@@ -1,0 +1,68 @@
+{
+	"notifTitle": {
+		"message": "Wykryto stream $EXT$!",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifText": {
+		"message": "Wykryto jeden lub więcej streamów $EXT$.\nWszystkie wykryte linki dostępne są w menu kontekstowym.",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifCopiedTitle": {
+		"message": "Skopiowano link do streamu $EXT$!",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifCopiedText": {
+		"message": "Pomyślnie skopiowano link do schowka."
+	},
+	"notifIncompCopiedText": {
+		"message": "Link skopiowany w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu.\nZalecane jest użycie youtube-dl."
+	},
+	"notifErrorTitle": {
+		"message": "Błąd kopiowania!"
+	},
+	"notifErrorText": {
+		"message": "Nie udało się skopiować linku: "
+	},
+	"extText": {
+		"message": "Wykrywa playlisty M3U8/MPD/F4M/ISM używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl (zalecany)/FFmpeg/Streamlink."
+	},
+	"copyMethod": {
+		"message": "Skopiuj link do streamu jako:"
+	},
+	"customCommand": {
+		"message": "Dodatkowe argumenty linii poleceń:"
+	},
+	"url": {
+		"message": "Zwykły link"
+	},
+	"youtubedl": {
+		"message": "Komendę youtube-dl"
+	},
+	"ffmpeg": {
+		"message": "Komendę FFmpeg"
+	},
+	"streamlink": {
+		"message": "Komendę Streamlink"
+	},
+	"headersPref": {
+		"message": "Dodaj nagłówki do komendy zewnętrznej:"
+	},
+	"notifPref": {
+		"message": "Wyłącz powiadomienia:"
+	},
+	"buttonTitle": {
+		"message": "Kopiowanie linków do schowka jest możliwe poprzez wybranie danego wpisu w menu kontekstowym (prawy klik na stronie). Lista usuwana jest po kliknięciu tego przycisku."
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"webextensions": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:prettier/recommended"
+	],
+	"plugins": [
+		"prettier"
+	],
+	"parserOptions": {
+		"ecmaVersion": 2015
+	},
+	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+				"useTabs": true
+			}
+		],
+		"no-unused-vars": "warn",
+		"no-console": "warn",
+		"no-undef": "warn"
+	}
+}

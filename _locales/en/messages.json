@@ -1,0 +1,68 @@
+{
+	"notifTitle": {
+		"message": "$EXT$ stream detected!",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifText": {
+		"message": "One or more $EXT$ streams detected.\nUse the right-click context menu to copy the URL.",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifCopiedTitle": {
+		"message": "$EXT$ stream URL copied!",
+		"placeholders": {
+			"ext": {
+				"content": "$1"
+			}
+		}
+	},
+	"notifCopiedText": {
+		"message": "Successfully copied the URL."
+	},
+	"notifIncompCopiedText": {
+		"message": "Stream URL copied in plain form due to lack of compatibility with the chosen tool.\nUse of youtube-dl is recommended."
+	},
+	"notifErrorTitle": {
+		"message": "Copy error!"
+	},
+	"notifErrorText": {
+		"message": "Unable to copy URL: "
+	},
+	"extText": {
+		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink commands."
+	},
+	"copyMethod": {
+		"message": "Copy stream URL as:"
+	},
+	"customCommand": {
+		"message": "Additional command line parameters:"
+	},
+	"url": {
+		"message": "URL only"
+	},
+	"youtubedl": {
+		"message": "youtube-dl command"
+	},
+	"ffmpeg": {
+		"message": "FFmpeg command"
+	},
+	"streamlink": {
+		"message": "Streamlink command"
+	},
+	"headersPref": {
+		"message": "Supply additional headers to tools:"
+	},
+	"notifPref": {
+		"message": "Disable notifications:"
+	},
+	"buttonTitle": {
+		"message": "Copy URLs by clicking on them in the context menu (right click on web page) or clear the list by clicking on this button."
+	}
+}
