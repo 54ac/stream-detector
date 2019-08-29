@@ -1,4 +1,4 @@
-const defaultOptions = { copyMethod: "youtubedl", headersPref: true }; //used in restoreOptions
+const defaultOptions = { copyMethod: "url", headersPref: true }; //used in restoreOptions
 
 function checkHeadersPref() {
 	//no need to confuse people
@@ -54,17 +54,27 @@ function restoreOptions() {
 					: (document.getElementById(options[entry].id).value = "");
 			} else if (defaultOptions[options[entry].id]) {
 				if (document.getElementById(options[entry].id).type === "checkbox") {
-					item[options[entry].id] !== undefined
-						? (document.getElementById(options[entry].id).checked =
-								item[options[entry].id])
-						: (document.getElementById(options[entry].id).checked =
-								defaultOptions[options[entry].id]);
+					if (item[options[entry].id] !== undefined) {
+						document.getElementById(options[entry].id).checked =
+							item[options[entry].id];
+					} else {
+						document.getElementById(options[entry].id).checked =
+							defaultOptions[options[entry].id];
+						browser.storage.local.set({
+							[options[entry].id]: defaultOptions[options[entry].id]
+						});
+					}
 				} else {
-					item[options[entry].id] !== undefined
-						? (document.getElementById(options[entry].id).value =
-								item[options[entry].id])
-						: (document.getElementById(options[entry].id).value =
-								defaultOptions[options[entry].id]);
+					if (item[options[entry].id] !== undefined) {
+						document.getElementById(options[entry].id).value =
+							item[options[entry].id];
+					} else {
+						document.getElementById(options[entry].id).value =
+							defaultOptions[options[entry].id];
+						browser.storage.local.set({
+							[options[entry].id]: defaultOptions[options[entry].id]
+						});
+					}
 				}
 			} else if (item[options[entry].id] !== undefined) {
 				if (document.getElementById(options[entry].id).type === "checkbox") {

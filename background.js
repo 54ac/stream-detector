@@ -1,20 +1,70 @@
-var badgenum = 0;
-var urlList = [];
+const listenerFilter = {
+	urls: [
+		"*://*/*.m3u8",
+		"*://*/*.m3u8?*",
+		"*://*/*.mpd",
+		"*://*/*.mpd?*",
+		"*://*/*.f4m",
+		"*://*/*.f4m?*",
+		"*://*/*.ism",
+		"*://*/*.ism/*",
+		"*://*/*.vtt",
+		"*://*/*.vtt/*"
+	]
+};
+
+var paused = false;
 const _ = browser.i18n.getMessage;
-browser.browserAction.disable();
-browser.browserAction.setBadgeBackgroundColor({ color: "#797C80" });
-browser.browserAction.setTitle({ title: _("buttonTitle") });
+var badgenum,
+	urlList = [];
+browser.browserAction.setTitle({ title: "The Stream Detector" });
+
+function refresh() {
+	//clear everything and/or set up
+	browser.menus.removeAll();
+	browser.notifications.getAll().then(clearNotifs);
+	browser.browserAction.setBadgeText({ text: "" });
+	browser.browserAction.disable();
+	browser.browserAction.setBadgeBackgroundColor({ color: "#797C80" });
+	badgenum = 0;
+	urlList = [];
+
+	browser.menus.create({
+		id: "m3u8link",
+		title: "The Stream Detector"
+	});
+	browser.menus.create({
+		type: "checkbox",
+		checked: paused,
+		id: "m3u8linkPause",
+		title: _("pauseTitle"),
+		parentId: "m3u8link"
+	});
+}
+refresh();
 
 function addURL(requestDetails) {
-	if (!urlList.includes(requestDetails.url)) {
-		if (!urlList.length)
+	if (!Object.keys(urlList).includes(requestDetails.url)) {
+		if (!Object.keys(urlList).length) {
 			browser.menus.create({
-				id: "m3u8link",
-				title: "The Stream Detector"
+				id: "m3u8linkClear",
+				title: _("clearTitle"),
+				parentId: "m3u8link"
 			});
+			browser.menus.create({
+				type: "separator",
+				parentId: "m3u8link"
+			});
+			browser.menus.create({
+				id: "m3u8linkCopyAll",
+				title: _("copyAllTitle"),
+				parentId: "m3u8link"
+			});
+		}
 
-		//very basic way of checking for duplicates in context menu entries because there's no way of listing them
-		urlList.push(requestDetails.url);
+		//using the url as the id is not the best thing ever
+		urlList[requestDetails.url] = requestDetails;
+
 		const url = new URL(requestDetails.url);
 
 		var filename;
@@ -33,19 +83,22 @@ function addURL(requestDetails) {
 				url.href.lastIndexOf(".")
 			);
 		}
+		urlList[requestDetails.url].filename = filename;
 
 		var ext = url.href.slice(url.href.lastIndexOf(".") + 1, url.href.length);
 		ext = ext.slice(
 			0,
 			ext.lastIndexOf("/") === -1 ? ext.length : ext.lastIndexOf("/")
 		);
-		ext = ext
-			.slice(0, ext.lastIndexOf("?") === -1 ? ext.length : ext.lastIndexOf("?"))
-			.toUpperCase();
+		ext = ext.slice(
+			0,
+			ext.lastIndexOf("?") === -1 ? ext.length : ext.lastIndexOf("?")
+		);
+		urlList[requestDetails.url].ext = ext;
 
 		browser.menus.create({
-			id: JSON.stringify(requestDetails), //this is absolutely terrible but will have to do since there's no value property
-			title: `[${ext}] ${url.hostname} – ${filename}`,
+			id: requestDetails.url, //this was way worse before, trust me
+			title: `[${ext.toUpperCase()}] ${url.hostname} – ${filename}`,
 			parentId: "m3u8link",
 			icons: {
 				"16": "data/icon-dark-16.png"
@@ -73,183 +126,173 @@ function addURL(requestDetails) {
 	}
 }
 
-function clearNotifs(all) {
-	for (let key of Object.keys(all)) {
-		browser.notifications.clear(key);
-	}
-}
-
-browser.browserAction.onClicked.addListener(() => {
-	//clear everything when button is clicked
-	browser.menus.removeAll();
-	browser.notifications.getAll().then(clearNotifs);
-	browser.browserAction.setBadgeText({ text: "" });
-	browser.browserAction.disable();
-	browser.browserAction.setBadgeBackgroundColor({ color: "#797C80" });
-	badgenum = 0;
-	urlList = [];
-});
-
-browser.menus.onClicked.addListener((info, tab) => {
+function copyURL(info) {
 	browser.storage.local.get().then(method => {
-		var code, ua, methodIncomp;
-		if (!method.copyMethod) method.copyMethod = "url";
-		const streamURL = JSON.stringify(JSON.parse(info.menuItemId).url); //terrible again but works
-
-		var filename = streamURL.slice(
-			streamURL.lastIndexOf("/") + 1,
-			streamURL.lastIndexOf(".") || streamURL.lastIndexOf("?")
-		);
-		filename = filename
-			.slice(
-				0,
-				filename.indexOf("?") === -1 ? filename.length : filename.indexOf("?")
+		var list = { urls: [], filenames: [], methodIncomp: false };
+		info.forEach(e => {
+			var code, ua, methodIncomp;
+			if (
+				!method.copyMethod ||
+				(method.copyMethod !== "url" &&
+					method.copyMethod !== "ffmpeg" &&
+					method.copyMethod !== "streamlink" &&
+					method.copyMethod !== "youtubedl")
 			)
-			.replace(/[/\\?%*:|"<>]/g, "-");
+				method.copyMethod = "url"; //default
 
-		var ext = streamURL.slice(
-			streamURL.lastIndexOf(".") + 1,
-			streamURL.length - 1
-		);
-		ext = ext.slice(0, ext.indexOf("/") === -1 ? ext.length : ext.indexOf("/"));
-		ext = ext.slice(0, ext.indexOf("?") === -1 ? ext.length : ext.indexOf("?"));
+			const streamURL = urlList[e].url;
+			const filename = urlList[e].filename;
+			const ext = urlList[e].ext;
 
-		if (
-			(ext === "f4m" && method.copyMethod === "ffmpeg") ||
-			(ext === "ism" && method.copyMethod !== "youtubedl")
-		) {
-			method.copyMethod = "url";
-			methodIncomp = true;
-		}
-
-		if (method.copyMethod === "url") {
-			code = "copyToClipboard(" + streamURL + ");";
-		} else if (method.copyMethod === "ffmpeg") {
-			ua = false;
-			code = "copyToClipboard('ffmpeg";
-
-			let prefName = "customCommand" + method.copyMethod;
-			if (method[prefName]) {
-				code += " " + method[prefName];
+			if (
+				(ext === "f4m" && method.copyMethod === "ffmpeg") ||
+				(ext === "ism" && method.copyMethod !== "youtubedl") ||
+				(ext === "vtt" && method.copyMethod !== "youtubedl")
+			) {
+				method.copyMethod = "url";
+				methodIncomp = true;
 			}
 
-			if (method.headersPref === true) {
-				for (let header of JSON.parse(info.menuItemId).requestHeaders) {
-					if (header.name.toLowerCase() === "user-agent") {
-						code += ' -user_agent "' + header.value + '"';
-						ua = true;
-					}
-					if (header.name.toLowerCase() === "cookie") {
-						code += ' -headers "Cookie: ' + header.value + '"';
-					}
-					if (header.name.toLowerCase() === "referer") {
-						code += ' -referer "' + header.value + '"';
-					}
+			if (method.copyMethod === "url") {
+				code = streamURL;
+			} else if (
+				method.copyMethod === "ffmpeg" ||
+				method.copyMethod === "streamlink" ||
+				method.copyMethod === "youtubedl"
+			) {
+				ua = false;
+				//the switchboard of doom begins
+				switch (method.copyMethod) {
+					case "ffmpeg":
+						code = "ffmpeg";
+						break;
+					case "streamlink":
+						code = "streamlink";
+						break;
+					case "youtubedl":
+						code = "youtube-dl --no-part --restrict-filenames";
+						break;
 				}
-				if (ua === false) {
-					code += ' -user_agent "' + navigator.userAgent + '"';
-				}
-			}
-			code += " -i " + streamURL + ' -c copy "' + filename + ".ts\"');";
-		} else if (method.copyMethod === "streamlink") {
-			ua = false;
-			code = "copyToClipboard('streamlink";
 
-			let prefName = "customCommand" + method.copyMethod;
-			if (method[prefName]) {
-				code += " " + method[prefName];
+				//custom command line
+				let prefName = "customCommand" + method.copyMethod;
+				if (method[prefName]) {
+					code += " " + method[prefName];
+				}
+
+				//additional headers
+				if (method.headersPref === true) {
+					for (let header of urlList[e].requestHeaders) {
+						if (header.name.toLowerCase() === "user-agent") {
+							switch (method.copyMethod) {
+								case "ffmpeg":
+									code += ` -user_agent "${header.value}"`;
+									break;
+								case "streamlink":
+									code += ` --http-header "User-Agent=${header.value}"`;
+									break;
+								case "youtubedl":
+									code += ` --user-agent "${header.value}"`;
+									break;
+							}
+							ua = true;
+						}
+						if (header.name.toLowerCase() === "cookie") {
+							switch (method.copyMethod) {
+								case "ffmpeg":
+									code += ` -headers "Cookie: ${header.value}"`;
+									break;
+								case "streamlink":
+									code += ` --http-header "Cookie=${header.value}"`;
+									break;
+								case "youtubedl":
+									code += ` --add-header "Cookie:${header.value}"`;
+									break;
+							}
+						}
+						if (header.name.toLowerCase() === "referer") {
+							switch (method.copyMethod) {
+								case "ffmpeg":
+									code += ` -referer "${header.value}"`;
+									break;
+								case "streamlink":
+									code += ` --http-header "Referer=${header.value}"`;
+									break;
+								case "youtubedl":
+									code += ` --referer "${header.value}"`;
+									break;
+							}
+						}
+					}
+
+					//user agent fallback if not supplied earlier
+					if (ua === false) {
+						switch (method.copyMethod) {
+							case "ffmpeg":
+								code += ` -user_agent "${navigator.userAgent}"`;
+								break;
+							case "streamlink":
+								code += ` --http-header "User-Agent=${navigator.userAgent}"`;
+								break;
+							case "youtubedl":
+								code += ` --user-agent "${navigator.userAgent}"`;
+								break;
+						}
+					}
+				}
+
+				//final part of command
+				switch (method.copyMethod) {
+					case "ffmpeg":
+						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
+						break;
+					case "streamlink":
+						code += ` -o "${filename}.ts" "${streamURL}" best`;
+						break;
+					case "youtubedl":
+						code += ` "${streamURL}"`;
+						break;
+				}
 			}
 
-			if (method.headersPref === true) {
-				for (var header of JSON.parse(info.menuItemId).requestHeaders) {
-					if (header.name.toLowerCase() === "user-agent") {
-						code += ' --http-header "User-Agent=' + header.value + '"';
-						ua = true;
-					}
-					if (header.name.toLowerCase() === "cookie") {
-						code += ' --http-header "Cookie=' + header.value + '"';
-					}
-					if (header.name.toLowerCase() === "referer") {
-						code += ' --http-header "Referer=' + header.value + '"';
-					}
-				}
-				if (ua === false) {
-					code += ' --http-header "User-Agent=' + navigator.userAgent + '"';
-				}
-			}
-			code += ' -o "' + filename + '.ts" ' + streamURL + " best');";
-		} else if (method.copyMethod === "youtubedl") {
-			ua = false;
-			code = "copyToClipboard('youtube-dl --no-part --restrict-filenames";
+			//used to communicate with clipboard/notifications api
+			list.urls.push(code);
+			list.filenames.push(filename + "." + ext);
+			list.methodIncomp = methodIncomp;
+		});
 
-			let prefName = "customCommand" + method.copyMethod;
-			if (method[prefName]) {
-				code += " " + method[prefName];
-			}
-
-			if (method.headersPref === true) {
-				for (let header of JSON.parse(info.menuItemId).requestHeaders) {
-					if (header.name.toLowerCase() === "user-agent") {
-						code += ' --user-agent "' + header.value + '"';
-						ua = true;
-					}
-					if (header.name.toLowerCase() === "cookie") {
-						code += ' --add-header "Cookie:' + header.value + '"';
-					}
-					if (header.name.toLowerCase() === "referer") {
-						code += ' --referer "' + header.value + '"';
-					}
-				}
-				if (ua === false) {
-					code += ' --user-agent "' + navigator.userAgent + '"';
-				}
-			}
-			code += " " + streamURL + "');";
-		}
-		browser.tabs
-			.executeScript({
-				code: "typeof copyToClipboard === 'function';"
-			})
-			.then(results => {
-				if (!results || results[0] !== true) {
-					return browser.tabs.executeScript(tab.id, {
-						file: "clipboard-helper.js" //sourced from https://github.com/mdn/webextensions-examples/blob/master/context-menu-copy-link-with-types/clipboard-helper.js
-					});
-				}
-			})
-			.then(() => {
+		navigator.clipboard.writeText(list.urls.join("\n")).then(
+			() => {
 				browser.storage.local.get().then(function(notifs) {
 					if (notifs.notifPref !== true) {
-						if (methodIncomp === true) {
+						if (list.methodIncomp === true) {
 							browser.notifications.getAll().then(() => {
-								browser.notifications.create(`copied-${filename}`, {
+								browser.notifications.create("copied", {
 									type: "basic",
 									iconUrl: "data/icon-dark-96.png",
-									title: _("notifCopiedTitle", ext.toUpperCase()),
-									message: _("notifIncompCopiedText")
+									title: _("notifCopiedTitle"),
+									message:
+										_("notifIncompCopiedText") + list.filenames.join("\n")
 								});
 							});
 						} else {
 							browser.notifications.getAll().then(() => {
-								browser.notifications.create(`copied-${filename}`, {
+								browser.notifications.create("copied", {
 									type: "basic",
 									iconUrl: "data/icon-dark-96.png",
-									title: _("notifCopiedTitle", ext.toUpperCase()),
-									message: _("notifCopiedText")
+									title: _("notifCopiedTitle"),
+									message: _("notifCopiedText") + list.filenames.join("\n")
 								});
 							});
 						}
 					}
 				});
-				return browser.tabs.executeScript(tab.id, {
-					code
-				});
-			})
-			.catch(error => {
+			},
+			error => {
 				browser.storage.local.get().then(function(notifs) {
 					if (notifs.notifPref !== true) {
 						browser.notifications.getAll().then(() => {
-							browser.notifications.create(`error-${filename}`, {
+							browser.notifications.create("error", {
 								type: "basic",
 								iconUrl: "data/icon-dark-96.png",
 								title: _("notifErrorTitle"),
@@ -258,23 +301,42 @@ browser.menus.onClicked.addListener((info, tab) => {
 						});
 					}
 				});
-			});
+			}
+		);
 	});
+}
+
+function clearNotifs(all) {
+	for (let key of Object.keys(all)) {
+		browser.notifications.clear(key);
+	}
+}
+
+browser.browserAction.onClicked.addListener(() => refresh());
+
+browser.menus.onClicked.addListener((info, tab) => {
+	if (info.menuItemId === "m3u8linkPause") {
+		//not the most elegant solution but it works fine
+		if (info.checked) {
+			paused = true;
+			browser.webRequest.onSendHeaders.removeListener(addURL);
+		} else {
+			paused = false;
+			browser.webRequest.onSendHeaders.addListener(addURL, listenerFilter, [
+				"requestHeaders"
+			]);
+		}
+	} else if (info.menuItemId === "m3u8linkClear") {
+		refresh();
+	} else {
+		if (info.menuItemId === "m3u8linkCopyAll") {
+			copyURL(Object.keys(urlList)); //each id is a url because the menus api is the way it is
+		} else {
+			copyURL(Array.of(info.menuItemId)); //for the sake of compatibility
+		}
+	}
 });
 
-browser.webRequest.onSendHeaders.addListener(
-	addURL,
-	{
-		urls: [
-			"*://*/*.m3u8",
-			"*://*/*.m3u8?*",
-			"*://*/*.mpd",
-			"*://*/*.mpd?*",
-			"*://*/*.f4m",
-			"*://*/*.f4m?*",
-			"*://*/*.ism",
-			"*://*/*.ism/*"
-		]
-	},
-	["requestHeaders"]
-);
+browser.webRequest.onSendHeaders.addListener(addURL, listenerFilter, [
+	"requestHeaders"
+]);

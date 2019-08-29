@@ -1,42 +1,27 @@
 {
 	"notifTitle": {
-		"message": "Wykryto stream $EXT$!",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "Wykryto stream(y)!"
 	},
 	"notifText": {
-		"message": "Wykryto jeden lub więcej streamów $EXT$.\nWszystkie wykryte linki dostępne są w menu kontekstowym.",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "Wykryto jeden lub więcej streamów.\nWszystkie wykryte linki dostępne są w menu kontekstowym."
 	},
 	"notifCopiedTitle": {
-		"message": "Skopiowano link do streamu $EXT$!",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "Skopiowano link(i)!"
 	},
 	"notifCopiedText": {
-		"message": "Pomyślnie skopiowano link do schowka."
+		"message": "Pomyślnie skopiowano następujące link(i) do schowka:\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Link skopiowany w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu.\nZalecane jest użycie youtube-dl."
+		"message": "Zalecane jest użycie youtube-dl.\nDane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Błąd kopiowania!"
 	},
 	"notifErrorText": {
-		"message": "Nie udało się skopiować linku: "
+		"message": "Nie udało się skopiować danych:\n"
 	},
 	"extText": {
-		"message": "Wykrywa playlisty M3U8/MPD/F4M/ISM używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl (zalecany)/FFmpeg/Streamlink."
+		"message": "Wykrywa playlisty M3U8/MPD/F4M/ISM oraz napisy VTT używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl (zalecany)/FFmpeg/Streamlink."
 	},
 	"copyMethod": {
 		"message": "Skopiuj link do streamu jako:"
@@ -62,7 +47,13 @@
 	"notifPref": {
 		"message": "Wyłącz powiadomienia:"
 	},
-	"buttonTitle": {
-		"message": "Kopiowanie linków do schowka jest możliwe poprzez wybranie danego wpisu w menu kontekstowym (prawy klik na stronie). Lista usuwana jest po kliknięciu tego przycisku."
+	"pauseTitle": {
+		"message": "Przerwij wykrywanie"
+	},
+	"clearTitle": {
+		"message": "Wyczyść listę"
+	},
+	"copyAllTitle": {
+		"message": "Skopiuj wszystkie linki"
 	}
 }

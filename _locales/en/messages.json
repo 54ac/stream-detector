@@ -1,42 +1,27 @@
 {
 	"notifTitle": {
-		"message": "$EXT$ stream detected!",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "Stream(s) detected!"
 	},
 	"notifText": {
-		"message": "One or more $EXT$ streams detected.\nUse the right-click context menu to copy the URL.",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "One or more streams detected.\nUse the right-click context menu to copy the URL(s)."
 	},
 	"notifCopiedTitle": {
-		"message": "$EXT$ stream URL copied!",
-		"placeholders": {
-			"ext": {
-				"content": "$1"
-			}
-		}
+		"message": "URL(s) copied!"
 	},
 	"notifCopiedText": {
-		"message": "Successfully copied the URL."
+		"message": "Successfully copied the following URL(s):\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Stream URL copied in plain form due to lack of compatibility with the chosen tool.\nUse of youtube-dl is recommended."
+		"message": "Use of youtube-dl is recommended.\nStream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Copy error!"
 	},
 	"notifErrorText": {
-		"message": "Unable to copy URL: "
+		"message": "Unable to copy URL(s):\n"
 	},
 	"extText": {
-		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink commands."
+		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists and VTT subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink commands."
 	},
 	"copyMethod": {
 		"message": "Copy stream URL as:"
@@ -62,7 +47,13 @@
 	"notifPref": {
 		"message": "Disable notifications:"
 	},
-	"buttonTitle": {
-		"message": "Copy URLs by clicking on them in the context menu (right click on web page) or clear the list by clicking on this button."
+	"pauseTitle": {
+		"message": "Pause detection"
+	},
+	"clearTitle": {
+		"message": "Clear list"
+	},
+	"copyAllTitle": {
+		"message": "Copy all URLs"
 	}
 }

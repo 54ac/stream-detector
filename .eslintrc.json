@@ -12,7 +12,9 @@
 		"prettier"
 	],
 	"parserOptions": {
-		"ecmaVersion": 2015
+		"ecmaFeatures": {
+			"jsx": true
+		}
 	},
 	"rules": {
 		"prettier/prettier": [

@@ -3,8 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "1.4.0",
-
+	"version": "1.7.0",
 	"permissions": [
 		"webRequest",
 		"*://*/*.m3u8",
@@ -15,26 +14,26 @@
 		"*://*/*.f4m?*",
 		"*://*/*.ism",
 		"*://*/*.ism/*",
+		"*://*/*.vtt",
+		"*://*/*.vtt/*",
 		"menus",
 		"notifications",
 		"activeTab",
 		"clipboardWrite",
 		"storage"
 	],
-
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": [
+			"background.js"
+		]
 	},
-
 	"icons": {
 		"48": "data/icon-dark-48.png",
 		"96": "data/icon-dark-96.png"
 	},
-
 	"options_ui": {
 		"page": "options.html"
 	},
-
 	"browser_action": {
 		"browser_style": true,
 		"theme_icons": [
