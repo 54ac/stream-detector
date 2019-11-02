@@ -131,14 +131,7 @@ function copyURL(info) {
 		var list = { urls: [], filenames: [], methodIncomp: false };
 		info.forEach(e => {
 			var code, ua, methodIncomp;
-			if (
-				!method.copyMethod ||
-				(method.copyMethod !== "url" &&
-					method.copyMethod !== "ffmpeg" &&
-					method.copyMethod !== "streamlink" &&
-					method.copyMethod !== "youtubedl")
-			)
-				method.copyMethod = "url"; //default
+			if (!method.copyMethod) method.copyMethod = "url"; //default
 
 			const streamURL = urlList[e].url;
 			const filename = urlList[e].filename;
@@ -147,7 +140,8 @@ function copyURL(info) {
 			if (
 				(ext === "f4m" && method.copyMethod === "ffmpeg") ||
 				(ext === "ism" && method.copyMethod !== "youtubedl") ||
-				(ext === "vtt" && method.copyMethod !== "youtubedl")
+				(ext === "vtt" && method.copyMethod !== "youtubedl") ||
+				(ext !== "m3u8" && method.copyMethod === "hlsdl")
 			) {
 				method.copyMethod = "url";
 				methodIncomp = true;
@@ -155,11 +149,7 @@ function copyURL(info) {
 
 			if (method.copyMethod === "url") {
 				code = streamURL;
-			} else if (
-				method.copyMethod === "ffmpeg" ||
-				method.copyMethod === "streamlink" ||
-				method.copyMethod === "youtubedl"
-			) {
+			} else {
 				ua = false;
 				//the switchboard of doom begins
 				switch (method.copyMethod) {
@@ -171,6 +161,9 @@ function copyURL(info) {
 						break;
 					case "youtubedl":
 						code = "youtube-dl --no-part --restrict-filenames";
+						break;
+					case "hlsdl":
+						code = "hlsdl -b";
 						break;
 				}
 
@@ -194,6 +187,9 @@ function copyURL(info) {
 								case "youtubedl":
 									code += ` --user-agent "${header.value}"`;
 									break;
+								case "hlsdl":
+									code += ` -u "${header.value}"`;
+									break;
 							}
 							ua = true;
 						}
@@ -208,6 +204,9 @@ function copyURL(info) {
 								case "youtubedl":
 									code += ` --add-header "Cookie:${header.value}"`;
 									break;
+								case "hlsdl":
+									code += ` -h "Cookie:${header.value}"`;
+									break;
 							}
 						}
 						if (header.name.toLowerCase() === "referer") {
@@ -220,6 +219,9 @@ function copyURL(info) {
 									break;
 								case "youtubedl":
 									code += ` --referer "${header.value}"`;
+									break;
+								case "hlsdl":
+									code += ` -h "Referer:${header.value}"`;
 									break;
 							}
 						}
@@ -237,6 +239,9 @@ function copyURL(info) {
 							case "youtubedl":
 								code += ` --user-agent "${navigator.userAgent}"`;
 								break;
+							case "hlsdl":
+								code += ` -u "${navigator.userAgent}"`;
+								break;
 						}
 					}
 				}
@@ -252,6 +257,8 @@ function copyURL(info) {
 					case "youtubedl":
 						code += ` "${streamURL}"`;
 						break;
+					case "hlsdl":
+						code += ` -o "${filename}.ts" "${streamURL}"`;
 				}
 			}
 

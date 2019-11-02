@@ -41,6 +41,9 @@
 	"streamlink": {
 		"message": "Komendę Streamlink"
 	},
+	"hlsdl": {
+		"message": "Komendę hlsdl"
+	},
 	"headersPref": {
 		"message": "Dodaj nagłówki do komendy zewnętrznej:"
 	},

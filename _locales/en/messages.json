@@ -41,6 +41,9 @@
 	"streamlink": {
 		"message": "Streamlink command"
 	},
+	"hlsdl": {
+		"message": "hlsdl command"
+	},
 	"headersPref": {
 		"message": "Supply additional headers to tools:"
 	},

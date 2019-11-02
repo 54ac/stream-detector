@@ -1,10 +1,8 @@
-
-
 ## The Stream Detector
 ### What is this?
 This is a Firefox addon written in JavaScript which provides an easy way to keep track of URLs to playlists and subtitles used by Apple HLS, Adobe HDS, MPEG-DASH, and Microsoft Smooth Streaming streams.
 
-Also assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink commands which (should) include all of the necessary cookies and headers.
+Also assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink/hlsdl commands which (should) include all of the necessary cookies and headers.
 
 ![A screenshot of a notification.](https://addons.cdn.mozilla.net/user-media/previews/thumbs/204/204893.png?modified=1543520749)
 
@@ -22,7 +20,7 @@ More details and screenshots available [in the AMO listing](https://addons.mozil
 Being able to easily find direct URLs to streams on the Internet. I wrote this initially for my own use - I was fed up with hunting for URLs in the Network Monitor and manually adding all the necessary headers and cookies.
 
 ### Is anyone even using this?
-As of writing this document, the addon has been downloaded almost 150,000 times, with over 6,000 daily users.
+As of writing this document, the addon has been downloaded over 150,000 times, with over 7,000 average daily users.
 
 [The usage statistics are publicly available](https://addons.mozilla.org/en-US/firefox/addon/hls-stream-detector/statistics/), in case anyone is interested.
 
