@@ -1,0 +1,62 @@
+{
+	"notifTitle": {
+		"message": "Detegovaný(é) stream(y)!"
+	},
+	"notifText": {
+		"message": "Bol detegovaný jeden alebo viacero streamov.\nPoužite pravé tlačidlo myši na otvorenie kontextovej ponuky a skopírovanie URL adresy(adries)."
+	},
+	"notifCopiedTitle": {
+		"message": "URL adresa(y) skopírovaná(é)!"
+	},
+	"notifCopiedText": {
+		"message": "Úspešne skopírovaná(é) táto(tieto) adresa(y) URL:\n"
+	},
+	"notifIncompCopiedText": {
+		"message": "Odporúča sa použiť youtube-dl.\nAdres(y) URL skopírované bez formátovacích znakov kvôli kompatibilite s vybraným nástrojom:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Chyba pri kopírovaní!"
+	},
+	"notifErrorText": {
+		"message": "Nebolo možné skopírovať adresu(y) URL:\n"
+	},
+	"extText": {
+		"message": "Predtým známy pod menom HLS Stream Detector. Deteguje playlisty M3U8/MPD/F4M/ISM a titulky VTT použité v streamoch HLS/DASH/HDS/MSS. Pripraví hotové príkazy pre youtube-dl (odporúčané)/FFmpeg/Streamlink."
+	},
+	"copyMethod": {
+		"message": "Kopírovať URL adresu streamu ako:"
+	},
+	"customCommand": {
+		"message": "Dodatočné parametre príkazu:"
+	},
+	"url": {
+		"message": "Iba URL adresa"
+	},
+	"youtubedl": {
+		"message": "príkaz youtube-dl"
+	},
+	"ffmpeg": {
+		"message": "príkaz FFmpeg"
+	},
+	"streamlink": {
+		"message": "príkaz Streamlink"
+	},
+	"hlsdl": {
+		"message": "príkaz hlsdl"
+	},
+	"headersPref": {
+		"message": "Pridať dodatočné hlavičky pre nástroje:"
+	},
+	"notifPref": {
+		"message": "Vypnúť notifikácie:"
+	},
+	"pauseTitle": {
+		"message": "Pozastaviť detekciu"
+	},
+	"clearTitle": {
+		"message": "Vyčistiť zoznam"
+	},
+	"copyAllTitle": {
+		"message": "Kopírovať všetky adresy URL"
+	}
+}
