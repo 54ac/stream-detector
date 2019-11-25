@@ -1,11 +1,21 @@
-const defaultOptions = { copyMethod: "url", headersPref: true }; //used in restoreOptions
+const defaultOptions = {
+	copyMethod: "url",
+	streamlinkOutput: "file",
+	headersPref: true
+}; //used in restoreOptions
 
 function checkHeadersPref() {
 	//no need to confuse people
 	if (document.getElementById("copyMethod").value === "url") {
+		document.getElementById("streamlinkOutput").disabled = true;
 		document.getElementById("headersPref").disabled = true;
 		document.getElementById("customCommand").disabled = true;
+	} else if (document.getElementById("copyMethod").value === "streamlink") {
+		document.getElementById("streamlinkOutput").disabled = false;
+		document.getElementById("headersPref").disabled = false;
+		document.getElementById("customCommand").disabled = false;
 	} else {
+		document.getElementById("streamlinkOutput").disabled = true;
 		document.getElementById("headersPref").disabled = false;
 		document.getElementById("customCommand").disabled = false;
 	}
@@ -13,15 +23,12 @@ function checkHeadersPref() {
 
 function saveOption(e) {
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
-		document.getElementById("customCommand").disabled = false;
 		let prefName = "customCommand" + e.target.value;
 		browser.storage.local.get(prefName).then(res => {
 			res[prefName]
 				? (document.getElementById("customCommand").value = res[prefName])
 				: (document.getElementById("customCommand").value = "");
 		});
-	} else if (e.target.id === "copyMethod" && e.target.value == "url") {
-		document.getElementById("customCommand").disabled = true;
 	}
 
 	if (e.target.id === "customCommand") {

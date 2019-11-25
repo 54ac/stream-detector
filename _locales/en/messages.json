@@ -26,9 +26,6 @@
 	"copyMethod": {
 		"message": "Copy stream URL as:"
 	},
-	"customCommand": {
-		"message": "Additional command line parameters:"
-	},
 	"url": {
 		"message": "URL only"
 	},
@@ -44,8 +41,20 @@
 	"hlsdl": {
 		"message": "hlsdl command"
 	},
+	"streamlinkOutput": {
+		"message": "Output Streamlink to:"
+	},
+	"file": {
+		"message": "File"
+	},
+	"player": {
+		"message": "Default player"
+	},
+	"customCommand": {
+		"message": "Additional command line parameters:"
+	},
 	"headersPref": {
-		"message": "Supply additional headers to tools:"
+		"message": "Include additional headers:"
 	},
 	"notifPref": {
 		"message": "Disable notifications:"

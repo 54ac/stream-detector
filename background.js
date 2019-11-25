@@ -252,7 +252,10 @@ function copyURL(info) {
 						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
 						break;
 					case "streamlink":
-						code += ` -o "${filename}.ts" "${streamURL}" best`;
+						if (!method.streamlinkOutput) method.streamlinkOutput = "file";
+						if (method.streamlinkOutput === "file")
+							code += ` -o "${filename}.ts"`;
+						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
 						code += ` "${streamURL}"`;

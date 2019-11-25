@@ -26,9 +26,6 @@
 	"copyMethod": {
 		"message": "Skopiuj link do streamu jako:"
 	},
-	"customCommand": {
-		"message": "Dodatkowe argumenty linii poleceń:"
-	},
 	"url": {
 		"message": "Zwykły link"
 	},
@@ -44,8 +41,20 @@
 	"hlsdl": {
 		"message": "Komendę hlsdl"
 	},
+	"streamlinkOutput": {
+		"message": "Przesyłaj strumień wyjściowy Streamlink do:"
+	},
+	"file": {
+		"message": "Pliku"
+	},
+	"player": {
+		"message": "Domyślnego odtwarzacza"
+	},
+	"customCommand": {
+		"message": "Dodatkowe argumenty linii poleceń:"
+	},
 	"headersPref": {
-		"message": "Dodaj nagłówki do komendy zewnętrznej:"
+		"message": "Dołącz dodatkowe nagłówki:"
 	},
 	"notifPref": {
 		"message": "Wyłącz powiadomienia:"
