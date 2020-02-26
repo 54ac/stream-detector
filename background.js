@@ -130,29 +130,29 @@ function copyURL(info) {
 	browser.storage.local.get().then(method => {
 		var list = { urls: [], filenames: [], methodIncomp: false };
 		info.forEach(e => {
-			var code, ua, methodIncomp;
-			if (!method.copyMethod) method.copyMethod = "url"; //default
+			var code, ua, methodIncomp, fileMethod;
 
 			const streamURL = urlList[e].url;
 			const filename = urlList[e].filename;
 			const ext = urlList[e].ext;
+			fileMethod = !method.copyMethod ? "url" : method.copyMethod;
 
 			if (
-				(ext === "f4m" && method.copyMethod === "ffmpeg") ||
-				(ext === "ism" && method.copyMethod !== "youtubedl") ||
-				(ext === "vtt" && method.copyMethod !== "youtubedl") ||
-				(ext !== "m3u8" && method.copyMethod === "hlsdl")
+				(ext === "f4m" && fileMethod === "ffmpeg") ||
+				(ext === "ism" && fileMethod !== "youtubedl") ||
+				(ext === "vtt" && fileMethod !== "youtubedl") ||
+				(ext !== "m3u8" && fileMethod === "hlsdl")
 			) {
-				method.copyMethod = "url";
+				fileMethod = "url";
 				methodIncomp = true;
 			}
 
-			if (method.copyMethod === "url") {
+			if (fileMethod === "url") {
 				code = streamURL;
 			} else {
 				ua = false;
 				//the switchboard of doom begins
-				switch (method.copyMethod) {
+				switch (fileMethod) {
 					case "ffmpeg":
 						code = "ffmpeg";
 						break;
@@ -168,16 +168,34 @@ function copyURL(info) {
 				}
 
 				//custom command line
-				let prefName = "customCommand" + method.copyMethod;
+				let prefName = "customCommand" + fileMethod;
 				if (method[prefName]) {
 					code += " " + method[prefName];
+				}
+
+				//http proxy
+				if (method.proxyPref === true && method.proxyCommand) {
+					switch (fileMethod) {
+						case "ffmpeg":
+							code += ` -http_proxy "${method.proxyCommand}"`;
+							break;
+						case "streamlink":
+							code += ` --http-proxy "${method.proxyCommand}"`;
+							break;
+						case "youtubedl":
+							code += ` --proxy "${method.proxyCommand}"`;
+							break;
+						case "hlsdl":
+							code += ` -p "${method.proxyCommand}"`;
+							break;
+					}
 				}
 
 				//additional headers
 				if (method.headersPref === true) {
 					for (let header of urlList[e].requestHeaders) {
 						if (header.name.toLowerCase() === "user-agent") {
-							switch (method.copyMethod) {
+							switch (fileMethod) {
 								case "ffmpeg":
 									code += ` -user_agent "${header.value}"`;
 									break;
@@ -194,7 +212,7 @@ function copyURL(info) {
 							ua = true;
 						}
 						if (header.name.toLowerCase() === "cookie") {
-							switch (method.copyMethod) {
+							switch (fileMethod) {
 								case "ffmpeg":
 									code += ` -headers "Cookie: ${header.value}"`;
 									break;
@@ -210,7 +228,7 @@ function copyURL(info) {
 							}
 						}
 						if (header.name.toLowerCase() === "referer") {
-							switch (method.copyMethod) {
+							switch (fileMethod) {
 								case "ffmpeg":
 									code += ` -referer "${header.value}"`;
 									break;
@@ -229,7 +247,7 @@ function copyURL(info) {
 
 					//user agent fallback if not supplied earlier
 					if (ua === false) {
-						switch (method.copyMethod) {
+						switch (fileMethod) {
 							case "ffmpeg":
 								code += ` -user_agent "${navigator.userAgent}"`;
 								break;
@@ -247,7 +265,7 @@ function copyURL(info) {
 				}
 
 				//final part of command
-				switch (method.copyMethod) {
+				switch (fileMethod) {
 					case "ffmpeg":
 						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
 						break;

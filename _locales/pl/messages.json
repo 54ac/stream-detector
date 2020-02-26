@@ -67,5 +67,11 @@
 	},
 	"copyAllTitle": {
 		"message": "Skopiuj wszystkie linki"
+	},
+	"proxyPref": {
+		"message": "Użyj serwera HTTP proxy:"
+	},
+	"proxyCommand": {
+		"message": "Adres serwera HTTP proxy:"
 	}
 }

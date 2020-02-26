@@ -5,19 +5,23 @@ const defaultOptions = {
 }; //used in restoreOptions
 
 function checkHeadersPref() {
-	//no need to confuse people
+	document.getElementById("streamlinkOutput").disabled = true;
+	document.getElementById("headersPref").disabled = false;
+	document.getElementById("customCommand").disabled = false;
+	document.getElementById("proxyPref").disabled = false;
+	document.getElementById("proxyCommand").disabled = false;
+
+	document.getElementById("proxyPref").checked === true
+		? (document.getElementById("proxyCommand").disabled = false)
+		: (document.getElementById("proxyCommand").disabled = true);
+
 	if (document.getElementById("copyMethod").value === "url") {
-		document.getElementById("streamlinkOutput").disabled = true;
 		document.getElementById("headersPref").disabled = true;
 		document.getElementById("customCommand").disabled = true;
+		document.getElementById("proxyPref").disabled = true;
+		document.getElementById("proxyCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
-		document.getElementById("headersPref").disabled = false;
-		document.getElementById("customCommand").disabled = false;
-	} else {
-		document.getElementById("streamlinkOutput").disabled = true;
-		document.getElementById("headersPref").disabled = false;
-		document.getElementById("customCommand").disabled = false;
 	}
 }
 
@@ -50,7 +54,7 @@ function saveOption(e) {
 }
 
 function restoreOptions() {
-	//this is truly a pain in vanilla JS but frameworks would have been overkill
+	//this is truly a pain
 	browser.storage.local.get().then(item => {
 		for (let entry = 0; entry < options.length; entry++) {
 			if (options[entry].id === "customCommand") {
