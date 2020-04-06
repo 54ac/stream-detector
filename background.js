@@ -340,7 +340,7 @@ function clearNotifs(all) {
 	}
 }
 
-browser.browserAction.onClicked.addListener(() => refresh());
+browser.browserAction.onClicked.addListener(() => copyURL(Object.keys(urlList)));
 
 browser.menus.onClicked.addListener((info, tab) => {
 	if (info.menuItemId === "m3u8linkPause") {
