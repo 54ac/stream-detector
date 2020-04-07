@@ -7,9 +7,10 @@ const listenerFilter = {
 		"*://*/*.f4m",
 		"*://*/*.f4m?*",
 		"*://*/*.ism",
+		"*://*/*.ism?*",
 		"*://*/*.ism/*",
 		"*://*/*.vtt",
-		"*://*/*.vtt/*"
+		"*://*/*.vtt?*"
 	]
 };
 
@@ -63,7 +64,7 @@ function addURL(requestDetails) {
 		}
 
 		//using the url as the id is not the best thing ever
-		urlList[requestDetails.url] = requestDetails;
+		urlList[requestDetails.url] = { ...requestDetails };
 
 		const url = new URL(requestDetails.url);
 
@@ -338,26 +339,28 @@ function clearNotifs(all) {
 browser.browserAction.onClicked.addListener(() => {
 	{
 		browser.storage.local.get().then(options => {
-			if (options.copyAll === true) {
-				copyURL(Object.keys(urlList));
-			} else if (options.clearList === true) {
+			if (options.clearList === true) {
 				refresh();
+			} else {
+				copyURL(Object.keys(urlList));
 			}
 		});
 	}
 });
 
-browser.menus.onClicked.addListener((info, tab) => {
+browser.menus.onClicked.addListener(info => {
 	if (info.menuItemId === "m3u8linkPause") {
 		//not the most elegant solution but it works fine
 		if (info.checked) {
 			paused = true;
-			browser.webRequest.onSendHeaders.removeListener(addURL);
+			browser.webRequest.onBeforeSendHeaders.removeListener(addURL);
 		} else {
 			paused = false;
-			browser.webRequest.onSendHeaders.addListener(addURL, listenerFilter, [
-				"requestHeaders"
-			]);
+			browser.webRequest.onBeforeSendHeaders.addListener(
+				addURL,
+				listenerFilter,
+				["requestHeaders"]
+			);
 		}
 	} else if (info.menuItemId === "m3u8linkClear") {
 		refresh();
@@ -370,6 +373,6 @@ browser.menus.onClicked.addListener((info, tab) => {
 	}
 });
 
-browser.webRequest.onSendHeaders.addListener(addURL, listenerFilter, [
+browser.webRequest.onBeforeSendHeaders.addListener(addURL, listenerFilter, [
 	"requestHeaders"
 ]);
