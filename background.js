@@ -37,7 +37,7 @@ function refresh() {
 		type: "checkbox",
 		checked: paused,
 		id: "m3u8linkPause",
-		title: _("pauseTitle"),
+		title: _("pause"),
 		parentId: "m3u8link"
 	});
 }
@@ -48,7 +48,7 @@ function addURL(requestDetails) {
 		if (!Object.keys(urlList).length) {
 			browser.menus.create({
 				id: "m3u8linkClear",
-				title: _("clearTitle"),
+				title: _("clearList"),
 				parentId: "m3u8link"
 			});
 			browser.menus.create({
@@ -57,7 +57,7 @@ function addURL(requestDetails) {
 			});
 			browser.menus.create({
 				id: "m3u8linkCopyAll",
-				title: _("copyAllTitle"),
+				title: _("copyAll"),
 				parentId: "m3u8link"
 			});
 		}
@@ -110,8 +110,8 @@ function addURL(requestDetails) {
 		badgenum++;
 		browser.browserAction.setBadgeText({ text: badgenum.toString() });
 
-		browser.storage.local.get().then(notifs => {
-			if (notifs.notifPref !== true) {
+		browser.storage.local.get().then(options => {
+			if (options.notifPref !== true) {
 				browser.notifications.getAll().then(all => {
 					clearNotifs(all);
 					browser.notifications.create(`notif-${filename}`, {
@@ -127,7 +127,7 @@ function addURL(requestDetails) {
 }
 
 function copyURL(info) {
-	browser.storage.local.get().then(method => {
+	browser.storage.local.get().then(options => {
 		var list = { urls: [], filenames: [], methodIncomp: false };
 		info.forEach(e => {
 			var code, ua, methodIncomp, fileMethod;
@@ -135,7 +135,7 @@ function copyURL(info) {
 			const streamURL = urlList[e].url;
 			const filename = urlList[e].filename;
 			const ext = urlList[e].ext;
-			fileMethod = !method.copyMethod ? "url" : method.copyMethod;
+			fileMethod = !options.copyMethod ? "url" : options.copyMethod;
 
 			if (
 				(ext === "f4m" && fileMethod === "ffmpeg") ||
@@ -169,30 +169,30 @@ function copyURL(info) {
 
 				//custom command line
 				let prefName = "customCommand" + fileMethod;
-				if (method[prefName]) {
-					code += " " + method[prefName];
+				if (options[prefName]) {
+					code += " " + options[prefName];
 				}
 
 				//http proxy
-				if (method.proxyPref === true && method.proxyCommand) {
+				if (options.proxyPref === true && options.proxyCommand) {
 					switch (fileMethod) {
 						case "ffmpeg":
-							code += ` -http_proxy "${method.proxyCommand}"`;
+							code += ` -http_proxy "${options.proxyCommand}"`;
 							break;
 						case "streamlink":
-							code += ` --http-proxy "${method.proxyCommand}"`;
+							code += ` --http-proxy "${options.proxyCommand}"`;
 							break;
 						case "youtubedl":
-							code += ` --proxy "${method.proxyCommand}"`;
+							code += ` --proxy "${options.proxyCommand}"`;
 							break;
 						case "hlsdl":
-							code += ` -p "${method.proxyCommand}"`;
+							code += ` -p "${options.proxyCommand}"`;
 							break;
 					}
 				}
 
 				//additional headers
-				if (method.headersPref === true) {
+				if (options.headersPref === true) {
 					for (let header of urlList[e].requestHeaders) {
 						if (header.name.toLowerCase() === "user-agent") {
 							switch (fileMethod) {
@@ -270,8 +270,8 @@ function copyURL(info) {
 						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
 						break;
 					case "streamlink":
-						if (!method.streamlinkOutput) method.streamlinkOutput = "file";
-						if (method.streamlinkOutput === "file")
+						if (!options.streamlinkOutput) options.streamlinkOutput = "file";
+						if (options.streamlinkOutput === "file")
 							code += ` -o "${filename}.ts"`;
 						code += ` "${streamURL}" best`;
 						break;
@@ -291,44 +291,39 @@ function copyURL(info) {
 
 		navigator.clipboard.writeText(list.urls.join("\n")).then(
 			() => {
-				browser.storage.local.get().then(function(notifs) {
-					if (notifs.notifPref !== true) {
-						if (list.methodIncomp === true) {
-							browser.notifications.getAll().then(() => {
-								browser.notifications.create("copied", {
-									type: "basic",
-									iconUrl: "data/icon-dark-96.png",
-									title: _("notifCopiedTitle"),
-									message:
-										_("notifIncompCopiedText") + list.filenames.join("\n")
-								});
-							});
-						} else {
-							browser.notifications.getAll().then(() => {
-								browser.notifications.create("copied", {
-									type: "basic",
-									iconUrl: "data/icon-dark-96.png",
-									title: _("notifCopiedTitle"),
-									message: _("notifCopiedText") + list.filenames.join("\n")
-								});
-							});
-						}
-					}
-				});
-			},
-			error => {
-				browser.storage.local.get().then(function(notifs) {
-					if (notifs.notifPref !== true) {
+				if (options.notifPref !== true) {
+					if (list.methodIncomp === true) {
 						browser.notifications.getAll().then(() => {
-							browser.notifications.create("error", {
+							browser.notifications.create("copied", {
 								type: "basic",
 								iconUrl: "data/icon-dark-96.png",
-								title: _("notifErrorTitle"),
-								message: _("notifErrorText") + error
+								title: _("notifCopiedTitle"),
+								message: _("notifIncompCopiedText") + list.filenames.join("\n")
+							});
+						});
+					} else {
+						browser.notifications.getAll().then(() => {
+							browser.notifications.create("copied", {
+								type: "basic",
+								iconUrl: "data/icon-dark-96.png",
+								title: _("notifCopiedTitle"),
+								message: _("notifCopiedText") + list.filenames.join("\n")
 							});
 						});
 					}
-				});
+				}
+			},
+			error => {
+				if (options.notifPref !== true) {
+					browser.notifications.getAll().then(() => {
+						browser.notifications.create("error", {
+							type: "basic",
+							iconUrl: "data/icon-dark-96.png",
+							title: _("notifErrorTitle"),
+							message: _("notifErrorText") + error
+						});
+					});
+				}
 			}
 		);
 	});
@@ -340,7 +335,17 @@ function clearNotifs(all) {
 	}
 }
 
-browser.browserAction.onClicked.addListener(() => copyURL(Object.keys(urlList)));
+browser.browserAction.onClicked.addListener(() => {
+	{
+		browser.storage.local.get().then(options => {
+			if (options.copyAll === true) {
+				copyURL(Object.keys(urlList));
+			} else if (options.clearList === true) {
+				refresh();
+			}
+		});
+	}
+});
 
 browser.menus.onClicked.addListener((info, tab) => {
 	if (info.menuItemId === "m3u8linkPause") {

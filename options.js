@@ -1,7 +1,8 @@
 const defaultOptions = {
 	copyMethod: "url",
 	streamlinkOutput: "file",
-	headersPref: true
+	headersPref: true,
+	copyAll: true
 }; //used in restoreOptions
 
 function checkHeadersPref() {
@@ -44,6 +45,16 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
+	} else if (e.target.type === "radio") {
+		//update entire radio group
+		for (let entry = 0; entry < options.length; entry++) {
+			if (options[entry].name === e.target.name) {
+				browser.storage.local.set({
+					[options[entry].id]: document.getElementById(options[entry].id)
+						.checked
+				});
+			}
+		}
 	} else {
 		browser.storage.local.set({
 			[e.target.id]: e.target.value
@@ -64,7 +75,10 @@ function restoreOptions() {
 					? (document.getElementById(options[entry].id).value = item[prefName])
 					: (document.getElementById(options[entry].id).value = "");
 			} else if (defaultOptions[options[entry].id]) {
-				if (document.getElementById(options[entry].id).type === "checkbox") {
+				if (
+					document.getElementById(options[entry].id).type === "checkbox" ||
+					document.getElementById(options[entry].id).type === "radio"
+				) {
 					if (item[options[entry].id] !== undefined) {
 						document.getElementById(options[entry].id).checked =
 							item[options[entry].id];
@@ -88,7 +102,10 @@ function restoreOptions() {
 					}
 				}
 			} else if (item[options[entry].id] !== undefined) {
-				if (document.getElementById(options[entry].id).type === "checkbox") {
+				if (
+					document.getElementById(options[entry].id).type === "checkbox" ||
+					document.getElementById(options[entry].id).type === "radio"
+				) {
 					document.getElementById(options[entry].id).checked =
 						item[options[entry].id];
 				} else {

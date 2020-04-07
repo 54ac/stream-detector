@@ -21,7 +21,7 @@
 		"message": "Unable to copy URL(s):\n"
 	},
 	"extText": {
-		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists and VTT subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink commands."
+		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists and VTT subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl commands."
 	},
 	"copyMethod": {
 		"message": "Copy stream URL as:"
@@ -59,13 +59,13 @@
 	"notifPref": {
 		"message": "Disable notifications:"
 	},
-	"pauseTitle": {
+	"pause": {
 		"message": "Pause detection"
 	},
-	"clearTitle": {
-		"message": "Clear list"
+	"clearList": {
+		"message": "Clear URL list"
 	},
-	"copyAllTitle": {
+	"copyAll": {
 		"message": "Copy all URLs"
 	},
 	"proxyPref": {
@@ -73,5 +73,8 @@
 	},
 	"proxyCommand": {
 		"message": "HTTP proxy server address:"
+	},
+	"buttonClick": {
+		"message": "Browser action button functionality:"
 	}
 }

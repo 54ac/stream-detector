@@ -20,7 +20,7 @@ More details and screenshots available [in the AMO listing](https://addons.mozil
 Being able to easily find direct URLs to streams on the Internet. I wrote this initially for my own use - I was fed up with hunting for URLs in the Network Monitor and manually adding all the necessary headers and cookies.
 
 ### Is anyone even using this?
-As of writing this document, the addon has been downloaded over 180,000 times, with over 8,000 average daily users.
+As of writing this document, the addon has been downloaded over 190,000 times, with over 9,000 average daily users.
 
 [The usage statistics are publicly available](https://addons.mozilla.org/en-US/firefox/addon/hls-stream-detector/statistics/), in case anyone is interested.
 

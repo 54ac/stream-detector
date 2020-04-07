@@ -50,13 +50,13 @@
 	"notifPref": {
 		"message": "Vypnúť notifikácie:"
 	},
-	"pauseTitle": {
+	"pause": {
 		"message": "Pozastaviť detekciu"
 	},
-	"clearTitle": {
+	"clearList": {
 		"message": "Vyčistiť zoznam"
 	},
-	"copyAllTitle": {
+	"copyAll": {
 		"message": "Kopírovať všetky adresy URL"
 	}
 }
