@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "1.10.0",
+	"version": "1.11.0",
 	"permissions": [
 		"webRequest",
 		"*://*/*.m3u8",
@@ -36,6 +36,7 @@
 	},
 	"browser_action": {
 		"browser_style": true,
+		"default_title": "The Stream Detector",
 		"theme_icons": [
 			{
 				"dark": "data/icon-dark-96.png",

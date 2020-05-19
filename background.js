@@ -14,13 +14,29 @@ const listenerFilter = {
 	]
 };
 
-var paused = false;
 const _ = browser.i18n.getMessage;
 var badgenum,
+	paused = false,
 	urlList = [];
-browser.browserAction.setTitle({ title: "The Stream Detector" });
 
-function refresh() {
+function addListener() {
+	browser.webRequest.onBeforeSendHeaders.addListener(addURL, listenerFilter, [
+		"requestHeaders"
+	]);
+}
+
+function removeListener() {
+	browser.webRequest.onBeforeSendHeaders.removeListener(addURL);
+}
+
+function clearList() {
+	//don't include clearing the list in setup - wouldn't survive restarts
+	browser.storage.local.set({ urlStorage: [] }).then(() => {
+		setup();
+	});
+}
+
+function setup() {
 	//clear everything and/or set up
 	browser.menus.removeAll();
 	browser.notifications.getAll().then(clearNotifs);
@@ -34,15 +50,18 @@ function refresh() {
 		id: "m3u8link",
 		title: "The Stream Detector"
 	});
-	browser.menus.create({
-		type: "checkbox",
-		checked: paused,
-		id: "m3u8linkPause",
-		title: _("pause"),
-		parentId: "m3u8link"
+	browser.storage.local.get().then(options => {
+		if (options.paused === true) paused = options.paused;
+		browser.menus.create({
+			type: "checkbox",
+			checked: paused,
+			id: "m3u8linkPause",
+			title: _("pause"),
+			parentId: "m3u8link"
+		});
 	});
 }
-refresh();
+setup();
 
 function addURL(requestDetails) {
 	if (!Object.keys(urlList).includes(requestDetails.url)) {
@@ -112,14 +131,21 @@ function addURL(requestDetails) {
 		browser.browserAction.setBadgeText({ text: badgenum.toString() });
 
 		browser.storage.local.get().then(options => {
-			if (options.notifPref !== true) {
+			if (!options.urlStorage) {
+				browser.storage.local.set({ urlStorage: [requestDetails] });
+			} else {
+				browser.storage.local.set({
+					urlStorage: [...options.urlStorage, requestDetails]
+				});
+			}
+			if (options.notifPref !== true && !requestDetails.restore) {
 				browser.notifications.getAll().then(all => {
 					clearNotifs(all);
 					browser.notifications.create(`notif-${filename}`, {
 						type: "basic",
 						iconUrl: "data/icon-dark-96.png",
-						title: _("notifTitle", ext),
-						message: _("notifText", ext)
+						title: _("notifTitle"),
+						message: _("notifText")
 					});
 				});
 			}
@@ -337,33 +363,27 @@ function clearNotifs(all) {
 }
 
 browser.browserAction.onClicked.addListener(() => {
-	{
-		browser.storage.local.get().then(options => {
-			if (options.clearList === true) {
-				refresh();
-			} else {
-				copyURL(Object.keys(urlList));
-			}
-		});
-	}
+	browser.storage.local.get().then(options => {
+		if (options.clearList === true) {
+			clearList();
+			setup();
+		} else {
+			copyURL(Object.keys(urlList));
+		}
+	});
 });
 
 browser.menus.onClicked.addListener(info => {
 	if (info.menuItemId === "m3u8linkPause") {
-		//not the most elegant solution but it works fine
+		paused = info.checked;
+		browser.storage.local.set({ paused });
 		if (info.checked) {
-			paused = true;
-			browser.webRequest.onBeforeSendHeaders.removeListener(addURL);
+			removeListener();
 		} else {
-			paused = false;
-			browser.webRequest.onBeforeSendHeaders.addListener(
-				addURL,
-				listenerFilter,
-				["requestHeaders"]
-			);
+			addListener();
 		}
 	} else if (info.menuItemId === "m3u8linkClear") {
-		refresh();
+		clearList();
 	} else {
 		if (info.menuItemId === "m3u8linkCopyAll") {
 			copyURL(Object.keys(urlList)); //each id is a url because the menus api is the way it is
@@ -373,6 +393,10 @@ browser.menus.onClicked.addListener(info => {
 	}
 });
 
-browser.webRequest.onBeforeSendHeaders.addListener(addURL, listenerFilter, [
-	"requestHeaders"
-]);
+browser.storage.local.get().then(options => {
+	if (options.paused !== true) addListener();
+	if (options.urlStorage && options.urlStorage.length > 0) {
+		//restore urls on startup - restore: true for no notifs in addURL
+		for (let url of options.urlStorage) addURL({ ...url, restore: true });
+	}
+});
