@@ -1,9 +1,9 @@
 {
 	"notifTitle": {
-		"message": "Wykryto stream(y)!"
+		"message": "Wykryto stream!"
 	},
 	"notifText": {
-		"message": "Wykryto jeden lub więcej streamów.\nWszystkie wykryte linki dostępne są w menu kontekstowym."
+		"message": "Uwaga: Funkcjonalność rozszerzenia została przeniesiona do przycisku na pasku narzędzi.\n\nWykryto nowy stream:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "Skopiowano link(i)!"
@@ -59,14 +59,14 @@
 	"notifPref": {
 		"message": "Wyłącz powiadomienia:"
 	},
-	"pause": {
-		"message": "Przerwij wykrywanie"
+	"disablePref": {
+		"message": "Wyłącz wykrywanie:"
 	},
 	"clearList": {
-		"message": "Wyczyść listę"
+		"message": "Wyczyść tę listę"
 	},
 	"copyAll": {
-		"message": "Skopiuj wszystkie linki"
+		"message": "Skopiuj widoczne linki"
 	},
 	"proxyPref": {
 		"message": "Użyj serwera HTTP proxy:"
@@ -76,5 +76,35 @@
 	},
 	"buttonClick": {
 		"message": "Działanie przycisku na pasku narzędzi:"
+	},
+	"popupType": {
+		"message": "Rodzaj"
+	},
+	"popupFilename": {
+		"message": "Nazwa pliku"
+	},
+	"popupSource": {
+		"message": "Źródło"
+	},
+	"popupTimestamp": {
+		"message": "Data"
+	},
+	"copyTooltip": {
+		"message": "Kliknij, aby skopiować link."
+	},
+	"deleteTooltip": {
+		"message": "Kliknij, aby usunąć link."
+	},
+	"tabThis": {
+		"message": "Ta karta"
+	},
+	"tabAll": {
+		"message": "Wszystkie karty"
+	},
+	"tabPrevious": {
+		"message": "Poprzednie sesje"
+	},
+	"filterInput": {
+		"message": "Filtr:"
 	}
 }

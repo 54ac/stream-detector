@@ -50,7 +50,7 @@
 	"notifPref": {
 		"message": "Vypnúť notifikácie:"
 	},
-	"pause": {
+	"disablePref": {
 		"message": "Pozastaviť detekciu"
 	},
 	"clearList": {

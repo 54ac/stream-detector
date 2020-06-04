@@ -1,9 +1,9 @@
 {
 	"notifTitle": {
-		"message": "Stream(s) detected!"
+		"message": "Stream detected!"
 	},
 	"notifText": {
-		"message": "One or more streams detected.\nUse the right-click context menu to copy the URL(s)."
+		"message": "Note: All addon functionality has been moved to the toolbar button.\n\nNew stream detected:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URL(s) copied!"
@@ -59,14 +59,14 @@
 	"notifPref": {
 		"message": "Disable notifications:"
 	},
-	"pause": {
-		"message": "Pause detection"
+	"disablePref": {
+		"message": "Disable detection:"
 	},
 	"clearList": {
-		"message": "Clear URL list"
+		"message": "Clear this URL list"
 	},
 	"copyAll": {
-		"message": "Copy all URLs"
+		"message": "Copy all visible URLs"
 	},
 	"proxyPref": {
 		"message": "Use HTTP proxy server:"
@@ -76,5 +76,35 @@
 	},
 	"buttonClick": {
 		"message": "Browser action button functionality:"
+	},
+	"popupType": {
+		"message": "Type"
+	},
+	"popupFilename": {
+		"message": "Filename"
+	},
+	"popupSource": {
+		"message": "Source"
+	},
+	"popupTimestamp": {
+		"message": "Timestamp"
+	},
+	"copyTooltip": {
+		"message": "Click to copy URL."
+	},
+	"deleteTooltip": {
+		"message": "Click to delete URL."
+	},
+	"tabThis": {
+		"message": "This tab"
+	},
+	"tabAll": {
+		"message": "All tabs"
+	},
+	"tabPrevious": {
+		"message": "Previous sessions"
+	},
+	"filterInput": {
+		"message": "Filter:"
 	}
 }

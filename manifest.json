@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "1.11.0",
+	"version": "2.0.0",
 	"permissions": [
 		"webRequest",
 		"*://*/*.m3u8",
@@ -17,10 +17,10 @@
 		"*://*/*.ism/*",
 		"*://*/*.vtt",
 		"*://*/*.vtt?*",
-		"menus",
 		"notifications",
 		"clipboardWrite",
-		"storage"
+		"storage",
+		"activeTab"
 	],
 	"background": {
 		"scripts": [
@@ -28,29 +28,31 @@
 		]
 	},
 	"icons": {
-		"48": "data/icon-dark-48.png",
-		"96": "data/icon-dark-96.png"
+		"16": "img/icon-dark-16.png",
+		"48": "img/icon-dark-48.png",
+		"96": "img/icon-dark-96.png"
 	},
 	"options_ui": {
-		"page": "options.html"
+		"page": "options/options.html"
 	},
 	"browser_action": {
 		"browser_style": true,
 		"default_title": "The Stream Detector",
+		"default_popup": "popup/popup.html",
 		"theme_icons": [
 			{
-				"dark": "data/icon-dark-96.png",
-				"light": "data/icon-light-96.png",
+				"dark": "img/icon-dark-96.png",
+				"light": "img/icon-light-96.png",
 				"size": 96
 			},
 			{
-				"dark": "data/icon-dark-48.png",
-				"light": "data/icon-light-48.png",
+				"dark": "img/icon-dark-48.png",
+				"light": "img/icon-light-48.png",
 				"size": 48
 			},
 			{
-				"dark": "data/icon-dark-16.png",
-				"light": "data/icon-light-16.png",
+				"dark": "img/icon-dark-16.png",
+				"light": "img/icon-light-16.png",
 				"size": 16
 			}
 		]
