@@ -116,7 +116,8 @@ function addURL(requestDetails) {
 					.then(() => {
 						browser.runtime.sendMessage({}); //must contain object, empty for now
 						if (options.notifPref !== true) {
-							browser.notifications.create("", {
+							browser.notifications.create("add", {
+								//id = only one notification of this type appears at a time
 								type: "basic",
 								iconUrl: "img/icon-dark-96.png",
 								title: _("notifTitle"),

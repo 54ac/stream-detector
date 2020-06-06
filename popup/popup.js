@@ -250,7 +250,7 @@ function copyURL(info) {
 		navigator.clipboard.writeText(list.urls.join("\n")).then(
 			() => {
 				if (options.notifPref !== true) {
-					browser.notifications.create("", {
+					browser.notifications.create("copy", {
 						type: "basic",
 						iconUrl: "img/icon-dark-96.png",
 						title: _("notifCopiedTitle"),
@@ -263,7 +263,7 @@ function copyURL(info) {
 			},
 			error => {
 				if (options.notifPref !== true) {
-					browser.notifications.create("", {
+					browser.notifications.create("error", {
 						type: "basic",
 						iconUrl: "img/icon-dark-96.png",
 						title: _("notifErrorTitle"),
