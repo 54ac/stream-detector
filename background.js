@@ -16,6 +16,7 @@ const listenerFilter = {
 
 const _ = browser.i18n.getMessage;
 
+var urlStorage = [];
 function setup() {
 	//clear everything and/or set up
 	browser.browserAction.setBadgeText({ text: "" });
@@ -24,8 +25,7 @@ function setup() {
 		browser.storage.local
 			.set({
 				disablePref: !options.disablePref ? false : options.disablePref,
-				urlStorage: !options.urlStorage ? [] : options.urlStorage,
-				badgeText: 0
+				urlStorage: !options.urlStorage ? [] : options.urlStorage
 			})
 			.then(() => {
 				browser.webRequest.onBeforeSendHeaders.addListener(
@@ -38,18 +38,29 @@ function setup() {
 			//restore urls on startup
 			for (let url of options.urlStorage) {
 				url.restore = true;
+				urlStorage.push(url);
 				addURL(url);
 			}
 		}
 	});
+
+	browser.runtime.onMessage.addListener(() => {
+		//updating urlstorage if entries deleted in popup. should be implemented better
+		browser.storage.local.get().then(options => {
+			urlStorage = options.urlStorage;
+			badgeText = options.badgeText;
+			browser.browserAction.setBadgeText({
+				text: badgeText === 0 ? "" : badgeText.toString() //only display at 1+
+			});
+		});
+	});
 }
 
+var badgeText = 0;
 function addURL(requestDetails) {
-	browser.storage.local.get().then(options => {
-		const checkUrl = options.urlStorage.filter(
-			url => url.url === requestDetails.url
-		);
+	const checkUrl = urlStorage.filter(e => e.url === requestDetails.url);
 
+	browser.storage.local.get().then(options => {
 		if (
 			(!options.disablePref && //only run if it's not disabled by checkbox
 				(checkUrl.length === 0 || //and if it's either a new url
@@ -58,8 +69,9 @@ function addURL(requestDetails) {
 		) {
 			if (!requestDetails.restore) {
 				browser.browserAction.setBadgeBackgroundColor({ color: "green" });
+				badgeText++;
 				browser.browserAction.setBadgeText({
-					text: (options.badgeText + 1).toString()
+					text: badgeText.toString()
 				});
 
 				const url = new URL(requestDetails.url);
@@ -108,23 +120,19 @@ function addURL(requestDetails) {
 					timestamp
 				};
 
-				browser.storage.local
-					.set({
-						urlStorage: [...options.urlStorage, newRequestDetails],
-						badgeText: options.badgeText + 1
-					})
-					.then(() => {
-						browser.runtime.sendMessage({}); //must contain object, empty for now
-						if (options.notifPref !== true) {
-							browser.notifications.create("add", {
-								//id = only one notification of this type appears at a time
-								type: "basic",
-								iconUrl: "img/icon-dark-96.png",
-								title: _("notifTitle"),
-								message: _("notifText") + filename + "." + ext
-							});
-						}
-					});
+				urlStorage.push(newRequestDetails); //the following promise is too slow - workaround instead of doing it properly
+				browser.storage.local.set({ urlStorage, badgeText }).then(() => {
+					browser.runtime.sendMessage({}); //must contain object, empty for now
+					if (options.notifPref !== true) {
+						browser.notifications.create("add", {
+							//id = only one notification of this type appears at a time
+							type: "basic",
+							iconUrl: "img/icon-dark-96.png",
+							title: _("notifTitle"),
+							message: _("notifText") + filename + "." + ext
+						});
+					}
+				});
 			}
 		}
 	});

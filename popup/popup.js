@@ -3,9 +3,8 @@ const defaultOptions = { tabThis: true }; //used in restoreOptions
 const _ = browser.i18n.getMessage; //i18n
 
 function restoreOptions() {
-	//reset badge text when clicked
-	browser.storage.local.set({ badgeText: 0 });
-	browser.browserAction.setBadgeText({ text: "" });
+	//change badge text background when clicked
+	browser.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
 
 	const options = document.getElementsByClassName("option");
 	//should probably consolidate this with the other one at some point
@@ -277,13 +276,16 @@ function copyURL(info) {
 
 function deleteURL(requestDetails) {
 	browser.storage.local.get().then(options => {
-		const newUrlStorage = options.urlStorage.filter(
+		const urlStorage = options.urlStorage.filter(
 			//no need to compare the entire object
 			url => url.requestId !== requestDetails.requestId
 		);
-		browser.storage.local
-			.set({ urlStorage: newUrlStorage })
-			.then(() => createList());
+		const badgeText = urlStorage.length;
+
+		browser.storage.local.set({ urlStorage, badgeText }).then(() => {
+			createList();
+			browser.runtime.sendMessage({}); //notify background script to update urlstorage. workaround
+		});
 	});
 }
 
@@ -309,10 +311,15 @@ function clearList() {
 	const idList = getIdList();
 
 	browser.storage.local.get().then(options => {
-		const urlList = options.urlStorage.filter(
+		const urlStorage = options.urlStorage.filter(
 			url => !idList.includes(url.requestId)
 		);
-		browser.storage.local.set({ urlStorage: urlList }).then(() => createList());
+		const badgeText = urlStorage.length;
+
+		browser.storage.local.set({ urlStorage, badgeText }).then(() => {
+			createList();
+			browser.runtime.sendMessage({});
+		});
 	});
 }
 
