@@ -114,7 +114,7 @@ function restoreOptions() {
 		}
 
 		for (let option of options) {
-			option.addEventListener("change", e => saveOption(e));
+			option.onchange = e => saveOption(e);
 		}
 
 		//i18n
@@ -135,5 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
 
 	//sync with popup changes
-	browser.storage.onChanged.addListener(restoreOptions);
+	browser.runtime.onMessage.addListener(message => {
+		if (message.options) restoreOptions();
+	});
 });

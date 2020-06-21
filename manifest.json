@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"permissions": [
 		"webRequest",
 		"*://*/*.m3u8",
@@ -33,6 +33,8 @@
 		"96": "img/icon-dark-96.png"
 	},
 	"options_ui": {
+		"browser_style": true,
+		"open_in_tab": false,
 		"page": "options/options.html"
 	},
 	"browser_action": {

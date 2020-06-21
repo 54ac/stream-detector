@@ -32,7 +32,7 @@ function restoreOptions() {
 			}
 		}
 		for (let option of options) {
-			option.addEventListener("change", e => saveOption(e));
+			option.onchange = e => saveOption(e);
 		}
 
 		//i18n
@@ -46,17 +46,15 @@ function restoreOptions() {
 		}
 
 		//button and text input functionality
-		document.getElementById("copyAll").addEventListener("click", e => {
+		document.getElementById("copyAll").onclick = e => {
 			e.preventDefault();
 			copyAll();
-		});
-		document.getElementById("clearList").addEventListener("click", e => {
+		};
+		document.getElementById("clearList").onclick = e => {
 			e.preventDefault();
 			clearList();
-		});
-		document
-			.getElementById("filterInput")
-			.addEventListener("keyup", () => createList());
+		};
+		document.getElementById("filterInput").onkeyup = () => createList();
 	});
 }
 
@@ -66,6 +64,8 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
+		//sync with options.js - workaround
+		browser.runtime.sendMessage({ options: true });
 	} else if (e.target.type === "radio") {
 		//update entire radio group
 		for (let option of options) {
@@ -80,6 +80,7 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.value
 		});
+		browser.runtime.sendMessage({ options: true });
 	}
 }
 
@@ -275,18 +276,8 @@ function copyURL(info) {
 }
 
 function deleteURL(requestDetails) {
-	browser.storage.local.get().then(options => {
-		const urlStorage = options.urlStorage.filter(
-			//no need to compare the entire object
-			url => url.requestId !== requestDetails.requestId
-		);
-		const badgeText = urlStorage.length;
-
-		browser.storage.local.set({ urlStorage, badgeText }).then(() => {
-			createList();
-			browser.runtime.sendMessage({}); //notify background script to update urlstorage. workaround
-		});
-	});
+	const deleteUrlStorage = [requestDetails];
+	browser.runtime.sendMessage({ delete: deleteUrlStorage }); //notify background script to update urlstorage. workaround
 }
 
 function getIdList() {
@@ -298,32 +289,23 @@ function getIdList() {
 function copyAll() {
 	//this seems like a roundabout way of doing this but oh well
 	const idList = getIdList();
+	const copyUrlList = urlList.filter(url => idList.includes(url.requestId));
 
-	browser.storage.local.get().then(options => {
-		const urlList = options.urlStorage.filter(url =>
-			idList.includes(url.requestId)
-		);
-		copyURL(urlList);
-	});
+	copyURL(copyUrlList);
 }
 
 function clearList() {
 	const idList = getIdList();
+	const deleteUrlStorage = urlList.filter(url =>
+		idList.includes(url.requestId)
+	);
 
-	browser.storage.local.get().then(options => {
-		const urlStorage = options.urlStorage.filter(
-			url => !idList.includes(url.requestId)
-		);
-		const badgeText = urlStorage.length;
-
-		browser.storage.local.set({ urlStorage, badgeText }).then(() => {
-			createList();
-			browser.runtime.sendMessage({});
-		});
-	});
+	browser.runtime.sendMessage({ delete: deleteUrlStorage });
 }
 
 const table = document.getElementById("popupUrlList");
+
+var urlList = [];
 
 function createList() {
 	function insertList(urlList) {
@@ -341,7 +323,7 @@ function createList() {
 
 			const urlCell = document.createElement("td");
 			urlCell.textContent = requestDetails.filename;
-			urlCell.addEventListener("click", () => copyURL([requestDetails]));
+			urlCell.onclick = () => copyURL([requestDetails]);
 			urlCell.style.cursor = "pointer";
 			urlCell.title = _("copyTooltip");
 
@@ -355,16 +337,10 @@ function createList() {
 
 			const deleteCell = document.createElement("td");
 			deleteCell.textContent = "X";
-			deleteCell.addEventListener("click", () => deleteURL(requestDetails));
-			deleteCell.addEventListener(
-				"mouseover",
-				() => (urlCell.style.textDecoration = "line-through")
-			);
-
-			deleteCell.addEventListener(
-				"mouseout",
-				() => (urlCell.style.textDecoration = "initial")
-			);
+			deleteCell.onclick = () => deleteURL(requestDetails);
+			deleteCell.onmouseover = () =>
+				(urlCell.style.textDecoration = "line-through");
+			deleteCell.onmouseout = () => (urlCell.style.textDecoration = "initial");
 			deleteCell.style.cursor = "pointer";
 			deleteCell.title = _("deleteTooltip");
 
@@ -374,15 +350,8 @@ function createList() {
 			row.appendChild(timestampCell);
 			row.appendChild(deleteCell);
 
-			row.addEventListener(
-				"mouseover",
-				() => (row.style.backgroundColor = "gainsboro")
-			);
-
-			row.addEventListener(
-				"mouseout",
-				() => (row.style.backgroundColor = "initial")
-			);
+			row.onmouseover = () => (row.style.backgroundColor = "gainsboro");
+			row.onmouseout = () => (row.style.backgroundColor = "initial");
 
 			table.appendChild(row);
 		}
@@ -410,7 +379,6 @@ function createList() {
 
 	browser.storage.local.get().then(options => {
 		if (options.urlStorage && options.urlStorage.length > 0) {
-			var urlList = [];
 			const urlStorageFilter = document
 				.getElementById("filterInput")
 				.value.toLowerCase();
@@ -431,6 +399,7 @@ function createList() {
 					urlList = urlList.filter(
 						url =>
 							url.filename.toLowerCase().includes(urlStorageFilter) ||
+							url.ext.toLowerCase().includes(urlStorageFilter) ||
 							url.hostname.toLowerCase().includes(urlStorageFilter)
 					);
 
@@ -447,8 +416,8 @@ function createList() {
 document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
 	createList();
-	browser.runtime.onMessage.addListener(() => {
-		//in case something is detected when the popup is open
-		if (document.getElementById("tabPrevious").checked === false) createList();
+
+	browser.runtime.onMessage.addListener(message => {
+		if (message.urlStorage) createList();
 	});
 });

@@ -44,15 +44,8 @@ function setup() {
 		}
 	});
 
-	browser.runtime.onMessage.addListener(() => {
-		//updating urlstorage if entries deleted in popup. should be implemented better
-		browser.storage.local.get().then(options => {
-			urlStorage = options.urlStorage;
-			badgeText = options.badgeText;
-			browser.browserAction.setBadgeText({
-				text: badgeText === 0 ? "" : badgeText.toString() //only display at 1+
-			});
-		});
+	browser.runtime.onMessage.addListener(message => {
+		if (message.delete) deleteURL(message.delete);
 	});
 }
 
@@ -122,7 +115,7 @@ function addURL(requestDetails) {
 
 				urlStorage.push(newRequestDetails); //the following promise is too slow - workaround instead of doing it properly
 				browser.storage.local.set({ urlStorage, badgeText }).then(() => {
-					browser.runtime.sendMessage({}); //must contain object, empty for now
+					browser.runtime.sendMessage({ urlStorage: true }); //update popup if opened
 					if (options.notifPref !== true) {
 						browser.notifications.create("add", {
 							//id = only one notification of this type appears at a time
@@ -135,6 +128,21 @@ function addURL(requestDetails) {
 				});
 			}
 		}
+	});
+}
+
+function deleteURL(message) {
+	//url deletion
+	urlStorage = urlStorage.filter(
+		url => !message.map(url => url.requestId).includes(url.requestId)
+	);
+	badgeText = urlStorage.filter(url => !url.restore).length;
+
+	browser.storage.local.set({ urlStorage, badgeText }).then(() => {
+		browser.runtime.sendMessage({ urlStorage: true });
+		browser.browserAction.setBadgeText({
+			text: badgeText === 0 ? "" : badgeText.toString() //only display at 1+
+		});
 	});
 }
 
