@@ -170,6 +170,7 @@ function copyURL(info) {
 							ua = true;
 						}
 						if (header.name.toLowerCase() === "cookie") {
+							header.value = header.value.replaceAll(`"`, `'`); //double quotation marks mess up the command
 							switch (fileMethod) {
 								case "ffmpeg":
 									code += ` -headers "Cookie: ${header.value}"`;

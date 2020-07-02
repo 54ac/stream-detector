@@ -29,7 +29,6 @@ function checkHeadersPref() {
 }
 
 function saveOption(e) {
-	const options = document.getElementsByClassName("option");
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
 		let prefName = "customCommand" + e.target.value;
 		browser.storage.local.get(prefName).then(res => {
@@ -48,15 +47,6 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
-	} else if (e.target.type === "radio") {
-		//update entire radio group
-		for (let option of options) {
-			if (option.name === e.target.name) {
-				browser.storage.local.set({
-					[option.id]: document.getElementById(option.id).checked
-				});
-			}
-		}
 	} else {
 		browser.storage.local.set({
 			[e.target.id]: e.target.value
@@ -113,25 +103,26 @@ function restoreOptions() {
 			}
 		}
 
-		for (let option of options) {
-			option.onchange = e => saveOption(e);
-		}
-
-		//i18n
-		const labels = document.getElementsByTagName("label");
-		for (let label of labels) {
-			label.textContent = _(label.htmlFor);
-		}
-		const selectOptions = document.getElementsByTagName("option");
-		for (let selectOption of selectOptions) {
-			selectOption.textContent = _(selectOption.value);
-		}
-
 		checkHeadersPref();
 	});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+	const options = document.getElementsByClassName("option");
+	for (let option of options) {
+		option.onchange = e => saveOption(e);
+	}
+
+	//i18n
+	const labels = document.getElementsByTagName("label");
+	for (let label of labels) {
+		label.textContent = _(label.htmlFor);
+	}
+	const selectOptions = document.getElementsByTagName("option");
+	for (let selectOption of selectOptions) {
+		selectOption.textContent = _(selectOption.value);
+	}
+
 	restoreOptions();
 
 	//sync with popup changes

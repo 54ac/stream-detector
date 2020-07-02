@@ -33,15 +33,15 @@ function setup() {
 					listenerFilter,
 					["requestHeaders"]
 				);
+				if (options.urlStorage && options.urlStorage.length > 0) {
+					//restore urls on startup
+					for (let url of options.urlStorage) {
+						url.restore = true;
+						urlStorage.push(url);
+					}
+					browser.storage.local.set({ urlStorage });
+				}
 			});
-		if (options.urlStorage && options.urlStorage.length > 0) {
-			//restore urls on startup
-			for (let url of options.urlStorage) {
-				url.restore = true;
-				urlStorage.push(url);
-				addURL(url);
-			}
-		}
 	});
 
 	browser.runtime.onMessage.addListener(message => {
@@ -55,76 +55,70 @@ function addURL(requestDetails) {
 
 	browser.storage.local.get().then(options => {
 		if (
-			(!options.disablePref && //only run if it's not disabled by checkbox
-				(checkUrl.length === 0 || //and if it's either a new url
-					checkUrl.filter(url => url.restore === undefined).length === 0)) || //or a new url for this session
-			requestDetails.restore //or if it's a restore
+			!options.disablePref && //only run if it's not disabled by checkbox
+			(checkUrl.length === 0 || //and if it's either a new url
+				checkUrl.filter(url => url.restore === undefined).length === 0)
 		) {
-			if (!requestDetails.restore) {
-				browser.browserAction.setBadgeBackgroundColor({ color: "green" });
-				badgeText++;
-				browser.browserAction.setBadgeText({
-					text: badgeText.toString()
-				});
+			browser.browserAction.setBadgeBackgroundColor({ color: "green" });
+			badgeText++;
+			browser.browserAction.setBadgeText({
+				text: badgeText.toString()
+			});
 
-				const url = new URL(requestDetails.url);
+			const url = new URL(requestDetails.url);
 
-				let filename;
-				if (url.href.indexOf(".ism") === -1) {
-					filename = url.href.slice(
-						url.href.lastIndexOf("/") + 1,
-						url.href.lastIndexOf(".") || url.href.lastIndexOf("?")
-					);
-					filename = filename.slice(
-						0,
-						filename.indexOf("?") === -1
-							? filename.length
-							: filename.indexOf("?")
-					); //why does slice have to be the way it is
-				} else {
-					filename = url.href.slice(
-						url.href.lastIndexOf("/", url.href.lastIndexOf(".ism")) + 1,
-						url.href.lastIndexOf(".")
-					);
-				}
-
-				let ext = url.href.slice(
-					url.href.lastIndexOf(".") + 1,
-					url.href.length
+			let filename;
+			if (url.href.indexOf(".ism") === -1) {
+				filename = url.href.slice(
+					url.href.lastIndexOf("/") + 1,
+					url.href.lastIndexOf(".") || url.href.lastIndexOf("?")
 				);
-				ext = ext.slice(
+				filename = filename.slice(
 					0,
-					ext.lastIndexOf("/") === -1 ? ext.length : ext.lastIndexOf("/")
+					filename.indexOf("?") === -1 ? filename.length : filename.indexOf("?")
+				); //why does slice have to be the way it is
+			} else {
+				filename = url.href.slice(
+					url.href.lastIndexOf("/", url.href.lastIndexOf(".ism")) + 1,
+					url.href.lastIndexOf(".")
 				);
-				ext = ext.slice(
-					0,
-					ext.lastIndexOf("?") === -1 ? ext.length : ext.lastIndexOf("?")
-				);
+			}
 
-				const hostname = url.hostname;
+			let ext = url.href.slice(url.href.lastIndexOf(".") + 1, url.href.length);
+			ext = ext.slice(
+				0,
+				ext.lastIndexOf("/") === -1 ? ext.length : ext.lastIndexOf("/")
+			);
+			ext = ext.slice(
+				0,
+				ext.lastIndexOf("?") === -1 ? ext.length : ext.lastIndexOf("?")
+			);
 
-				const timestamp = Date.now();
+			const hostname = url.hostname;
 
-				const newRequestDetails = {
-					...requestDetails,
-					filename,
-					ext,
-					hostname,
-					timestamp
-				};
+			const timestamp = Date.now();
 
-				urlStorage.push(newRequestDetails); //the following promise is too slow - workaround instead of doing it properly
+			const newRequestDetails = {
+				...requestDetails,
+				filename,
+				ext,
+				hostname,
+				timestamp
+			};
+
+			urlStorage.push(newRequestDetails); //the following promise is too slow - workaround instead of doing it properly
+			if (options.urlStorage != urlStorage && options.badgeText != badgeText)
 				browser.storage.local.set({ urlStorage, badgeText }).then(() => {
 					browser.runtime.sendMessage({ urlStorage: true }); //update popup if opened
-					if (options.notifPref !== true) {
-						browser.notifications.create("add", {
-							//id = only one notification of this type appears at a time
-							type: "basic",
-							iconUrl: "img/icon-dark-96.png",
-							title: _("notifTitle"),
-							message: _("notifText") + filename + "." + ext
-						});
-					}
+				});
+
+			if (options.notifPref !== true) {
+				browser.notifications.create("add", {
+					//id = only one notification of this type appears at a time
+					type: "basic",
+					iconUrl: "img/icon-dark-96.png",
+					title: _("notifTitle"),
+					message: _("notifText") + filename + "." + ext
 				});
 			}
 		}
