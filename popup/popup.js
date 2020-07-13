@@ -123,6 +123,9 @@ function copyURL(info) {
 					case "hlsdl":
 						code = "hlsdl -b";
 						break;
+					case "user":
+						code = options.userCommand;
+						break;
 				}
 
 				//custom command line
@@ -166,6 +169,9 @@ function copyURL(info) {
 								case "hlsdl":
 									code += ` -u "${header.value}"`;
 									break;
+								case "user":
+									code = code.replace("%useragent%", header.value);
+									break;
 							}
 							ua = true;
 						}
@@ -184,6 +190,9 @@ function copyURL(info) {
 								case "hlsdl":
 									code += ` -h "Cookie:${header.value}"`;
 									break;
+								case "user":
+									code = code.replace("%cookie%", header.value);
+									break;
 							}
 						}
 						if (header.name.toLowerCase() === "referer") {
@@ -199,6 +208,9 @@ function copyURL(info) {
 									break;
 								case "hlsdl":
 									code += ` -h "Referer:${header.value}"`;
+									break;
+								case "user":
+									code = code.replace("%referer%", header.value);
 									break;
 							}
 						}
@@ -218,6 +230,9 @@ function copyURL(info) {
 								break;
 							case "hlsdl":
 								code += ` -u "${navigator.userAgent}"`;
+								break;
+							case "user":
+								code = code.replace("%useragent%", navigator.userAgent);
 								break;
 						}
 					}
@@ -239,6 +254,11 @@ function copyURL(info) {
 						break;
 					case "hlsdl":
 						code += ` -o "${filename}.ts" "${streamURL}"`;
+						break;
+					case "user":
+						code = code.replace("%url%", streamURL);
+						code = code.replace("%filename%", filename);
+						break;
 				}
 			}
 
