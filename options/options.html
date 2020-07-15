@@ -29,6 +29,7 @@
 							<option value="ffmpeg"></option>
 							<option value="streamlink"></option>
 							<option value="hlsdl"></option>
+							<option value="user"></option>
 						</select></div>
 				</td>
 			</tr>
@@ -81,6 +82,14 @@
 				</td>
 				<td>
 					<div class="browser-style"><input class="option" id="customCommand" type="text"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="userCommand"></label><br/><br/ > %useragent%<br/> %referer%<br/> %cookie%<br/> %filename%<br/> %url%<br/>
+				</td>
+				<td>
+					<div class="browser-style"><input class="option" id="userCommand" type="text" placeholder="usercmd.py %url%"></div>
 				</td>
 			</tr>
 		</tbody>

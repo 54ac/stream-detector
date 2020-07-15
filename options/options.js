@@ -13,6 +13,7 @@ function checkHeadersPref() {
 	document.getElementById("customCommand").disabled = false;
 	document.getElementById("proxyPref").disabled = false;
 	document.getElementById("proxyCommand").disabled = false;
+  document.getElementById("userCommand").disabled = true;
 
 	document.getElementById("proxyPref").checked === true
 		? (document.getElementById("proxyCommand").disabled = false)
@@ -25,6 +26,12 @@ function checkHeadersPref() {
 		document.getElementById("proxyCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
+	}	else if (document.getElementById("copyMethod").value === "user") {
+		document.getElementById("headersPref").disabled = true;
+		document.getElementById("customCommand").disabled = true;
+		document.getElementById("proxyPref").disabled = true;
+		document.getElementById("proxyCommand").disabled = true;		
+		document.getElementById("userCommand").disabled = false;
 	}
 }
 

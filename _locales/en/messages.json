@@ -41,6 +41,9 @@
 	"hlsdl": {
 		"message": "hlsdl command"
 	},
+	"user": {
+		"message": "User defined command"
+	},
 	"streamlinkOutput": {
 		"message": "Output Streamlink to:"
 	},
@@ -52,6 +55,9 @@
 	},
 	"customCommand": {
 		"message": "Additional command line parameters:"
+	},
+	"userCommand": {
+		"message": "User defined command line - available fields: "
 	},
 	"headersPref": {
 		"message": "Include additional headers:"
