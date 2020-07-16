@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "2.1.2",
+	"version": "2.2.0",
 	"permissions": [
 		"webRequest",
 		"*://*/*.m3u8",

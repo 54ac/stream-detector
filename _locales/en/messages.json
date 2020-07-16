@@ -3,7 +3,7 @@
 		"message": "Stream detected!"
 	},
 	"notifText": {
-		"message": "Note: All addon functionality has been moved to the toolbar button.\n\nNew stream detected:\n"
+		"message": "New stream detected:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URL(s) copied!"
@@ -12,7 +12,7 @@
 		"message": "Successfully copied the following URL(s):\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Use of youtube-dl is recommended.\nStream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
+		"message": "Use of youtube-dl is recommended.\n\nStream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Copy error!"
@@ -42,7 +42,7 @@
 		"message": "hlsdl command"
 	},
 	"user": {
-		"message": "User defined command"
+		"message": "User-defined command"
 	},
 	"streamlinkOutput": {
 		"message": "Output Streamlink to:"
@@ -57,7 +57,10 @@
 		"message": "Additional command line parameters:"
 	},
 	"userCommand": {
-		"message": "User defined command line - available fields: "
+		"message": "User-defined command:"
+	},
+	"userCommandTip": {
+		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%"
 	},
 	"headersPref": {
 		"message": "Include additional headers:"

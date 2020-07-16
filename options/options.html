@@ -65,7 +65,8 @@
 					<label for="proxyCommand"></label>
 				</td>
 				<td>
-					<div class="browser-style"><input class="option" id="proxyCommand" type="text"></div>
+					<div class="browser-style"><input class="option" id="proxyCommand" type="text"
+							placeholder="http://127.0.0.1:1337"></div>
 				</td>
 			</tr>
 			<tr>
@@ -81,15 +82,18 @@
 					<label for="customCommand"></label>
 				</td>
 				<td>
-					<div class="browser-style"><input class="option" id="customCommand" type="text"></div>
+					<div class="browser-style"><input class="option" id="customCommand" type="text" placeholder="--verbose"></div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="userCommand"></label><br/><br/ > %useragent%<br/> %referer%<br/> %cookie%<br/> %filename%<br/> %url%<br/>
+					<label for="userCommand"></label>
 				</td>
 				<td>
-					<div class="browser-style"><input class="option" id="userCommand" type="text" placeholder="usercmd.py %url%"></div>
+					<div class="browser-style"><input class="option" id="userCommand" type="text" placeholder="usercmd.py %url%">
+						<div style="display: inline; cursor: help;"><span id="userCommandTip"
+								style="font-weight: bold; margin: auto 1vw;">?</span></div>
+					</div>
 				</td>
 			</tr>
 		</tbody>

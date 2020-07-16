@@ -1,3 +1,5 @@
+"use strict";
+
 const listenerFilter = {
 	urls: [
 		"*://*/*.m3u8",
@@ -16,7 +18,7 @@ const listenerFilter = {
 
 const _ = browser.i18n.getMessage;
 
-var urlStorage = [];
+let urlStorage = [];
 function setup() {
 	//clear everything and/or set up
 	browser.browserAction.setBadgeText({ text: "" });
@@ -49,7 +51,7 @@ function setup() {
 	});
 }
 
-var badgeText = 0;
+let badgeText = 0;
 function addURL(requestDetails) {
 	const checkUrl = urlStorage.filter(e => e.url === requestDetails.url);
 

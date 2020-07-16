@@ -3,7 +3,7 @@
 		"message": "Wykryto stream!"
 	},
 	"notifText": {
-		"message": "Uwaga: Funkcjonalność rozszerzenia została przeniesiona do przycisku na pasku narzędzi.\n\nWykryto nowy stream:\n"
+		"message": "Wykryto nowy stream:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "Skopiowano link(i)!"
@@ -12,7 +12,7 @@
 		"message": "Pomyślnie skopiowano następujące link(i) do schowka:\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Zalecane jest użycie youtube-dl.\nDane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
+		"message": "Zalecane jest użycie youtube-dl.\n\nDane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Błąd kopiowania!"
@@ -41,6 +41,9 @@
 	"hlsdl": {
 		"message": "Komendę hlsdl"
 	},
+	"user": {
+		"message": "Komendę własną"
+	},
 	"streamlinkOutput": {
 		"message": "Przesyłaj strumień wyjściowy Streamlink do:"
 	},
@@ -52,6 +55,12 @@
 	},
 	"customCommand": {
 		"message": "Dodatkowe argumenty linii poleceń:"
+	},
+	"userCommand": {
+		"message": "Komenda własna:"
+	},
+	"userCommandTip": {
+		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%"
 	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki:"

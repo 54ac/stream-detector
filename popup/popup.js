@@ -1,3 +1,5 @@
+"use strict";
+
 const defaultOptions = { tabThis: true }; //used in restoreOptions
 
 const _ = browser.i18n.getMessage; //i18n
@@ -46,11 +48,11 @@ function restoreOptions() {
 		}
 
 		//button and text input functionality
-		document.getElementById("copyAll").onclick = e => {
+		document.getElementById("copyAll").onmouseup = e => {
 			e.preventDefault();
 			copyAll();
 		};
-		document.getElementById("clearList").onclick = e => {
+		document.getElementById("clearList").onmouseup = e => {
 			e.preventDefault();
 			clearList();
 		};
@@ -86,14 +88,13 @@ function saveOption(e) {
 
 function copyURL(info) {
 	browser.storage.local.get().then(options => {
-		var list = { urls: [], filenames: [], methodIncomp: false };
+		const list = { urls: [], filenames: [], methodIncomp: false };
 		for (let e of info) {
-			var code, ua, methodIncomp, fileMethod;
+			let code, methodIncomp, fileMethod;
 
 			const streamURL = e.url;
-			const filename = e.filename;
-			const ext = e.ext;
-			fileMethod = !options.copyMethod ? "url" : options.copyMethod;
+			const { filename, ext } = e;
+			fileMethod = !options.copyMethod ? "url" : options.copyMethod; //default to url - just in case
 
 			if (
 				(ext === "f4m" && fileMethod === "ffmpeg") ||
@@ -105,10 +106,15 @@ function copyURL(info) {
 				methodIncomp = true;
 			}
 
+			//don't use user-defined command if empty
+			if (fileMethod === "user" && options.userCommand.length === 0) {
+				fileMethod = "url";
+				methodIncomp = true;
+			}
+
 			if (fileMethod === "url") {
 				code = streamURL;
 			} else {
-				ua = false;
 				//the switchboard of doom begins
 				switch (fileMethod) {
 					case "ffmpeg":
@@ -149,92 +155,96 @@ function copyURL(info) {
 						case "hlsdl":
 							code += ` -p "${options.proxyCommand}"`;
 							break;
+						case "user":
+							code = code.replace("%proxy%", options.proxyCommand);
+							break;
 					}
 				}
 
 				//additional headers
 				if (options.headersPref === true) {
-					for (let header of e.requestHeaders) {
-						if (header.name.toLowerCase() === "user-agent") {
-							switch (fileMethod) {
-								case "ffmpeg":
-									code += ` -user_agent "${header.value}"`;
-									break;
-								case "streamlink":
-									code += ` --http-header "User-Agent=${header.value}"`;
-									break;
-								case "youtubedl":
-									code += ` --user-agent "${header.value}"`;
-									break;
-								case "hlsdl":
-									code += ` -u "${header.value}"`;
-									break;
-								case "user":
-									code = code.replace("%useragent%", header.value);
-									break;
-							}
-							ua = true;
-						}
-						if (header.name.toLowerCase() === "cookie") {
-							header.value = header.value.replaceAll(`"`, `'`); //double quotation marks mess up the command
-							switch (fileMethod) {
-								case "ffmpeg":
-									code += ` -headers "Cookie: ${header.value}"`;
-									break;
-								case "streamlink":
-									code += ` --http-header "Cookie=${header.value}"`;
-									break;
-								case "youtubedl":
-									code += ` --add-header "Cookie:${header.value}"`;
-									break;
-								case "hlsdl":
-									code += ` -h "Cookie:${header.value}"`;
-									break;
-								case "user":
-									code = code.replace("%cookie%", header.value);
-									break;
-							}
-						}
-						if (header.name.toLowerCase() === "referer") {
-							switch (fileMethod) {
-								case "ffmpeg":
-									code += ` -referer "${header.value}"`;
-									break;
-								case "streamlink":
-									code += ` --http-header "Referer=${header.value}"`;
-									break;
-								case "youtubedl":
-									code += ` --referer "${header.value}"`;
-									break;
-								case "hlsdl":
-									code += ` -h "Referer:${header.value}"`;
-									break;
-								case "user":
-									code = code.replace("%referer%", header.value);
-									break;
-							}
-						}
-					}
+					let headerUserAgent = e.requestHeaders.find(
+						header => header.name.toLowerCase() === "user-agent"
+					);
+					headerUserAgent
+						? (headerUserAgent = headerUserAgent.value)
+						: (headerUserAgent = navigator.userAgent);
 
-					//user agent fallback if not supplied earlier
-					if (ua === false) {
+					let headerCookie = e.requestHeaders.find(
+						header => header.name.toLowerCase() === "cookie"
+					);
+					if (headerCookie)
+						headerCookie = headerCookie.value.replaceAll(`"`, `'`); //double quotation marks mess up the command
+
+					let headerReferer = e.requestHeaders.find(
+						header => header.name.toLowerCase() === "referer"
+					);
+					if (headerReferer) headerReferer = headerReferer.value;
+
+					if (headerUserAgent && headerUserAgent.length > 0) {
 						switch (fileMethod) {
 							case "ffmpeg":
-								code += ` -user_agent "${navigator.userAgent}"`;
+								code += ` -user_agent "${headerUserAgent}"`;
 								break;
 							case "streamlink":
-								code += ` --http-header "User-Agent=${navigator.userAgent}"`;
+								code += ` --http-header "User-Agent=${headerUserAgent}"`;
 								break;
 							case "youtubedl":
-								code += ` --user-agent "${navigator.userAgent}"`;
+								code += ` --user-agent "${headerUserAgent}"`;
 								break;
 							case "hlsdl":
-								code += ` -u "${navigator.userAgent}"`;
+								code += ` -u "${headerUserAgent}"`;
 								break;
 							case "user":
-								code = code.replace("%useragent%", navigator.userAgent);
+								code = code.replace("%useragent%", headerUserAgent);
 								break;
 						}
+					} else if (fileMethod === "user") {
+						code = code.replace("%useragent%", "");
+					}
+
+					if (headerCookie && headerCookie.length > 0) {
+						switch (fileMethod) {
+							case "ffmpeg":
+								code += ` -headers "Cookie: ${headerCookie}"`;
+								break;
+							case "streamlink":
+								code += ` --http-header "Cookie=${headerCookie}"`;
+								break;
+							case "youtubedl":
+								code += ` --add-header "Cookie:${headerCookie}"`;
+								break;
+							case "hlsdl":
+								code += ` -h "Cookie:${headerCookie}"`;
+								break;
+							case "user":
+								code = code.replace("%cookie%", headerCookie);
+								break;
+						}
+					} else if (fileMethod === "user") {
+						code = code.replace("%cookie%", "");
+					}
+
+					if (headerReferer && headerReferer.length > 0) {
+						switch (fileMethod) {
+							case "ffmpeg":
+								code += ` -referer "${headerReferer}"`;
+								break;
+							case "streamlink":
+								code += ` --http-header "Referer=${headerReferer}"`;
+								break;
+							case "youtubedl":
+								code += ` --referer "${headerReferer}"`;
+								break;
+							case "hlsdl":
+								code += ` -h "Referer:${headerReferer}"`;
+								break;
+							case "user":
+								code = code.replace("%referer%", headerReferer);
+								break;
+						}
+					} else if (fileMethod === "user") {
+						code = code.replace("%referer%", "");
 					}
 				}
 
@@ -326,7 +336,7 @@ function clearList() {
 
 const table = document.getElementById("popupUrlList");
 
-var urlList = [];
+let urlList = [];
 
 function createList() {
 	function insertList(urlList) {
@@ -344,7 +354,7 @@ function createList() {
 
 			const urlCell = document.createElement("td");
 			urlCell.textContent = requestDetails.filename;
-			urlCell.onclick = () => copyURL([requestDetails]);
+			urlCell.onmouseup = () => copyURL([requestDetails]);
 			urlCell.style.cursor = "pointer";
 			urlCell.title = _("copyTooltip");
 
@@ -358,7 +368,7 @@ function createList() {
 
 			const deleteCell = document.createElement("td");
 			deleteCell.textContent = "X";
-			deleteCell.onclick = () => deleteURL(requestDetails);
+			deleteCell.onmouseup = () => deleteURL(requestDetails);
 			deleteCell.onmouseover = () =>
 				(urlCell.style.textDecoration = "line-through");
 			deleteCell.onmouseout = () => (urlCell.style.textDecoration = "initial");
@@ -395,10 +405,10 @@ function createList() {
 		table.appendChild(row);
 	}
 
-	//clear list first just in case - quick and dirty
-	table.innerHTML = "";
-
 	browser.storage.local.get().then(options => {
+		//clear list first just in case - quick and dirty
+		table.innerHTML = "";
+
 		if (options.urlStorage && options.urlStorage.length > 0) {
 			const urlStorageFilter = document
 				.getElementById("filterInput")
