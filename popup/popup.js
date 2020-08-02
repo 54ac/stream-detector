@@ -1,100 +1,24 @@
 "use strict";
 
-const defaultOptions = { tabThis: true }; //used in restoreOptions
+const defaultOptions = { tabThis: true }; // used in restoreOptions
 
-const _ = browser.i18n.getMessage; //i18n
+const _ = browser.i18n.getMessage; // i18n
 
-function restoreOptions() {
-	//change badge text background when clicked
-	browser.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
+const table = document.getElementById("popupUrlList");
 
-	const options = document.getElementsByClassName("option");
-	//should probably consolidate this with the other one at some point
-	browser.storage.local.get().then(item => {
-		for (let option of options) {
-			if (defaultOptions[option.id]) {
-				if (item[option.id] !== undefined) {
-					document.getElementById(option.id).checked = item[option.id];
-				} else {
-					document.getElementById(option.id).checked =
-						defaultOptions[option.id];
-					browser.storage.local.set({
-						[option.id]: defaultOptions[option.id]
-					});
-				}
-			} else if (item[option.id] !== undefined) {
-				if (
-					document.getElementById(option.id).type === "checkbox" ||
-					document.getElementById(option.id).type === "radio"
-				) {
-					document.getElementById(option.id).checked = item[option.id];
-				} else {
-					document.getElementById(option.id).value = item[option.id];
-				}
-			}
-		}
-		for (let option of options) {
-			option.onchange = e => saveOption(e);
-		}
-
-		//i18n
-		const labels = document.getElementsByTagName("label");
-		for (let label of labels) {
-			label.textContent = _(label.htmlFor);
-		}
-		const selectOptions = document.getElementsByTagName("option");
-		for (let selectOption of selectOptions) {
-			selectOption.textContent = _(selectOption.value);
-		}
-
-		//button and text input functionality
-		document.getElementById("copyAll").onmouseup = e => {
-			e.preventDefault();
-			copyAll();
-		};
-		document.getElementById("clearList").onmouseup = e => {
-			e.preventDefault();
-			clearList();
-		};
-		document.getElementById("filterInput").onkeyup = () => createList();
-	});
-}
-
-function saveOption(e) {
-	const options = document.getElementsByClassName("option");
-	if (e.target.type === "checkbox") {
-		browser.storage.local.set({
-			[e.target.id]: e.target.checked
-		});
-		//sync with options.js - workaround
-		browser.runtime.sendMessage({ options: true });
-	} else if (e.target.type === "radio") {
-		//update entire radio group
-		for (let option of options) {
-			if (option.name === e.target.name) {
-				browser.storage.local.set({
-					[option.id]: document.getElementById(option.id).checked
-				});
-			}
-		}
-		createList();
-	} else {
-		browser.storage.local.set({
-			[e.target.id]: e.target.value
-		});
-		browser.runtime.sendMessage({ options: true });
-	}
-}
+let urlList = [];
 
 function copyURL(info) {
 	browser.storage.local.get().then(options => {
 		const list = { urls: [], filenames: [], methodIncomp: false };
-		for (let e of info) {
-			let code, methodIncomp, fileMethod;
+		for (const e of info) {
+			let code;
+			let methodIncomp;
+			let fileMethod;
 
 			const streamURL = e.url;
 			const { filename, ext } = e;
-			fileMethod = !options.copyMethod ? "url" : options.copyMethod; //default to url - just in case
+			fileMethod = !options.copyMethod ? "url" : options.copyMethod; // default to url - just in case
 
 			if (
 				(ext === "f4m" && fileMethod === "ffmpeg") ||
@@ -106,7 +30,7 @@ function copyURL(info) {
 				methodIncomp = true;
 			}
 
-			//don't use user-defined command if empty
+			// don't use user-defined command if empty
 			if (fileMethod === "user" && options.userCommand.length === 0) {
 				fileMethod = "url";
 				methodIncomp = true;
@@ -115,7 +39,7 @@ function copyURL(info) {
 			if (fileMethod === "url") {
 				code = streamURL;
 			} else {
-				//the switchboard of doom begins
+				// the switchboard of doom begins
 				switch (fileMethod) {
 					case "ffmpeg":
 						code = "ffmpeg";
@@ -132,15 +56,17 @@ function copyURL(info) {
 					case "user":
 						code = options.userCommand;
 						break;
+					default:
+						break;
 				}
 
-				//custom command line
-				let prefName = "customCommand" + fileMethod;
+				// custom command line
+				const prefName = `customCommand${fileMethod}`;
 				if (options[prefName]) {
-					code += " " + options[prefName];
+					code += ` ${options[prefName]}`;
 				}
 
-				//http proxy
+				// http proxy
 				if (options.proxyPref === true && options.proxyCommand) {
 					switch (fileMethod) {
 						case "ffmpeg":
@@ -158,10 +84,12 @@ function copyURL(info) {
 						case "user":
 							code = code.replace("%proxy%", options.proxyCommand);
 							break;
+						default:
+							break;
 					}
 				}
 
-				//additional headers
+				// additional headers
 				if (options.headersPref === true) {
 					let headerUserAgent = e.requestHeaders.find(
 						header => header.name.toLowerCase() === "user-agent"
@@ -174,7 +102,7 @@ function copyURL(info) {
 						header => header.name.toLowerCase() === "cookie"
 					);
 					if (headerCookie)
-						headerCookie = headerCookie.value.replaceAll(`"`, `'`); //double quotation marks mess up the command
+						headerCookie = headerCookie.value.replaceAll(`"`, `'`); // double quotation marks mess up the command
 
 					let headerReferer = e.requestHeaders.find(
 						header => header.name.toLowerCase() === "referer"
@@ -198,6 +126,8 @@ function copyURL(info) {
 							case "user":
 								code = code.replace("%useragent%", headerUserAgent);
 								break;
+							default:
+								break;
 						}
 					} else if (fileMethod === "user") {
 						code = code.replace("%useragent%", "");
@@ -219,6 +149,8 @@ function copyURL(info) {
 								break;
 							case "user":
 								code = code.replace("%cookie%", headerCookie);
+								break;
+							default:
 								break;
 						}
 					} else if (fileMethod === "user") {
@@ -242,13 +174,15 @@ function copyURL(info) {
 							case "user":
 								code = code.replace("%referer%", headerReferer);
 								break;
+							default:
+								break;
 						}
 					} else if (fileMethod === "user") {
 						code = code.replace("%referer%", "");
 					}
 				}
 
-				//final part of command
+				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
 						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
@@ -269,12 +203,14 @@ function copyURL(info) {
 						code = code.replace("%url%", streamURL);
 						code = code.replace("%filename%", filename);
 						break;
+					default:
+						break;
 				}
 			}
 
-			//used to communicate with clipboard/notifications api
+			// used to communicate with clipboard/notifications api
 			list.urls.push(code);
-			list.filenames.push(filename + "." + ext);
+			list.filenames.push(`${filename}.${ext}`);
 			list.methodIncomp = methodIncomp;
 		}
 
@@ -308,7 +244,7 @@ function copyURL(info) {
 
 function deleteURL(requestDetails) {
 	const deleteUrlStorage = [requestDetails];
-	browser.runtime.sendMessage({ delete: deleteUrlStorage }); //notify background script to update urlstorage. workaround
+	browser.runtime.sendMessage({ delete: deleteUrlStorage }); // notify background script to update urlstorage. workaround
 }
 
 function getIdList() {
@@ -318,7 +254,7 @@ function getIdList() {
 }
 
 function copyAll() {
-	//this seems like a roundabout way of doing this but oh well
+	// this seems like a roundabout way of doing this but oh well
 	const idList = getIdList();
 	const copyUrlList = urlList.filter(url => idList.includes(url.requestId));
 
@@ -334,18 +270,14 @@ function clearList() {
 	browser.runtime.sendMessage({ delete: deleteUrlStorage });
 }
 
-const table = document.getElementById("popupUrlList");
-
-let urlList = [];
-
 function createList() {
-	function insertList(urlList) {
+	function insertList(urls) {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
 		document.getElementById("filterInput").disabled = false;
 
-		for (let requestDetails of urlList) {
-			//everyone's favorite - dom manipulation in vanilla js
+		for (const requestDetails of urls) {
+			// everyone's favorite - dom manipulation in vanilla js
 			const row = document.createElement("tr");
 			row.id = requestDetails.requestId;
 
@@ -397,7 +329,7 @@ function createList() {
 		const row = document.createElement("tr");
 
 		const placeholderCell = document.createElement("td");
-		placeholderCell.colSpan = document.getElementsByTagName("th").length; //i would never remember to update this manually
+		placeholderCell.colSpan = document.getElementsByTagName("th").length; // i would never remember to update this manually
 		placeholderCell.textContent = "No URLs available.";
 
 		row.appendChild(placeholderCell);
@@ -406,7 +338,7 @@ function createList() {
 	}
 
 	browser.storage.local.get().then(options => {
-		//clear list first just in case - quick and dirty
+		// clear list first just in case - quick and dirty
 		table.innerHTML = "";
 
 		if (options.urlStorage && options.urlStorage.length > 0) {
@@ -414,7 +346,7 @@ function createList() {
 				.getElementById("filterInput")
 				.value.toLowerCase();
 
-			//do the query first to avoid async issues
+			// do the query first to avoid async issues
 			browser.tabs.query({ active: true, currentWindow: true }).then(tab => {
 				if (document.getElementById("tabThis").checked === true) {
 					urlList = options.urlStorage.filter(
@@ -435,12 +367,94 @@ function createList() {
 					);
 
 				urlList.length > 0
-					? insertList(urlList.reverse()) //latest entries first
+					? insertList(urlList.reverse()) // latest entries first
 					: insertPlaceholder();
 			});
 		} else {
 			insertPlaceholder();
 		}
+	});
+}
+
+function saveOption(e) {
+	const options = document.getElementsByClassName("option");
+	if (e.target.type === "checkbox") {
+		browser.storage.local.set({
+			[e.target.id]: e.target.checked
+		});
+		// sync with options.js - workaround
+		browser.runtime.sendMessage({ options: true });
+	} else if (e.target.type === "radio") {
+		// update entire radio group
+		for (const option of options) {
+			if (option.name === e.target.name) {
+				browser.storage.local.set({
+					[option.id]: document.getElementById(option.id).checked
+				});
+			}
+		}
+		createList();
+	} else {
+		browser.storage.local.set({
+			[e.target.id]: e.target.value
+		});
+		browser.runtime.sendMessage({ options: true });
+	}
+}
+
+function restoreOptions() {
+	// change badge text background when clicked
+	browser.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
+
+	const options = document.getElementsByClassName("option");
+	// should probably consolidate this with the other one at some point
+	browser.storage.local.get().then(item => {
+		for (const option of options) {
+			if (defaultOptions[option.id]) {
+				if (item[option.id] !== undefined) {
+					document.getElementById(option.id).checked = item[option.id];
+				} else {
+					document.getElementById(option.id).checked =
+						defaultOptions[option.id];
+					browser.storage.local.set({
+						[option.id]: defaultOptions[option.id]
+					});
+				}
+			} else if (item[option.id] !== undefined) {
+				if (
+					document.getElementById(option.id).type === "checkbox" ||
+					document.getElementById(option.id).type === "radio"
+				) {
+					document.getElementById(option.id).checked = item[option.id];
+				} else {
+					document.getElementById(option.id).value = item[option.id];
+				}
+			}
+		}
+		for (const option of options) {
+			option.onchange = e => saveOption(e);
+		}
+
+		// i18n
+		const labels = document.getElementsByTagName("label");
+		for (const label of labels) {
+			label.textContent = _(label.htmlFor);
+		}
+		const selectOptions = document.getElementsByTagName("option");
+		for (const selectOption of selectOptions) {
+			selectOption.textContent = _(selectOption.value);
+		}
+
+		// button and text input functionality
+		document.getElementById("copyAll").onmouseup = e => {
+			e.preventDefault();
+			copyAll();
+		};
+		document.getElementById("clearList").onmouseup = e => {
+			e.preventDefault();
+			clearList();
+		};
+		document.getElementById("filterInput").onkeyup = () => createList();
 	});
 }
 

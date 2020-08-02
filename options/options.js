@@ -5,9 +5,9 @@ const defaultOptions = {
 	streamlinkOutput: "file",
 	headersPref: true,
 	copyAll: true
-}; //used in restoreOptions
+}; // used in restoreOptions
 
-const _ = browser.i18n.getMessage; //i18n
+const _ = browser.i18n.getMessage; // i18n
 
 function checkHeadersPref() {
 	document.getElementById("streamlinkOutput").disabled = true;
@@ -39,7 +39,7 @@ function checkHeadersPref() {
 
 function saveOption(e) {
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
-		let prefName = "customCommand" + e.target.value;
+		const prefName = `customCommand${e.target.value}`;
 		browser.storage.local.get(prefName).then(res => {
 			res[prefName]
 				? (document.getElementById("customCommand").value = res[prefName])
@@ -67,11 +67,12 @@ function saveOption(e) {
 
 function restoreOptions() {
 	const options = document.getElementsByClassName("option");
-	//this is truly a pain
+	// this is truly a pain
 	browser.storage.local.get().then(item => {
-		for (let option of options) {
+		for (const option of options) {
 			if (option.id === "customCommand") {
-				let prefName = option.id + document.getElementById("copyMethod").value;
+				const prefName =
+					option.id + document.getElementById("copyMethod").value;
 				item[prefName]
 					? (document.getElementById(option.id).value = item[prefName])
 					: (document.getElementById(option.id).value = "");
@@ -89,16 +90,13 @@ function restoreOptions() {
 							[option.id]: defaultOptions[option.id]
 						});
 					}
+				} else if (item[option.id] !== undefined) {
+					document.getElementById(option.id).value = item[option.id];
 				} else {
-					if (item[option.id] !== undefined) {
-						document.getElementById(option.id).value = item[option.id];
-					} else {
-						document.getElementById(option.id).value =
-							defaultOptions[option.id];
-						browser.storage.local.set({
-							[option.id]: defaultOptions[option.id]
-						});
-					}
+					document.getElementById(option.id).value = defaultOptions[option.id];
+					browser.storage.local.set({
+						[option.id]: defaultOptions[option.id]
+					});
 				}
 			} else if (item[option.id] !== undefined) {
 				if (
@@ -118,28 +116,28 @@ function restoreOptions() {
 
 document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");
-	for (let option of options) {
+	for (const option of options) {
 		option.onchange = e => saveOption(e);
 	}
 
-	//i18n
+	// i18n
 	const labels = document.getElementsByTagName("label");
-	for (let label of labels) {
+	for (const label of labels) {
 		label.textContent = _(label.htmlFor);
 	}
 	const selectOptions = document.getElementsByTagName("option");
-	for (let selectOption of selectOptions) {
+	for (const selectOption of selectOptions) {
 		selectOption.textContent = _(selectOption.value);
 	}
 	const spans = document.getElementsByTagName("span");
-	for (let span of spans) {
-		//mouseover tooltip
+	for (const span of spans) {
+		// mouseover tooltip
 		span.parentElement.title = _(span.id);
 	}
 
 	restoreOptions();
 
-	//sync with popup changes
+	// sync with popup changes
 	browser.runtime.onMessage.addListener(message => {
 		if (message.options) restoreOptions();
 	});
