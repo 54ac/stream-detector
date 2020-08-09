@@ -1,127 +1,146 @@
 <!DOCTYPE html>
 
 <html>
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			/* might use a css file in the future. no need for now */
+			html,
+			body {
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
 
-<head>
-	<meta charset="UTF-8">
-	<style>
-		/* might use a css file in the future. no need for now */
-		html,
-		body {
-			padding: 0;
-			margin: 0;
-			width: 100%;
-			height: 100%;
-		}
+			body {
+				margin-right: 32px;
+				/* addon popup vertical scrollbar workaround */
+			}
 
-		body {
-			margin-right: 32px;
-			/* addon popup vertical scrollbar workaround */
-		}
+			table {
+				border-collapse: collapse;
+				width: 100%;
+			}
 
-		table {
-			border-collapse: collapse;
-			width: 100%;
-		}
+			table,
+			th,
+			td {
+				padding: 0.75em;
+				text-align: center;
+			}
 
-		table,
-		th,
-		td {
-			padding: 0.75em;
-			text-align: center;
-		}
+			div {
+				text-align: center;
+			}
 
-		div {
-			text-align: center;
-		}
+			td *,
+			th * {
+				margin: auto 0;
+			}
 
-		td *,
-		th * {
-			margin: auto 0;
-		}
+			#popupUrlList tr {
+				border: 1px solid gainsboro;
+				border-width: 1px 0;
+			}
 
-		#popupUrlList tr {
-			border: 1px solid gainsboro;
-			border-width: 1px 0;
-		}
+			input,
+			select {
+				margin: auto 0.25em;
+			}
+		</style>
+		<title>The Stream Detector</title>
+	</head>
+	<body>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<div class="browser-style">
+							<input
+								class="option"
+								type="radio"
+								id="tabThis"
+								name="tab"
+							/><label for="tabThis"></label>
+						</div>
+					</td>
+					<td>
+						<div class="browser-style">
+							<input class="option" type="radio" id="tabAll" name="tab" /><label
+								for="tabAll"
+							></label>
+						</div>
+					</td>
+					<td>
+						<div class="browser-style">
+							<input
+								class="option"
+								type="radio"
+								id="tabPrevious"
+								name="tab"
+							/><label for="tabPrevious"></label>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<div class="browser-style">
+							<label for="filterInput"></label
+							><input class="option" type="text" id="filterInput" />
+						</div>
+					</td>
+					<td>
+						<label for="copyMethod"></label>
+						<select class="option browser-style" id="copyMethod">
+							<option value="url"></option>
+							<option value="youtubedl"></option>
+							<option value="ffmpeg"></option>
+							<option value="streamlink"></option>
+							<option value="hlsdl"></option>
+							<option value="user"></option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<th><label for="popupType"></label></th>
+					<th><label for="popupFilename"></label></th>
+					<th><label for="popupSource"></label></th>
+					<th><label for="popupTimestamp"></label></th>
+					<th>X</th>
+				</tr>
+			</thead>
+			<tbody id="popupUrlList"></tbody>
+		</table>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<label for="disablePref"></label
+						><input class="option" id="disablePref" type="checkbox" />
+					</td>
+					<td>
+						<button class="browser-style" id="copyAll">
+							<label for="copyAll"></label>
+						</button>
+					</td>
+					<td>
+						<button class="browser-style" id="clearList">
+							<label for="clearList"></label>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
-		input,
-		select {
-			margin: auto 0.25em;
-		}
-	</style>
-	<title>The Stream Detector</title>
-</head>
-
-<body>
-	<table>
-		<tbody>
-			<tr>
-				<td>
-					<div class="browser-style"><input class="option" type="radio" id="tabThis" name="tab"><label
-							for="tabThis"></label></div>
-				</td>
-				<td>
-					<div class="browser-style"><input class="option" type="radio" id="tabAll" name="tab"><label
-							for="tabAll"></label></div>
-				</td>
-				<td>
-					<div class="browser-style"><input class="option" type="radio" id="tabPrevious" name="tab"><label
-							for="tabPrevious"></label></div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<table>
-		<tbody>
-			<tr>
-				<td>
-					<div class="browser-style"><label for="filterInput"></label><input class="option" type="text"
-							id="filterInput"></div>
-				</td>
-				<td>
-					<label for="copyMethod"></label>
-					<select class="option browser-style" id="copyMethod">
-						<option value="url"></option>
-						<option value="youtubedl"></option>
-						<option value="ffmpeg"></option>
-						<option value="streamlink"></option>
-						<option value="hlsdl"></option>
-						<option value="user"></option>
-					</select>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<table>
-		<thead>
-			<tr>
-				<th><label for="popupType"></label></th>
-				<th><label for="popupFilename"></label></th>
-				<th><label for="popupSource"></label></th>
-				<th><label for="popupTimestamp"></label></th>
-				<th>X</th>
-			</tr>
-		</thead>
-		<tbody id="popupUrlList"></tbody>
-	</table>
-	<table>
-		<tbody>
-			<tr>
-				<td>
-					<label for="disablePref"></label><input class="option" id="disablePref" type="checkbox">
-				</td>
-				<td>
-					<button class="browser-style" id="copyAll"><label for="copyAll"></label></button>
-				</td>
-				<td>
-					<button class="browser-style" id="clearList"><label for="clearList"></label></button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<script src="popup.js"></script>
-</body>
-
+		<script src="popup.js"></script>
+	</body>
 </html>

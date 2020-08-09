@@ -19,7 +19,6 @@ const listenerFilter = {
 const _ = browser.i18n.getMessage;
 
 let urlStorage = [];
-
 let badgeText = 0;
 
 function addURL(requestDetails) {

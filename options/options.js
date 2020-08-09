@@ -12,10 +12,16 @@ const _ = browser.i18n.getMessage; // i18n
 function checkHeadersPref() {
 	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("headersPref").disabled = false;
-	document.getElementById("customCommand").disabled = false;
+	document.getElementById("downloaderPref").disabled = true;
+	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
 	document.getElementById("proxyCommand").disabled = false;
+	document.getElementById("customCommand").disabled = false;
 	document.getElementById("userCommand").disabled = true;
+
+	document.getElementById("downloaderPref").checked === true
+		? (document.getElementById("downloaderCommand").disabled = false)
+		: (document.getElementById("downloaderCommand").disabled = true);
 
 	document.getElementById("proxyPref").checked === true
 		? (document.getElementById("proxyCommand").disabled = false)
@@ -23,16 +29,18 @@ function checkHeadersPref() {
 
 	if (document.getElementById("copyMethod").value === "url") {
 		document.getElementById("headersPref").disabled = true;
-		document.getElementById("customCommand").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
+		document.getElementById("customCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
+	} else if (document.getElementById("copyMethod").value === "youtubedl") {
+		document.getElementById("downloaderPref").disabled = false;
 	} else if (document.getElementById("copyMethod").value === "user") {
 		document.getElementById("headersPref").disabled = true;
-		document.getElementById("customCommand").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
+		document.getElementById("customCommand").disabled = true;
 		document.getElementById("userCommand").disabled = false;
 	}
 }

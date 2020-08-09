@@ -80,8 +80,8 @@
 	"proxyPref": {
 		"message": "Use HTTP proxy server:"
 	},
-	"proxyCommand": {
-		"message": "HTTP proxy server address:"
+	"downloaderPref": {
+		"message": "Use external downloader:"
 	},
 	"buttonClick": {
 		"message": "Browser action button functionality:"

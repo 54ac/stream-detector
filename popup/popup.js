@@ -49,6 +49,9 @@ function copyURL(info) {
 						break;
 					case "youtubedl":
 						code = "youtube-dl --no-part --restrict-filenames";
+						// use external downloader
+						if (options.downloaderPref === true && options.downloaderCommand)
+							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
 					case "hlsdl":
 						code = "hlsdl -b";
@@ -188,6 +191,7 @@ function copyURL(info) {
 						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
 						break;
 					case "streamlink":
+						// streamlink output to file or player
 						if (!options.streamlinkOutput) options.streamlinkOutput = "file";
 						if (options.streamlinkOutput === "file")
 							code += ` -o "${filename}.ts"`;

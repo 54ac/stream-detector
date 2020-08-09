@@ -1,105 +1,139 @@
 <!DOCTYPE html>
 
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<title>The Stream Detector</title>
+	</head>
+	<body>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<label for="disablePref"></label>
+					</td>
+					<td>
+						<input class="option" id="disablePref" type="checkbox" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="copyMethod"></label>
+					</td>
+					<td>
+						<div>
+							<select class="option browser-style" id="copyMethod">
+								<option value="url"></option>
+								<option value="youtubedl"></option>
+								<option value="ffmpeg"></option>
+								<option value="streamlink"></option>
+								<option value="hlsdl"></option>
+								<option value="user"></option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="streamlinkOutput"></label>
+					</td>
+					<td>
+						<div>
+							<select class="option browser-style" id="streamlinkOutput">
+								<option value="file"></option>
+								<option value="player"></option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="headersPref"></label>
+					</td>
+					<td>
+						<input class="option" id="headersPref" type="checkbox" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="downloaderPref"></label>
+					</td>
+					<td>
+						<input class="option" id="downloaderPref" type="checkbox" />
+						<div class="browser-style" style="display: inline;">
+							<input
+								class="option"
+								id="downloaderCommand"
+								type="text"
+								placeholder="aria2c"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="proxyPref"></label>
+					</td>
+					<td>
+						<input class="option" id="proxyPref" type="checkbox" />
+						<div class="browser-style" style="display: inline;">
+							<input
+								class="option"
+								id="proxyCommand"
+								type="text"
+								placeholder="http://127.0.0.1:1337"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="customCommand"></label>
+					</td>
+					<td>
+						<div class="browser-style">
+							<input
+								class="option"
+								id="customCommand"
+								type="text"
+								placeholder="--verbose"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="userCommand"></label>
+					</td>
+					<td>
+						<div class="browser-style">
+							<input
+								class="option"
+								id="userCommand"
+								type="text"
+								placeholder="usercmd.py %url%"
+							/>
+							<div style="display: inline; cursor: help;">
+								<span
+									id="userCommandTip"
+									style="font-weight: bold; margin: auto 1vw;"
+									>?</span
+								>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="notifPref"></label>
+					</td>
+					<td>
+						<input class="option" id="notifPref" type="checkbox" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
-<head>
-	<meta charset="utf-8">
-	<title>The Stream Detector</title>
-</head>
-
-<body>
-	<table>
-		<tbody>
-			<tr>
-				<td>
-					<label for="disablePref"></label>
-				</td>
-				<td>
-					<input class="option" id="disablePref" type="checkbox">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="copyMethod"></label>
-				</td>
-				<td>
-					<div><select class="option browser-style" id="copyMethod">
-							<option value="url"></option>
-							<option value="youtubedl"></option>
-							<option value="ffmpeg"></option>
-							<option value="streamlink"></option>
-							<option value="hlsdl"></option>
-							<option value="user"></option>
-						</select></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="streamlinkOutput"></label>
-				</td>
-				<td>
-					<div><select class="option browser-style" id="streamlinkOutput">
-							<option value="file"></option>
-							<option value="player"></option>
-						</select></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="headersPref"></label>
-				</td>
-				<td>
-					<input class="option" id="headersPref" type="checkbox">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="proxyPref"></label>
-				</td>
-				<td>
-					<input class="option" id="proxyPref" type="checkbox">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="proxyCommand"></label>
-				</td>
-				<td>
-					<div class="browser-style"><input class="option" id="proxyCommand" type="text"
-							placeholder="http://127.0.0.1:1337"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="notifPref"></label>
-				</td>
-				<td>
-					<input class="option" id="notifPref" type="checkbox">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="customCommand"></label>
-				</td>
-				<td>
-					<div class="browser-style"><input class="option" id="customCommand" type="text" placeholder="--verbose"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="userCommand"></label>
-				</td>
-				<td>
-					<div class="browser-style"><input class="option" id="userCommand" type="text" placeholder="usercmd.py %url%">
-						<div style="display: inline; cursor: help;"><span id="userCommandTip"
-								style="font-weight: bold; margin: auto 1vw;">?</span></div>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<script src="options.js"></script>
-</body>
-
+		<script src="options.js"></script>
+	</body>
 </html>
