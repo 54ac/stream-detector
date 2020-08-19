@@ -217,9 +217,42 @@ function copyURL(info) {
 			list.filenames.push(`${filename}.${ext}`);
 			list.methodIncomp = methodIncomp;
 		}
-
-		navigator.clipboard.writeText(list.urls.join("\n")).then(
-			() => {
+		if (navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(list.urls.join("\n")).then(
+				() => {
+					if (options.notifPref !== true) {
+						browser.notifications.create("copy", {
+							type: "basic",
+							iconUrl: "img/icon-dark-96.png",
+							title: _("notifCopiedTitle"),
+							message:
+								(list.methodIncomp === true
+									? _("notifIncompCopiedText")
+									: _("notifCopiedText")) + list.filenames.join("\n")
+						});
+					}
+				},
+				error => {
+					browser.notifications.create("error", {
+						type: "basic",
+						iconUrl: "img/icon-dark-96.png",
+						title: _("notifErrorTitle"),
+						message: _("notifErrorText") + error
+					});
+				}
+			);
+		} else {
+			// fallback in case the clipboard api doesn't work properly
+			const copyText = document.createElement("textarea");
+			copyText.style.position = "absolute";
+			copyText.style.left = "-5454px";
+			copyText.style.top = "-5454px";
+			document.body.appendChild(copyText);
+			copyText.value = list.urls.join("\n");
+			try {
+				copyText.select();
+				document.execCommand("copy");
+				document.body.removeChild(copyText);
 				if (options.notifPref !== true) {
 					browser.notifications.create("copy", {
 						type: "basic",
@@ -231,18 +264,15 @@ function copyURL(info) {
 								: _("notifCopiedText")) + list.filenames.join("\n")
 					});
 				}
-			},
-			error => {
-				if (options.notifPref !== true) {
-					browser.notifications.create("error", {
-						type: "basic",
-						iconUrl: "img/icon-dark-96.png",
-						title: _("notifErrorTitle"),
-						message: _("notifErrorText") + error
-					});
-				}
+			} catch (e) {
+				browser.notifications.create("error", {
+					type: "basic",
+					iconUrl: "img/icon-dark-96.png",
+					title: _("notifErrorTitle"),
+					message: _("notifErrorText") + e
+				});
 			}
-		);
+		}
 	});
 }
 
