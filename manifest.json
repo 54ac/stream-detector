@@ -3,9 +3,8 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "2.2.2",
+	"version": "2.3.0",
 	"permissions": [
-		"webRequest",
 		"*://*/*.m3u8",
 		"*://*/*.m3u8?*",
 		"*://*/*.mpd",
@@ -17,9 +16,11 @@
 		"*://*/*.ism/*",
 		"*://*/*.vtt",
 		"*://*/*.vtt?*",
+		"activeTab",
+		"clipboardWrite",
 		"notifications",
 		"storage",
-		"activeTab"
+		"webRequest"
 	],
 	"background": {
 		"scripts": ["background.js"]
