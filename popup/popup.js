@@ -22,8 +22,10 @@ function copyURL(info) {
 
 			if (
 				(ext === "f4m" && fileMethod === "ffmpeg") ||
-				(ext === "ism" && fileMethod !== "youtubedl") ||
-				(ext === "vtt" && fileMethod !== "youtubedl") ||
+				(ext === "ism" &&
+					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
+				(ext === "vtt" &&
+					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
 				(ext !== "m3u8" && fileMethod === "hlsdl")
 			) {
 				fileMethod = "url";
@@ -53,6 +55,12 @@ function copyURL(info) {
 						if (options.downloaderPref === true && options.downloaderCommand)
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
+					// this could be implemented better - maybe someday
+					case "youtubedlc":
+						code = "youtube-dlc --no-part --restrict-filenames";
+						if (options.downloaderPref === true && options.downloaderCommand)
+							code += ` --external-downloader "${options.downloaderCommand}"`;
+						break;
 					case "hlsdl":
 						code = "hlsdl -b";
 						break;
@@ -79,6 +87,9 @@ function copyURL(info) {
 							code += ` --http-proxy "${options.proxyCommand}"`;
 							break;
 						case "youtubedl":
+							code += ` --proxy "${options.proxyCommand}"`;
+							break;
+						case "youtubedlc":
 							code += ` --proxy "${options.proxyCommand}"`;
 							break;
 						case "hlsdl":
@@ -123,6 +134,9 @@ function copyURL(info) {
 							case "youtubedl":
 								code += ` --user-agent "${headerUserAgent}"`;
 								break;
+							case "youtubedlc":
+								code += ` --user-agent "${headerUserAgent}"`;
+								break;
 							case "hlsdl":
 								code += ` -u "${headerUserAgent}"`;
 								break;
@@ -147,6 +161,9 @@ function copyURL(info) {
 							case "youtubedl":
 								code += ` --add-header "Cookie:${headerCookie}"`;
 								break;
+							case "youtubedlc":
+								code += ` --add-header "Cookie:${headerCookie}"`;
+								break;
 							case "hlsdl":
 								code += ` -h "Cookie:${headerCookie}"`;
 								break;
@@ -169,6 +186,9 @@ function copyURL(info) {
 								code += ` --http-header "Referer=${headerReferer}"`;
 								break;
 							case "youtubedl":
+								code += ` --referer "${headerReferer}"`;
+								break;
+							case "youtubedlc":
 								code += ` --referer "${headerReferer}"`;
 								break;
 							case "hlsdl":
@@ -198,6 +218,9 @@ function copyURL(info) {
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
+						code += ` "${streamURL}"`;
+						break;
+					case "youtubedlc":
 						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
@@ -320,7 +343,7 @@ function createList() {
 
 			const urlCell = document.createElement("td");
 			urlCell.textContent = requestDetails.filename;
-			urlCell.onmouseup = () => copyURL([requestDetails]);
+			urlCell.onclick = () => copyURL([requestDetails]);
 			urlCell.style.cursor = "pointer";
 			urlCell.title = _("copyTooltip");
 
@@ -334,7 +357,7 @@ function createList() {
 
 			const deleteCell = document.createElement("td");
 			deleteCell.textContent = "X";
-			deleteCell.onmouseup = () => deleteURL(requestDetails);
+			deleteCell.onclick = () => deleteURL(requestDetails);
 			deleteCell.onmouseover = () =>
 				(urlCell.style.textDecoration = "line-through");
 			deleteCell.onmouseout = () => (urlCell.style.textDecoration = "initial");
@@ -480,11 +503,11 @@ function restoreOptions() {
 		}
 
 		// button and text input functionality
-		document.getElementById("copyAll").onmouseup = e => {
+		document.getElementById("copyAll").onclick = e => {
 			e.preventDefault();
 			copyAll();
 		};
-		document.getElementById("clearList").onmouseup = e => {
+		document.getElementById("clearList").onclick = e => {
 			e.preventDefault();
 			clearList();
 		};

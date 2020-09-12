@@ -32,6 +32,9 @@
 	"youtubedl": {
 		"message": "youtube-dl command"
 	},
+	"youtubedlc": {
+		"message": "youtube-dlc command"
+	},
 	"ffmpeg": {
 		"message": "FFmpeg command"
 	},

@@ -34,7 +34,10 @@ function checkHeadersPref() {
 		document.getElementById("customCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
-	} else if (document.getElementById("copyMethod").value === "youtubedl") {
+	} else if (
+		document.getElementById("copyMethod").value === "youtubedl" ||
+		document.getElementById("copyMethod").value === "youtubedlc"
+	) {
 		document.getElementById("downloaderPref").disabled = false;
 	} else if (document.getElementById("copyMethod").value === "user") {
 		document.getElementById("headersPref").disabled = true;
