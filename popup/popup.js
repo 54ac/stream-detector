@@ -240,7 +240,7 @@ function copyURL(info) {
 			list.filenames.push(`${filename}.${ext}`);
 			list.methodIncomp = methodIncomp;
 		}
-		if (navigator.clipboard.writeText) {
+		if (navigator.clipboard && navigator.clipboard.writeText) {
 			navigator.clipboard.writeText(list.urls.join("\n")).then(
 				() => {
 					if (options.notifPref !== true) {
