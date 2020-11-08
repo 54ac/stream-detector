@@ -24,8 +24,12 @@ function copyURL(info) {
 				(ext === "f4m" && fileMethod === "ffmpeg") ||
 				(ext === "ism" &&
 					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
-				(ext === "vtt" &&
-					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
+				((ext === "vtt" ||
+					ext === "srt" ||
+					ext === "ttml" ||
+					ext === "ttml2" ||
+					ext === "dfxp") &&
+					fileMethod !== "url") ||
 				(ext !== "m3u8" && fileMethod === "hlsdl")
 			) {
 				fileMethod = "url";
