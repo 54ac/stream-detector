@@ -40,7 +40,7 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 
 ### Future plans and things to do
 
-- [ ] Clean up the URL detection routine. The filename/extension part is particularly messy (it works, though),
+- [x] ~~Clean up the URL detection routine~~,
 - [x] ~~Rethink the UX~~,
 - [x] ~~Implement per-tab lists~~,
 - [ ] Sort detected URLs by video/audio quality? This would require downloading and parsing every detected manifest. Might not be feasible,

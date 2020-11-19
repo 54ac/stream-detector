@@ -109,20 +109,20 @@ function copyURL(info) {
 
 				// additional headers
 				if (options.headersPref === true) {
-					let headerUserAgent = e.requestHeaders.find(
+					let headerUserAgent = e.headers.find(
 						header => header.name.toLowerCase() === "user-agent"
 					);
 					headerUserAgent
 						? (headerUserAgent = headerUserAgent.value)
 						: (headerUserAgent = navigator.userAgent);
 
-					let headerCookie = e.requestHeaders.find(
+					let headerCookie = e.headers.find(
 						header => header.name.toLowerCase() === "cookie"
 					);
 					if (headerCookie)
 						headerCookie = headerCookie.value.replaceAll(`"`, `'`); // double quotation marks mess up the command
 
-					let headerReferer = e.requestHeaders.find(
+					let headerReferer = e.headers.find(
 						header => header.name.toLowerCase() === "referer"
 					);
 					if (headerReferer) headerReferer = headerReferer.value;
@@ -305,7 +305,10 @@ function copyURL(info) {
 
 function deleteURL(requestDetails) {
 	const deleteUrlStorage = [requestDetails];
-	browser.runtime.sendMessage({ delete: deleteUrlStorage }); // notify background script to update urlstorage. workaround
+	browser.runtime.sendMessage({
+		delete: deleteUrlStorage,
+		previous: document.getElementById("tabPrevious").checked
+	}); // notify background script to update urlstorage. workaround
 }
 
 function getIdList() {
@@ -328,7 +331,10 @@ function clearList() {
 		idList.includes(url.requestId)
 	);
 
-	browser.runtime.sendMessage({ delete: deleteUrlStorage });
+	browser.runtime.sendMessage({
+		delete: deleteUrlStorage,
+		previous: document.getElementById("tabPrevious").checked
+	});
 }
 
 function createList() {
@@ -402,7 +408,10 @@ function createList() {
 		// clear list first just in case - quick and dirty
 		table.innerHTML = "";
 
-		if (options.urlStorage && options.urlStorage.length > 0) {
+		if (
+			(options.urlStorage && options.urlStorage.length > 0) ||
+			(options.urlStorageRestore || options.urlStorageRestore.length > 0)
+		) {
 			const urlStorageFilter = document
 				.getElementById("filterInput")
 				.value.toLowerCase();
@@ -410,13 +419,11 @@ function createList() {
 			// do the query first to avoid async issues
 			browser.tabs.query({ active: true, currentWindow: true }).then(tab => {
 				if (document.getElementById("tabThis").checked === true) {
-					urlList = options.urlStorage.filter(
-						url => url.tabId === tab[0].id && !url.restore
-					);
+					urlList = options.urlStorage.filter(url => url.tabId === tab[0].id);
 				} else if (document.getElementById("tabAll").checked === true) {
-					urlList = options.urlStorage.filter(url => url.restore !== true);
+					urlList = options.urlStorage;
 				} else if (document.getElementById("tabPrevious").checked === true) {
-					urlList = options.urlStorage.filter(url => url.restore === true);
+					urlList = options.urlStorageRestore;
 				}
 
 				if (urlStorageFilter)
@@ -443,7 +450,6 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
-		// sync with options.js - workaround
 		browser.runtime.sendMessage({ options: true });
 	} else if (e.target.type === "radio") {
 		// update entire radio group

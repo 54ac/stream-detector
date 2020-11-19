@@ -67,6 +67,7 @@ function saveOption(e) {
 		browser.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
+		browser.runtime.sendMessage({ options: true });
 	} else {
 		browser.storage.local.set({
 			[e.target.id]: e.target.value

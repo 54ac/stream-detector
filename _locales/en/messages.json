@@ -21,7 +21,7 @@
 		"message": "Unable to copy URL(s):\n"
 	},
 	"extText": {
-		"message": "Formerly known as HLS Stream Detector. Detects M3U8/MPD/F4M/ISM playlists and VTT subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl commands."
+		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl commands."
 	},
 	"copyMethod": {
 		"message": "Copy stream URL as:"

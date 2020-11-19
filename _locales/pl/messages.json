@@ -21,7 +21,7 @@
 		"message": "Nie udało się skopiować danych:\n"
 	},
 	"extText": {
-		"message": "Wykrywa playlisty M3U8/MPD/F4M/ISM oraz napisy VTT używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl (zalecany)/FFmpeg/Streamlink."
+		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl."
 	},
 	"copyMethod": {
 		"message": "Skopiuj link do streamu jako:"
