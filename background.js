@@ -130,7 +130,7 @@ function deleteURL(message) {
 
 function filterContentType(requestDetails) {
 	let header = requestDetails.responseHeaders.find(
-        	(h) => h.name === "content-type"
+		(h) => h.name.toLowerCase() === "content-type"
 	);
 	if (header) {
 		const value = header.value.toLowerCase();
