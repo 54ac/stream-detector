@@ -24,6 +24,12 @@ const listenerFilter = {
 	]
 };
 
+const typeListenerFilter = {
+	urls: ["<all_urls>"]
+};
+
+const contentTypes = ["application/x-mpegurl", "application/vnd.apple.mpegurl"];
+
 const _ = browser.i18n.getMessage;
 
 let urlStorage = [];
@@ -122,6 +128,18 @@ function deleteURL(message) {
 	});
 }
 
+function filterContentType(requestDetails) {
+	let header = requestDetails.responseHeaders.find(
+		(h) => h.name.toLowerCase() === "content-type"
+	);
+	if (header) {
+		const value = header.value.toLowerCase();
+		if (contentTypes.some((ct) => ct === value)) {
+			addURL(requestDetails);
+		}
+	}
+}
+
 function setup() {
 	// clear everything and/or set up
 	browser.browserAction.setBadgeText({ text: "" });
@@ -137,6 +155,11 @@ function setup() {
 					addURL,
 					listenerFilter,
 					["requestHeaders"]
+				);
+				browser.webRequest.onHeadersReceived.addListener(
+					filterContentType,
+					typeListenerFilter,
+					["responseHeaders"]
 				);
 				if (options.urlStorage && options.urlStorage.length > 0) {
 					// restore urls on startup

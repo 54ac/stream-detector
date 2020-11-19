@@ -5,6 +5,7 @@
 	"default_locale": "en",
 	"version": "2.3.3",
 	"permissions": [
+		"<all_urls>",
 		"*://*/*.m3u8",
 		"*://*/*.m3u8?*",
 		"*://*/*.mpd",
