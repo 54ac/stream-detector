@@ -101,9 +101,6 @@
 	"popupTimestamp": {
 		"message": "Data"
 	},
-	"copyTooltip": {
-		"message": "Kliknij, aby skopiować link."
-	},
 	"deleteTooltip": {
 		"message": "Kliknij, aby usunąć link."
 	},

@@ -101,9 +101,6 @@
 	"popupTimestamp": {
 		"message": "Timestamp"
 	},
-	"copyTooltip": {
-		"message": "Click to copy URL."
-	},
 	"deleteTooltip": {
 		"message": "Click to delete URL."
 	},

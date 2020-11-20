@@ -352,10 +352,16 @@ function createList() {
 			extCell.textContent = requestDetails.ext.toUpperCase();
 
 			const urlCell = document.createElement("td");
-			urlCell.textContent = requestDetails.filename;
-			urlCell.onclick = () => copyURL([requestDetails]);
-			urlCell.style.cursor = "pointer";
-			urlCell.title = _("copyTooltip");
+			const urlHref = document.createElement("a");
+			urlHref.textContent = requestDetails.filename;
+			urlHref.href = requestDetails.url;
+			urlHref.onclick = e => {
+				e.preventDefault();
+				copyURL([requestDetails]);
+			};
+			urlHref.style.cursor = "pointer";
+			urlHref.title = requestDetails.url;
+			urlCell.appendChild(urlHref);
 
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent = requestDetails.hostname;
