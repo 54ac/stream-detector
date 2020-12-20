@@ -25,6 +25,8 @@ const contentTypes = [
 
 const _ = browser.i18n.getMessage;
 
+const manifestVersion = browser.runtime.getManifest().version;
+
 let urlStorage = [];
 let urlStorageRestore = [];
 let badgeText = 0;
@@ -167,16 +169,23 @@ function setup() {
 	browser.browserAction.setBadgeText({ text: "" });
 
 	browser.storage.local.get().then(options => {
+		if (
+			(options.version &&
+				(options.version.split(".")[0] < manifestVersion.split(".")[0] ||
+					(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
+						options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
+			!options.version
+		)
+			browser.storage.local.clear();
+
 		browser.storage.local
 			.set({
-				disablePref: !options.disablePref ? false : options.disablePref,
-				urlStorage: !options.urlStorage ? [] : options.urlStorage,
-				urlStorageRestore: !options.urlStorageRestore
-					? []
-					: options.urlStorageRestore
+				disablePref: options.disablePref || false,
+				urlStorageRestore: options.urlStorageRestore || [],
+				version: manifestVersion
 			})
 			.then(() => {
-				if (options.disablePref === false) {
+				if (!options.disablePref || options.disablePref === false) {
 					browser.webRequest.onBeforeSendHeaders.addListener(
 						filterExtension,
 						{ urls: ["<all_urls>"] },
@@ -191,19 +200,19 @@ function setup() {
 
 				notifPref = options.notifPref || false;
 
-				urlStorageRestore = [...options.urlStorageRestore];
+				if (options.urlStorageRestore && options.urlStorageRestore.length > 0)
+					// eslint-disable-next-line prefer-destructuring
+					urlStorageRestore = options.urlStorageRestore;
 
-				if (options.urlStorage.length > 0) {
-					urlStorageRestore = [
-						...options.urlStorageRestore,
-						...options.urlStorage
-					];
-					// restore urls on startup
+				if (options.urlStorage && options.urlStorage.length > 0)
+					urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
+
+				// restore urls on startup
+				if (urlStorageRestore.length > 0)
 					browser.storage.local.set({
 						urlStorageRestore,
 						urlStorage: []
 					});
-				}
 			});
 	});
 
@@ -241,6 +250,7 @@ function setup() {
 					);
 				}
 
+				// eslint-disable-next-line prefer-destructuring
 				notifPref = options.notifPref;
 			});
 		}
