@@ -1,3 +1,6 @@
 .firefox.exe.lnk
 /web-ext-artifacts
 /dist
+package.json
+package-lock.json
+/node_modules

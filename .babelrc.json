@@ -1,0 +1,14 @@
+{
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"bugfixes": true,
+				"targets": {
+					"firefox": "52"
+				}
+			}
+		]
+	],
+	"comments": false
+}

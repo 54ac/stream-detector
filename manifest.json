@@ -23,12 +23,12 @@
 	"options_ui": {
 		"browser_style": true,
 		"open_in_tab": false,
-		"page": "options/options.html"
+		"page": "content/options.html"
 	},
 	"browser_action": {
 		"browser_style": true,
 		"default_title": "The Stream Detector",
-		"default_popup": "popup/popup.html",
+		"default_popup": "content/popup.html",
 		"theme_icons": [
 			{
 				"dark": "img/icon-dark-96.png",
