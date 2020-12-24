@@ -244,61 +244,34 @@ function copyURL(info) {
 			list.filenames.push(`${filename}.${ext}`);
 			list.methodIncomp = methodIncomp;
 		}
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			navigator.clipboard.writeText(list.urls.join("\n")).then(
-				() => {
-					if (options.notifPref !== true) {
-						browser.notifications.create("copy", {
-							type: "basic",
-							iconUrl: "img/icon-dark-96.png",
-							title: _("notifCopiedTitle"),
-							message:
-								(list.methodIncomp === true
-									? _("notifIncompCopiedText")
-									: _("notifCopiedText")) + list.filenames.join("\n")
-						});
-					}
-				},
-				error => {
-					browser.notifications.create("error", {
-						type: "basic",
-						iconUrl: "img/icon-dark-96.png",
-						title: _("notifErrorTitle"),
-						message: _("notifErrorText") + error
-					});
-				}
-			);
-		} else {
-			// fallback in case the clipboard api doesn't work properly
-			const copyText = document.createElement("textarea");
-			copyText.style.position = "absolute";
-			copyText.style.left = "-5454px";
-			copyText.style.top = "-5454px";
-			document.body.appendChild(copyText);
-			copyText.value = list.urls.join("\n");
-			try {
-				copyText.select();
-				document.execCommand("copy");
-				document.body.removeChild(copyText);
-				if (options.notifPref !== true) {
-					browser.notifications.create("copy", {
-						type: "basic",
-						iconUrl: "img/icon-dark-96.png",
-						title: _("notifCopiedTitle"),
-						message:
-							(list.methodIncomp === true
-								? _("notifIncompCopiedText")
-								: _("notifCopiedText")) + list.filenames.join("\n")
-					});
-				}
-			} catch (e) {
-				browser.notifications.create("error", {
+		const copyText = document.createElement("textarea");
+		copyText.style.position = "absolute";
+		copyText.style.left = "-5454px";
+		copyText.style.top = "-5454px";
+		document.body.appendChild(copyText);
+		copyText.value = list.urls.join("\n");
+		try {
+			copyText.select();
+			document.execCommand("copy");
+			document.body.removeChild(copyText);
+			if (options.notifPref !== true) {
+				browser.notifications.create("copy", {
 					type: "basic",
 					iconUrl: "img/icon-dark-96.png",
-					title: _("notifErrorTitle"),
-					message: _("notifErrorText") + e
+					title: _("notifCopiedTitle"),
+					message:
+						(list.methodIncomp === true
+							? _("notifIncompCopiedText")
+							: _("notifCopiedText")) + list.filenames.join("\n")
 				});
 			}
+		} catch (e) {
+			browser.notifications.create("error", {
+				type: "basic",
+				iconUrl: "img/icon-dark-96.png",
+				title: _("notifErrorTitle"),
+				message: _("notifErrorText") + e
+			});
 		}
 	});
 }
@@ -425,20 +398,24 @@ function createList() {
 			// do the query first to avoid async issues
 			browser.tabs.query({ active: true, currentWindow: true }).then(tab => {
 				if (document.getElementById("tabThis").checked === true) {
-					urlList = options.urlStorage.filter(url => url.tabId === tab[0].id);
+					urlList = options.urlStorage
+						? options.urlStorage.filter(url => url.tabId === tab[0].id)
+						: [];
 				} else if (document.getElementById("tabAll").checked === true) {
-					urlList = options.urlStorage;
+					urlList = options.urlStorage || [];
 				} else if (document.getElementById("tabPrevious").checked === true) {
-					urlList = options.urlStorageRestore;
+					urlList = options.urlStorageRestore || [];
 				}
 
 				if (urlStorageFilter)
-					urlList = urlList.filter(
-						url =>
-							url.filename.toLowerCase().includes(urlStorageFilter) ||
-							url.ext.toLowerCase().includes(urlStorageFilter) ||
-							url.hostname.toLowerCase().includes(urlStorageFilter)
-					);
+					urlList =
+						urlList &&
+						urlList.filter(
+							url =>
+								url.filename.toLowerCase().includes(urlStorageFilter) ||
+								url.ext.toLowerCase().includes(urlStorageFilter) ||
+								url.hostname.toLowerCase().includes(urlStorageFilter)
+						);
 
 				urlList.length > 0
 					? insertList(urlList.reverse()) // latest entries first
@@ -526,6 +503,10 @@ function restoreOptions() {
 		document.getElementById("clearList").onclick = e => {
 			e.preventDefault();
 			clearList();
+		};
+		document.getElementById("openOptions").onclick = e => {
+			e.preventDefault();
+			browser.runtime.openOptionsPage();
 		};
 		document.getElementById("filterInput").onkeyup = () => createList();
 	});

@@ -180,7 +180,18 @@ function setup() {
 
 		browser.storage.local
 			.set({
+				// first init also happens here
 				disablePref: options.disablePref || false,
+				copyMethod: options.copyMethod || "url",
+				headersPref: options.headersPref || true,
+				streamlinkOutput: options.streamlinkOutput || "file",
+				downloaderPref: options.downloaderPref || false,
+				downloaderCommand: options.downloaderCommand || "",
+				proxyPref: options.proxyPref || false,
+				proxyCommand: options.proxyCommand || "",
+				customCommand: options.customCommand || "",
+				userCommand: options.userCommand || "",
+				notifPref: options.notifPref || false,
 				urlStorageRestore: options.urlStorageRestore || [],
 				version: manifestVersion
 			})

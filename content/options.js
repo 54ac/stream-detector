@@ -1,12 +1,5 @@
 "use strict";
 
-const defaultOptions = {
-	copyMethod: "url",
-	streamlinkOutput: "file",
-	headersPref: true,
-	copyAll: true
-}; // used in restoreOptions
-
 const _ = browser.i18n.getMessage; // i18n
 
 function checkHeadersPref() {
@@ -50,7 +43,7 @@ function checkHeadersPref() {
 
 function saveOption(e) {
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
-		const prefName = `customCommand${e.target.value}`;
+		const prefName = "customCommand" + e.target.value;
 		browser.storage.local.get(prefName).then(res => {
 			res[prefName]
 				? (document.getElementById("customCommand").value = res[prefName])
@@ -88,28 +81,6 @@ function restoreOptions() {
 				item[prefName]
 					? (document.getElementById(option.id).value = item[prefName])
 					: (document.getElementById(option.id).value = "");
-			} else if (defaultOptions[option.id]) {
-				if (
-					document.getElementById(option.id).type === "checkbox" ||
-					document.getElementById(option.id).type === "radio"
-				) {
-					if (item[option.id] !== undefined) {
-						document.getElementById(option.id).checked = item[option.id];
-					} else {
-						document.getElementById(option.id).checked =
-							defaultOptions[option.id];
-						browser.storage.local.set({
-							[option.id]: defaultOptions[option.id]
-						});
-					}
-				} else if (item[option.id] !== undefined) {
-					document.getElementById(option.id).value = item[option.id];
-				} else {
-					document.getElementById(option.id).value = defaultOptions[option.id];
-					browser.storage.local.set({
-						[option.id]: defaultOptions[option.id]
-					});
-				}
 			} else if (item[option.id] !== undefined) {
 				if (
 					document.getElementById(option.id).type === "checkbox" ||

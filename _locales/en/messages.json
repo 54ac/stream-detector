@@ -115,5 +115,8 @@
 	},
 	"filterInput": {
 		"message": "Filter:"
+	},
+	"openOptions": {
+		"message": "Options"
 	}
 }
