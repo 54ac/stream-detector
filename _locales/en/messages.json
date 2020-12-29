@@ -3,7 +3,7 @@
 		"message": "Stream detected!"
 	},
 	"notifText": {
-		"message": "New stream detected:\n"
+		"message": "New $1 stream detected:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URL(s) copied!"

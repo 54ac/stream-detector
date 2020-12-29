@@ -8,7 +8,7 @@ const table = document.getElementById("popupUrlList");
 
 let urlList = [];
 
-function copyURL(info) {
+const copyURL = info => {
 	browser.storage.local.get().then(options => {
 		const list = { urls: [], filenames: [], methodIncomp: false };
 		for (const e of info) {
@@ -125,7 +125,9 @@ function copyURL(info) {
 					let headerReferer = e.headers.find(
 						header => header.name.toLowerCase() === "referer"
 					);
-					if (headerReferer) headerReferer = headerReferer.value;
+					headerReferer = headerReferer
+						? headerReferer.value
+						: e.originUrl || e.documentUrl;
 
 					if (headerUserAgent && headerUserAgent.length > 0) {
 						switch (fileMethod) {
@@ -241,7 +243,7 @@ function copyURL(info) {
 
 			// used to communicate with clipboard/notifications api
 			list.urls.push(code);
-			list.filenames.push(`${filename}.${ext}`);
+			list.filenames.push(filename);
 			list.methodIncomp = methodIncomp;
 		}
 		const copyText = document.createElement("textarea");
@@ -274,31 +276,30 @@ function copyURL(info) {
 			});
 		}
 	});
-}
+};
 
-function deleteURL(requestDetails) {
+const deleteURL = requestDetails => {
 	const deleteUrlStorage = [requestDetails];
 	browser.runtime.sendMessage({
 		delete: deleteUrlStorage,
 		previous: document.getElementById("tabPrevious").checked
 	}); // notify background script to update urlstorage. workaround
-}
+};
 
-function getIdList() {
-	return Array.from(
+const getIdList = () =>
+	Array.from(
 		document.getElementById("popupUrlList").getElementsByTagName("tr")
 	).map(tr => tr.id);
-}
 
-function copyAll() {
+const copyAll = () => {
 	// this seems like a roundabout way of doing this but oh well
 	const idList = getIdList();
 	const copyUrlList = urlList.filter(url => idList.includes(url.requestId));
 
 	copyURL(copyUrlList);
-}
+};
 
-function clearList() {
+const clearList = () => {
 	const idList = getIdList();
 	const deleteUrlStorage = urlList.filter(url =>
 		idList.includes(url.requestId)
@@ -308,10 +309,10 @@ function clearList() {
 		delete: deleteUrlStorage,
 		previous: document.getElementById("tabPrevious").checked
 	});
-}
+};
 
-function createList() {
-	function insertList(urls) {
+const createList = () => {
+	const insertList = urls => {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
 		document.getElementById("filterInput").disabled = false;
@@ -328,11 +329,16 @@ function createList() {
 			const urlHref = document.createElement("a");
 			urlHref.textContent = requestDetails.filename;
 			urlHref.href = requestDetails.url;
-			urlHref.onclick = e => {
+			urlCell.onclick = e => {
 				e.preventDefault();
 				copyURL([requestDetails]);
 			};
-			urlHref.style.cursor = "pointer";
+			urlHref.onclick = e => {
+				e.preventDefault();
+				e.stopPropagation();
+				copyURL([requestDetails]);
+			};
+			urlCell.style.cursor = "pointer";
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 
@@ -364,9 +370,9 @@ function createList() {
 
 			table.appendChild(row);
 		}
-	}
+	};
 
-	function insertPlaceholder() {
+	const insertPlaceholder = () => {
 		document.getElementById("copyAll").disabled = true;
 		document.getElementById("clearList").disabled = true;
 		if (document.getElementById("filterInput").value.length === 0)
@@ -381,7 +387,7 @@ function createList() {
 		row.appendChild(placeholderCell);
 
 		table.appendChild(row);
-	}
+	};
 
 	browser.storage.local.get().then(options => {
 		// clear list first just in case - quick and dirty
@@ -425,9 +431,9 @@ function createList() {
 			insertPlaceholder();
 		}
 	});
-}
+};
 
-function saveOption(e) {
+const saveOption = e => {
 	const options = document.getElementsByClassName("option");
 	if (e.target.type === "checkbox") {
 		browser.storage.local.set({
@@ -450,9 +456,9 @@ function saveOption(e) {
 		});
 		browser.runtime.sendMessage({ options: true });
 	}
-}
+};
 
-function restoreOptions() {
+const restoreOptions = () => {
 	// change badge text background when clicked
 	browser.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
 
@@ -510,7 +516,7 @@ function restoreOptions() {
 		};
 		document.getElementById("filterInput").onkeyup = () => createList();
 	});
-}
+};
 
 document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();

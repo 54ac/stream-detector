@@ -2,7 +2,7 @@
 
 const _ = browser.i18n.getMessage; // i18n
 
-function checkHeadersPref() {
+const checkHeadersPref = () => {
 	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("headersPref").disabled = false;
 	document.getElementById("downloaderPref").disabled = true;
@@ -39,9 +39,9 @@ function checkHeadersPref() {
 		document.getElementById("customCommand").disabled = true;
 		document.getElementById("userCommand").disabled = false;
 	}
-}
+};
 
-function saveOption(e) {
+const saveOption = e => {
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
 		const prefName = "customCommand" + e.target.value;
 		browser.storage.local.get(prefName).then(res => {
@@ -68,9 +68,9 @@ function saveOption(e) {
 	}
 
 	checkHeadersPref();
-}
+};
 
-function restoreOptions() {
+const restoreOptions = () => {
 	const options = document.getElementsByClassName("option");
 	// this is truly a pain
 	browser.storage.local.get().then(item => {
@@ -95,7 +95,7 @@ function restoreOptions() {
 
 		checkHeadersPref();
 	});
-}
+};
 
 document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");

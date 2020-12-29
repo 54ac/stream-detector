@@ -1,26 +1,18 @@
 "use strict";
 
-const extensions = [
-	"m3u8",
-	"mpd",
-	"f4m",
-	"ism",
-	"vtt",
-	"srt",
-	"ttml",
-	"ttml2",
-	"dfxp"
-];
-
-const contentTypes = [
-	"application/x-mpegurl",
-	"application/vnd.apple.mpegurl",
-	"application/dash+xml",
-	"application/f4m",
-	"text/vtt",
-	"application/x-subrip",
-	"application/ttml+xml",
-	"application/ttaf+xml"
+const supported = [
+	{
+		ext: ["m3u8"],
+		ct: ["application/x-mpegurl", "application/vnd.apple.mpegurl"],
+		type: "HLS"
+	},
+	{ ext: ["mpd"], ct: ["application/dash+xml"], type: "DASH" },
+	{ ext: ["f4m"], ct: ["application/f4m"], type: "HDS" },
+	{ ext: ["ism"], ct: [], type: "MSS" },
+	{ ext: ["vtt"], ct: ["text/vtt"], type: "VTT" },
+	{ ext: ["srt"], ct: ["application/x-subrip"], type: "SRT" },
+	{ ext: ["ttml", "ttml2"], ct: ["application/ttml+xml"], type: "TTML" },
+	{ ext: ["dfxp"], ct: ["application/ttaf+xml"], type: "DFXP" }
 ];
 
 const _ = browser.i18n.getMessage;
@@ -33,36 +25,28 @@ let badgeText = 0;
 let queue = [];
 let notifPref = false;
 
-function getExtension(url) {
-	let ext = url.href.slice(url.href.lastIndexOf(".") + 1, url.href.length);
-	ext = ext.slice(
-		0,
-		ext.lastIndexOf("/") === -1 ? ext.length : ext.lastIndexOf("/")
-	);
-	ext = ext.slice(
-		0,
-		ext.lastIndexOf("?") === -1 ? ext.length : ext.lastIndexOf("?")
-	);
+const urlFilter = requestDetails => {
+	let ext;
 
-	return ext.toLowerCase();
-}
+	if (requestDetails.requestHeaders) {
+		const url = new URL(requestDetails.url).pathname.toLowerCase();
+		ext = supported.find(f => f.ext.some(fe => url.includes("." + fe)));
+	} else if (requestDetails.responseHeaders) {
+		const header = requestDetails.responseHeaders.find(
+			h => h.name.toLowerCase() === "content-type"
+		);
 
-function filterExtension(requestDetails) {
-	const url = new URL(requestDetails.url);
-	if (extensions.includes(getExtension(url))) addURL(requestDetails);
-}
-
-function filterContentType(requestDetails) {
-	const header = requestDetails.responseHeaders.find(
-		h => h.name.toLowerCase() === "content-type"
-	);
-	if (header) {
-		const value = header.value.toLowerCase();
-		if (contentTypes.some(ct => ct === value)) addURL(requestDetails);
+		if (header)
+			ext = supported.find(f => f.ct.includes(header.value.toLowerCase()));
 	}
-}
 
-function addURL(requestDetails) {
+	if (ext) {
+		requestDetails.ext = ext.type;
+		addURL(requestDetails);
+	}
+};
+
+const addURL = requestDetails => {
 	let newEntry = false;
 
 	if (
@@ -73,23 +57,14 @@ function addURL(requestDetails) {
 
 		const url = new URL(requestDetails.url);
 
-		let filename = "";
-		if (url.href.indexOf(".ism") === -1) {
-			filename = url.href.slice(
-				url.href.lastIndexOf("/") + 1,
-				url.href.lastIndexOf(".") || url.href.lastIndexOf("?")
-			);
-			filename = filename.slice(
-				0,
-				filename.indexOf("?") === -1 ? filename.length : filename.indexOf("?")
-			); // why does slice have to be the way it is
-		} else {
-			filename = url.href.slice(
-				url.href.lastIndexOf("/", url.href.lastIndexOf(".ism")) + 1,
-				url.href.lastIndexOf(".")
-			);
-		}
-		const ext = getExtension(url);
+		const urlPath = url.pathname.toLowerCase();
+		// eslint-disable-next-line no-nested-ternary
+		const filename = +urlPath.lastIndexOf("/")
+			? urlPath.slice(urlPath.lastIndexOf("/") + 1)
+			: urlPath[0] === "/"
+			? urlPath.slice(1)
+			: urlPath;
+
 		const { hostname } = url;
 		const timestamp = Date.now();
 		const headers =
@@ -99,7 +74,6 @@ function addURL(requestDetails) {
 			...requestDetails,
 			headers,
 			filename,
-			ext,
 			hostname,
 			timestamp
 		};
@@ -116,7 +90,7 @@ function addURL(requestDetails) {
 				type: "basic",
 				iconUrl: "img/icon-dark-96.png",
 				title: _("notifTitle"),
-				message: `${_("notifText") + filename}.${ext}`
+				message: `${_("notifText", requestDetails.ext) + filename}`
 			});
 		}
 	}
@@ -136,9 +110,9 @@ function addURL(requestDetails) {
 			() => browser.runtime.sendMessage({ urlStorage: true }) // update popup if opened
 		);
 	}
-}
+};
 
-function deleteURL(message) {
+const deleteURL = message => {
 	// url deletion
 	if (message.previous === false) {
 		urlStorage = urlStorage.filter(
@@ -162,9 +136,9 @@ function deleteURL(message) {
 					text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
 				});
 		});
-}
+};
 
-function setup() {
+const setup = () => {
 	// clear everything and/or set up
 	browser.browserAction.setBadgeText({ text: "" });
 
@@ -198,12 +172,12 @@ function setup() {
 			.then(() => {
 				if (!options.disablePref || options.disablePref === false) {
 					browser.webRequest.onBeforeSendHeaders.addListener(
-						filterExtension,
+						urlFilter,
 						{ urls: ["<all_urls>"] },
 						["requestHeaders"]
 					);
 					browser.webRequest.onHeadersReceived.addListener(
-						filterContentType,
+						urlFilter,
 						{ urls: ["<all_urls>"] },
 						["responseHeaders"]
 					);
@@ -233,29 +207,23 @@ function setup() {
 			browser.storage.local.get().then(options => {
 				if (
 					options.disablePref === true &&
-					browser.webRequest.onBeforeSendHeaders.hasListener(filterExtension) &&
-					browser.webRequest.onHeadersReceived.hasListener(filterContentType)
+					browser.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+					browser.webRequest.onHeadersReceived.hasListener(urlFilter)
 				) {
-					browser.webRequest.onBeforeSendHeaders.removeListener(
-						filterExtension
-					);
-					browser.webRequest.onHeadersReceived.removeListener(
-						filterContentType
-					);
+					browser.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
+					browser.webRequest.onHeadersReceived.removeListener(urlFilter);
 				} else if (
 					options.disablePref === false &&
-					!browser.webRequest.onBeforeSendHeaders.hasListener(
-						filterExtension
-					) &&
-					!browser.webRequest.onHeadersReceived.hasListener(filterContentType)
+					!browser.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+					!browser.webRequest.onHeadersReceived.hasListener(urlFilter)
 				) {
 					browser.webRequest.onBeforeSendHeaders.addListener(
-						filterExtension,
+						urlFilter,
 						{ urls: ["<all_urls>"] },
 						["requestHeaders"]
 					);
 					browser.webRequest.onHeadersReceived.addListener(
-						filterContentType,
+						urlFilter,
 						{ urls: ["<all_urls>"] },
 						["responseHeaders"]
 					);
@@ -266,6 +234,6 @@ function setup() {
 			});
 		}
 	});
-}
+};
 
 setup();
