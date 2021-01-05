@@ -17,20 +17,19 @@ const copyURL = info => {
 			let fileMethod;
 
 			const streamURL = e.url;
-			const { filename, ext } = e;
+			const { filename, type } = e;
 			fileMethod = !options.copyMethod ? "url" : options.copyMethod; // default to url - just in case
 
 			if (
-				(ext === "f4m" && fileMethod === "ffmpeg") ||
-				(ext === "ism" &&
+				(type === "HDS" && fileMethod === "ffmpeg") ||
+				(type === "MSS" &&
 					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
-				((ext === "vtt" ||
-					ext === "srt" ||
-					ext === "ttml" ||
-					ext === "ttml2" ||
-					ext === "dfxp") &&
+				((type === "VTT" ||
+					type === "SRT" ||
+					type === "TTML" ||
+					type === "DFXP") &&
 					fileMethod !== "url") ||
-				(ext !== "m3u8" && fileMethod === "hlsdl")
+				(type !== "HLS" && fileMethod === "hlsdl")
 			) {
 				fileMethod = "url";
 				methodIncomp = true;
@@ -66,7 +65,7 @@ const copyURL = info => {
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
 					case "hlsdl":
-						code = "hlsdl -b";
+						code = "hlsdl -b -c";
 						break;
 					case "user":
 						code = options.userCommand;
@@ -211,16 +210,23 @@ const copyURL = info => {
 					}
 				}
 
+				let outFilename = filename;
+				if (outFilename.indexOf(".")) {
+					outFilename = outFilename.split(".");
+					outFilename.pop();
+					outFilename = outFilename.join(".");
+				}
+
 				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
-						code += ` -i "${streamURL}" -c copy "${filename}.ts"`;
+						code += ` -i "${streamURL}" -c copy "${outFilename}.ts"`;
 						break;
 					case "streamlink":
 						// streamlink output to file or player
 						if (!options.streamlinkOutput) options.streamlinkOutput = "file";
 						if (options.streamlinkOutput === "file")
-							code += ` -o "${filename}.ts"`;
+							code += ` -o "${outFilename}.ts"`;
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
@@ -230,7 +236,7 @@ const copyURL = info => {
 						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
-						code += ` -o "${filename}.ts" "${streamURL}"`;
+						code += ` -o "${outFilename}.ts" "${streamURL}"`;
 						break;
 					case "user":
 						code = code.replace("%url%", streamURL);
@@ -323,7 +329,7 @@ const createList = () => {
 			row.id = requestDetails.requestId;
 
 			const extCell = document.createElement("td");
-			extCell.textContent = requestDetails.ext.toUpperCase();
+			extCell.textContent = requestDetails.type.toUpperCase();
 
 			const urlCell = document.createElement("td");
 			const urlHref = document.createElement("a");
@@ -419,7 +425,7 @@ const createList = () => {
 						urlList.filter(
 							url =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
-								url.ext.toLowerCase().includes(urlStorageFilter) ||
+								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
 						);
 

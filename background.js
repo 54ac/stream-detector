@@ -26,22 +26,21 @@ let queue = [];
 let notifPref = false;
 
 const urlFilter = requestDetails => {
-	let ext;
+	let e;
 
 	if (requestDetails.requestHeaders) {
 		const url = new URL(requestDetails.url).pathname.toLowerCase();
-		ext = supported.find(f => f.ext.some(fe => url.includes("." + fe)));
+		e = supported.find(f => f.ext.some(fe => url.includes("." + fe)));
 	} else if (requestDetails.responseHeaders) {
 		const header = requestDetails.responseHeaders.find(
 			h => h.name.toLowerCase() === "content-type"
 		);
-
 		if (header)
-			ext = supported.find(f => f.ct.includes(header.value.toLowerCase()));
+			e = supported.find(f => f.ct.includes(header.value.toLowerCase()));
 	}
 
-	if (ext) {
-		requestDetails.ext = ext.type;
+	if (e) {
+		requestDetails.type = e.type;
 		addURL(requestDetails);
 	}
 };
@@ -90,7 +89,7 @@ const addURL = requestDetails => {
 				type: "basic",
 				iconUrl: "img/icon-dark-96.png",
 				title: _("notifTitle"),
-				message: `${_("notifText", requestDetails.ext) + filename}`
+				message: _("notifText", requestDetails.type) + filename
 			});
 		}
 	}

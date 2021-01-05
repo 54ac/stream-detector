@@ -12,7 +12,7 @@
 		"message": "Successfully copied the following URL(s):\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Use of youtube-dl is recommended.\n\nStream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
+		"message": "Stream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Copy error!"

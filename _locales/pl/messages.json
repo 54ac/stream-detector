@@ -3,7 +3,7 @@
 		"message": "Wykryto stream!"
 	},
 	"notifText": {
-		"message": "Wykryto nowy stream:\n"
+		"message": "Wykryto nowy stream $1:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "Skopiowano link(i)!"
@@ -12,7 +12,7 @@
 		"message": "Pomyślnie skopiowano następujące link(i) do schowka:\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Zalecane jest użycie youtube-dl.\n\nDane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
+		"message": "Dane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Błąd kopiowania!"
