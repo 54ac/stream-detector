@@ -16,6 +16,8 @@
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
 					"Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
+				background: #fff;
+				color: #202023;
 
 				/* addon popup vertical scrollbar workaround */
 				margin-right: 32px;
@@ -55,6 +57,13 @@
 			a {
 				color: inherit;
 				word-break: break-all;
+			}
+
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #202023;
+					color: #fff;
+				}
 			}
 		</style>
 		<title>The Stream Detector</title>
