@@ -2,14 +2,14 @@
 
 const defaultOptions = { tabThis: true }; // used in restoreOptions
 
-const _ = browser.i18n.getMessage; // i18n
+const _ = chrome.i18n.getMessage; // i18n
 
 const table = document.getElementById("popupUrlList");
 
 let urlList = [];
 
 const copyURL = info => {
-	browser.storage.local.get().then(options => {
+	chrome.storage.local.get((options) => {
 		const list = { urls: [], filenames: [], methodIncomp: false };
 		for (const e of info) {
 			let code;
@@ -263,7 +263,7 @@ const copyURL = info => {
 			document.execCommand("copy");
 			document.body.removeChild(copyText);
 			if (options.notifPref !== true) {
-				browser.notifications.create("copy", {
+				chrome.notifications.create("copy", {
 					type: "basic",
 					iconUrl: "img/icon-dark-96.png",
 					title: _("notifCopiedTitle"),
@@ -274,7 +274,7 @@ const copyURL = info => {
 				});
 			}
 		} catch (e) {
-			browser.notifications.create("error", {
+			chrome.notifications.create("error", {
 				type: "basic",
 				iconUrl: "img/icon-dark-96.png",
 				title: _("notifErrorTitle"),
@@ -286,7 +286,7 @@ const copyURL = info => {
 
 const deleteURL = requestDetails => {
 	const deleteUrlStorage = [requestDetails];
-	browser.runtime.sendMessage({
+	chrome.runtime.sendMessage({
 		delete: deleteUrlStorage,
 		previous: document.getElementById("tabPrevious").checked
 	}); // notify background script to update urlstorage. workaround
@@ -311,7 +311,7 @@ const clearList = () => {
 		idList.includes(url.requestId)
 	);
 
-	browser.runtime.sendMessage({
+	chrome.runtime.sendMessage({
 		delete: deleteUrlStorage,
 		previous: document.getElementById("tabPrevious").checked
 	});
@@ -395,7 +395,7 @@ const createList = () => {
 		table.appendChild(row);
 	};
 
-	browser.storage.local.get().then(options => {
+	chrome.storage.local.get((options) => {
 		// clear list first just in case - quick and dirty
 		table.innerHTML = "";
 
@@ -408,7 +408,7 @@ const createList = () => {
 				.value.toLowerCase();
 
 			// do the query first to avoid async issues
-			browser.tabs.query({ active: true, currentWindow: true }).then(tab => {
+			chrome.tabs.query({ active: true, currentWindow: true }, (tab) => {
 				if (document.getElementById("tabThis").checked === true) {
 					urlList = options.urlStorage
 						? options.urlStorage.filter(url => url.tabId === tab[0].id)
@@ -442,35 +442,35 @@ const createList = () => {
 const saveOption = e => {
 	const options = document.getElementsByClassName("option");
 	if (e.target.type === "checkbox") {
-		browser.storage.local.set({
+		chrome.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
-		browser.runtime.sendMessage({ options: true });
+		chrome.runtime.sendMessage({ options: true });
 	} else if (e.target.type === "radio") {
 		// update entire radio group
 		for (const option of options) {
 			if (option.name === e.target.name) {
-				browser.storage.local.set({
+				chrome.storage.local.set({
 					[option.id]: document.getElementById(option.id).checked
 				});
 			}
 		}
 		createList();
 	} else {
-		browser.storage.local.set({
+		chrome.storage.local.set({
 			[e.target.id]: e.target.value
 		});
-		browser.runtime.sendMessage({ options: true });
+		chrome.runtime.sendMessage({ options: true });
 	}
 };
 
 const restoreOptions = () => {
 	// change badge text background when clicked
-	browser.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
+	chrome.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
 
 	const options = document.getElementsByClassName("option");
 	// should probably consolidate this with the other one at some point
-	browser.storage.local.get().then(item => {
+	chrome.storage.local.get((item) => {
 		for (const option of options) {
 			if (defaultOptions[option.id]) {
 				if (item[option.id] !== undefined) {
@@ -478,7 +478,7 @@ const restoreOptions = () => {
 				} else {
 					document.getElementById(option.id).checked =
 						defaultOptions[option.id];
-					browser.storage.local.set({
+					chrome.storage.local.set({
 						[option.id]: defaultOptions[option.id]
 					});
 				}
@@ -518,7 +518,7 @@ const restoreOptions = () => {
 		};
 		document.getElementById("openOptions").onclick = e => {
 			e.preventDefault();
-			browser.runtime.openOptionsPage();
+			chrome.runtime.openOptionsPage();
 		};
 		document.getElementById("filterInput").onkeyup = () => createList();
 	});
@@ -528,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
 	createList();
 
-	browser.runtime.onMessage.addListener(message => {
+	chrome.runtime.onMessage.addListener(message => {
 		if (message.urlStorage) createList();
 	});
 });
