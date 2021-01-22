@@ -371,9 +371,6 @@ const createList = () => {
 			row.appendChild(timestampCell);
 			row.appendChild(deleteCell);
 
-			row.onmouseover = () => (row.style.backgroundColor = "gainsboro");
-			row.onmouseout = () => (row.style.backgroundColor = "initial");
-
 			table.appendChild(row);
 		}
 	};
