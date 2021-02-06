@@ -14,10 +14,10 @@ More details and screenshots available [in the AMO listing](https://addons.mozil
 
 - Javascript,
 - WebExtensions API, including:
-  _ Notifications,
-  _ Clipboard,
-  _ Storage,
-  _ Tabs.
+  - Notifications,
+  - Clipboard,
+  - Storage,
+  - Tabs.
 
 ### What's the point?
 
