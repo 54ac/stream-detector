@@ -6,7 +6,7 @@ This is a Firefox addon written in JavaScript which provides an easy way to keep
 
 Also assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink/hlsdl commands which (should) include all of the necessary cookies and headers.
 
-![A screenshot of a notification.](https://addons.cdn.mozilla.net/user-media/previews/thumbs/204/204893.png?modified=1543520749)
+![A screenshot of the options menu.](https://addons.cdn.mozilla.net/user-media/previews/full/239/239286.png)
 
 More details and screenshots available [in the AMO listing](https://addons.mozilla.org/en-US/firefox/addon/hls-stream-detector/).
 
