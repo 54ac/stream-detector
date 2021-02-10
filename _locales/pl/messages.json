@@ -63,7 +63,7 @@
 		"message": "Komenda własna:"
 	},
 	"userCommandTip": {
-		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%"
+		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
 	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki:"
@@ -118,5 +118,8 @@
 	},
 	"openOptions": {
 		"message": "Ustawienia"
+	},
+	"titlePref": {
+		"message": "Pokaż tytuł karty jako źródło:"
 	}
 }

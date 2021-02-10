@@ -25,115 +25,110 @@ let badgeText = 0;
 let queue = [];
 let notifPref = false;
 
-const urlFilter = requestDetails => {
+const urlFilter = (requestDetails) => {
 	let e;
 
 	if (requestDetails.requestHeaders) {
 		const url = new URL(requestDetails.url).pathname.toLowerCase();
-		e = supported.find(f => f.ext.some(fe => url.includes("." + fe)));
+		// go through the extensions and see if the url contains any
+		e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
 	} else if (requestDetails.responseHeaders) {
 		const header = requestDetails.responseHeaders.find(
-			h => h.name.toLowerCase() === "content-type"
+			(h) => h.name.toLowerCase() === "content-type"
 		);
 		if (header)
-			e = supported.find(f => f.ct.includes(header.value.toLowerCase()));
+			// go through content types and see if the header matches
+			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
 	}
-
-	if (e) {
+	if (
+		e &&
+		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
+		!queue.includes(requestDetails.requestId) // queue in case urlStorage is also too slow
+	) {
+		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
 		addURL(requestDetails);
 	}
 };
 
-const addURL = requestDetails => {
-	let newEntry = false;
+const addURL = (requestDetails) => {
+	const url = new URL(requestDetails.url);
 
-	if (
-		!queue.includes(requestDetails.requestId) &&
-		urlStorage.filter(e => e.url === requestDetails.url).length === 0 // only new urls
-	) {
-		queue.push(requestDetails.requestId);
+	const urlPath = url.pathname.toLowerCase();
+	// eslint-disable-next-line no-nested-ternary
+	const filename = +urlPath.lastIndexOf("/")
+		? urlPath.slice(urlPath.lastIndexOf("/") + 1)
+		: urlPath[0] === "/"
+		? urlPath.slice(1)
+		: urlPath;
 
-		const url = new URL(requestDetails.url);
+	const { hostname } = url;
+	const timestamp = Date.now();
+	// depends on which listener caught it
+	const headers =
+		requestDetails.requestHeaders || requestDetails.responseHeaders;
 
-		const urlPath = url.pathname.toLowerCase();
-		// eslint-disable-next-line no-nested-ternary
-		const filename = +urlPath.lastIndexOf("/")
-			? urlPath.slice(urlPath.lastIndexOf("/") + 1)
-			: urlPath[0] === "/"
-			? urlPath.slice(1)
-			: urlPath;
-
-		const { hostname } = url;
-		const timestamp = Date.now();
-		const headers =
-			requestDetails.requestHeaders || requestDetails.responseHeaders;
-
+	chrome.tabs.get(requestDetails.tabId, (tabData) => {
 		const newRequestDetails = {
 			...requestDetails,
 			headers,
 			filename,
 			hostname,
-			timestamp
+			timestamp,
+			tabData
 		};
 
 		urlStorage.push(newRequestDetails);
-		newEntry = true;
 
-		// the promises are too slow - queue used as workaround
-		queue = queue.filter(e => e !== requestDetails.requestId);
-
-		if (notifPref === false) {
-			chrome.notifications.create("add", {
-				// id = only one notification of this type appears at a time
-				type: "basic",
-				iconUrl: "img/icon-dark-96.png",
-				title: _("notifTitle"),
-				message: _("notifText", requestDetails.type) + filename
-			});
-		}
-	}
-
-	if (
-		queue.length === 0 && // do not fire until async queue has finished processing - absolutely terrible
-		newEntry
-	) {
 		badgeText = urlStorage.length;
 		chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
 		chrome.browserAction.setBadgeText({
 			text: badgeText.toString()
 		});
-		newEntry = false;
 
-		chrome.storage.local.set({ urlStorage, badgeText },
-			() => chrome.runtime.sendMessage({ urlStorage: true }) // update popup if opened
-		);
+		chrome.storage.local.set({ urlStorage, badgeText }, () => {
+			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+			queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
+		});
+	});
+
+	if (notifPref === false) {
+		chrome.notifications.create("add", {
+			// id = only one notification of this type appears at a time
+			type: "basic",
+			iconUrl: "img/icon-dark-96.png",
+			title: _("notifTitle"),
+			message: _("notifText", requestDetails.type) + filename
+		});
 	}
 };
 
-const deleteURL = message => {
+const deleteURL = (message) => {
 	// url deletion
 	if (message.previous === false) {
 		urlStorage = urlStorage.filter(
-			url =>
-				!message.delete.map(msgUrl => msgUrl.requestId).includes(url.requestId)
+			(url) =>
+				!message.delete
+					.map((msgUrl) => msgUrl.requestId)
+					.includes(url.requestId)
 		);
 		badgeText = urlStorage.length;
 	} else {
 		urlStorageRestore = urlStorageRestore.filter(
-			url =>
-				!message.delete.map(msgUrl => msgUrl.requestId).includes(url.requestId)
+			(url) =>
+				!message.delete
+					.map((msgUrl) => msgUrl.requestId)
+					.includes(url.requestId)
 		);
 	}
 
-	chrome.storage.local
-		.set({ urlStorage, urlStorageRestore, badgeText }, () => {
-			chrome.runtime.sendMessage({ urlStorage: true });
-			if (message.previous === false)
-				chrome.browserAction.setBadgeText({
-					text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
-				});
-		});
+	chrome.storage.local.set({ urlStorage, urlStorageRestore, badgeText }, () => {
+		chrome.runtime.sendMessage({ urlStorage: true });
+		if (message.previous === false)
+			chrome.browserAction.setBadgeText({
+				text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
+			});
+	});
 };
 
 const setup = () => {
@@ -150,8 +145,8 @@ const setup = () => {
 		)
 			chrome.storage.local.clear();
 
-		chrome.storage.local
-			.set({
+		chrome.storage.local.set(
+			{
 				// first init also happens here
 				disablePref: options.disablePref || false,
 				copyMethod: options.copyMethod || "url",
@@ -166,7 +161,8 @@ const setup = () => {
 				notifPref: options.notifPref || false,
 				urlStorageRestore: options.urlStorageRestore || [],
 				version: manifestVersion
-			}, () => {
+			},
+			() => {
 				if (!options.disablePref || options.disablePref === false) {
 					chrome.webRequest.onBeforeSendHeaders.addListener(
 						urlFilter,
@@ -195,10 +191,11 @@ const setup = () => {
 						urlStorageRestore,
 						urlStorage: []
 					});
-			});
+			}
+		);
 	});
 
-	chrome.runtime.onMessage.addListener(message => {
+	chrome.runtime.onMessage.addListener((message) => {
 		if (message.delete) deleteURL(message);
 		else if (message.options) {
 			chrome.storage.local.get((options) => {

@@ -41,7 +41,7 @@ const checkHeadersPref = () => {
 	}
 };
 
-const saveOption = e => {
+const saveOption = (e) => {
 	if (e.target.id === "copyMethod" && e.target.value !== "url") {
 		const prefName = "customCommand" + e.target.value;
 		chrome.storage.local.get(prefName, (res) => {
@@ -100,7 +100,7 @@ const restoreOptions = () => {
 document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
-		option.onchange = e => saveOption(e);
+		option.onchange = (e) => saveOption(e);
 	}
 
 	// i18n
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
 
 	// sync with popup changes
-	chrome.runtime.onMessage.addListener(message => {
+	chrome.runtime.onMessage.addListener((message) => {
 		if (message.options) restoreOptions();
 	});
 });

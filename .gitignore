@@ -1,4 +1,5 @@
 .firefox.exe.lnk
+.firefox-esr.exe.lnk
 /web-ext-artifacts
 /dist
 package.json

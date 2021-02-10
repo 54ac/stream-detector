@@ -8,7 +8,7 @@ const table = document.getElementById("popupUrlList");
 
 let urlList = [];
 
-const copyURL = info => {
+const copyURL = (info) => {
 	chrome.storage.local.get((options) => {
 		const list = { urls: [], filenames: [], methodIncomp: false };
 		for (const e of info) {
@@ -23,7 +23,8 @@ const copyURL = info => {
 			if (
 				(type === "HDS" && fileMethod === "ffmpeg") ||
 				(type === "MSS" &&
-					(fileMethod !== "youtubedl" || fileMethod !== "youtubedlc")) ||
+					fileMethod !== "youtubedl" &&
+					fileMethod !== "youtubedlc") ||
 				((type === "VTT" ||
 					type === "SRT" ||
 					type === "TTML" ||
@@ -99,7 +100,7 @@ const copyURL = info => {
 							code += ` -p "${options.proxyCommand}"`;
 							break;
 						case "user":
-							code = code.replace("%proxy%", options.proxyCommand);
+							code = code.replaceAll("%proxy%", options.proxyCommand);
 							break;
 						default:
 							break;
@@ -109,24 +110,24 @@ const copyURL = info => {
 				// additional headers
 				if (options.headersPref === true) {
 					let headerUserAgent = e.headers.find(
-						header => header.name.toLowerCase() === "user-agent"
+						(header) => header.name.toLowerCase() === "user-agent"
 					);
 					headerUserAgent
 						? (headerUserAgent = headerUserAgent.value)
 						: (headerUserAgent = navigator.userAgent);
 
 					let headerCookie = e.headers.find(
-						header => header.name.toLowerCase() === "cookie"
+						(header) => header.name.toLowerCase() === "cookie"
 					);
 					if (headerCookie)
 						headerCookie = headerCookie.value.replaceAll(`"`, `'`); // double quotation marks mess up the command
 
 					let headerReferer = e.headers.find(
-						header => header.name.toLowerCase() === "referer"
+						(header) => header.name.toLowerCase() === "referer"
 					);
 					headerReferer = headerReferer
 						? headerReferer.value
-						: e.originUrl || e.documentUrl;
+						: e.originUrl || e.documentUrl || e.tabData.url;
 
 					if (headerUserAgent && headerUserAgent.length > 0) {
 						switch (fileMethod) {
@@ -146,14 +147,13 @@ const copyURL = info => {
 								code += ` -u "${headerUserAgent}"`;
 								break;
 							case "user":
-								code = code.replace("%useragent%", headerUserAgent);
+								code = code.replaceAll("%useragent%", headerUserAgent);
 								break;
 							default:
 								break;
 						}
-					} else if (fileMethod === "user") {
-						code = code.replace("%useragent%", "");
-					}
+					} else if (fileMethod === "user")
+						code = code.replaceAll("%useragent%", "");
 
 					if (headerCookie && headerCookie.length > 0) {
 						switch (fileMethod) {
@@ -173,14 +173,13 @@ const copyURL = info => {
 								code += ` -h "Cookie:${headerCookie}"`;
 								break;
 							case "user":
-								code = code.replace("%cookie%", headerCookie);
+								code = code.replaceAll("%cookie%", headerCookie);
 								break;
 							default:
 								break;
 						}
-					} else if (fileMethod === "user") {
-						code = code.replace("%cookie%", "");
-					}
+					} else if (fileMethod === "user")
+						code = code.replaceAll("%cookie%", "");
 
 					if (headerReferer && headerReferer.length > 0) {
 						switch (fileMethod) {
@@ -200,18 +199,28 @@ const copyURL = info => {
 								code += ` -h "Referer:${headerReferer}"`;
 								break;
 							case "user":
-								code = code.replace("%referer%", headerReferer);
+								code = code.replaceAll("%referer%", headerReferer);
 								break;
 							default:
 								break;
 						}
-					} else if (fileMethod === "user") {
-						code = code.replace("%referer%", "");
-					}
+					} else if (fileMethod === "user")
+						code = code.replaceAll("%referer%", "");
+
+					if (
+						fileMethod === "user" &&
+						(e.documentUrl || e.originUrl || e.tabData.url)
+					)
+						code = code.replaceAll(
+							"%origin%",
+							e.documentUrl || e.originUrl || e.tabData.url
+						);
+					else code = code.replaceAll("%origin%", "");
 				}
 
 				let outFilename = filename;
 				if (outFilename.indexOf(".")) {
+					// filename without extension
 					outFilename = outFilename.split(".");
 					outFilename.pop();
 					outFilename = outFilename.join(".");
@@ -239,8 +248,8 @@ const copyURL = info => {
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
 						break;
 					case "user":
-						code = code.replace("%url%", streamURL);
-						code = code.replace("%filename%", filename);
+						code = code.replaceAll("%url%", streamURL);
+						code = code.replaceAll("%filename%", filename);
 						break;
 					default:
 						break;
@@ -252,6 +261,7 @@ const copyURL = info => {
 			list.filenames.push(filename);
 			list.methodIncomp = methodIncomp;
 		}
+		// old copying method for compatibility purposes
 		const copyText = document.createElement("textarea");
 		copyText.style.position = "absolute";
 		copyText.style.left = "-5454px";
@@ -284,7 +294,7 @@ const copyURL = info => {
 	});
 };
 
-const deleteURL = requestDetails => {
+const deleteURL = (requestDetails) => {
 	const deleteUrlStorage = [requestDetails];
 	chrome.runtime.sendMessage({
 		delete: deleteUrlStorage,
@@ -295,19 +305,19 @@ const deleteURL = requestDetails => {
 const getIdList = () =>
 	Array.from(
 		document.getElementById("popupUrlList").getElementsByTagName("tr")
-	).map(tr => tr.id);
+	).map((tr) => tr.id);
 
 const copyAll = () => {
 	// this seems like a roundabout way of doing this but oh well
 	const idList = getIdList();
-	const copyUrlList = urlList.filter(url => idList.includes(url.requestId));
+	const copyUrlList = urlList.filter((url) => idList.includes(url.requestId));
 
 	copyURL(copyUrlList);
 };
 
 const clearList = () => {
 	const idList = getIdList();
-	const deleteUrlStorage = urlList.filter(url =>
+	const deleteUrlStorage = urlList.filter((url) =>
 		idList.includes(url.requestId)
 	);
 
@@ -318,7 +328,7 @@ const clearList = () => {
 };
 
 const createList = () => {
-	const insertList = urls => {
+	const insertList = (urls) => {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
 		document.getElementById("filterInput").disabled = false;
@@ -335,29 +345,41 @@ const createList = () => {
 			const urlHref = document.createElement("a");
 			urlHref.textContent = requestDetails.filename;
 			urlHref.href = requestDetails.url;
-			urlCell.onclick = e => {
+			urlCell.onclick = (e) => {
 				e.preventDefault();
 				copyURL([requestDetails]);
 			};
-			urlHref.onclick = e => {
+			urlHref.onclick = (e) => {
 				e.preventDefault();
 				e.stopPropagation();
 				copyURL([requestDetails]);
 			};
 			urlCell.style.cursor = "pointer";
+			urlHref.style.whiteSpace = "nowrap";
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 
 			const sourceCell = document.createElement("td");
-			sourceCell.textContent = requestDetails.hostname;
+			sourceCell.textContent =
+				requestDetails.tabData.title &&
+				// tabData.title falls back to url
+				!requestDetails.url.includes(requestDetails.tabData.title)
+					? requestDetails.tabData.title
+					: requestDetails.hostname;
+			sourceCell.title =
+				requestDetails.documentUrl ||
+				requestDetails.originUrl ||
+				requestDetails.tabData.url;
+			sourceCell.style.overflowWrap = "anywhere";
 
 			const timestampCell = document.createElement("td");
-			timestampCell.textContent = new Date(
-				requestDetails.timestamp
-			).toISOString();
+			timestampCell.textContent =
+				new Date(requestDetails.timestamp).toLocaleDateString() +
+				" " +
+				new Date(requestDetails.timestamp).toLocaleTimeString();
 
 			const deleteCell = document.createElement("td");
-			deleteCell.textContent = "X";
+			deleteCell.textContent = "✖";
 			deleteCell.onclick = () => deleteURL(requestDetails);
 			deleteCell.onmouseover = () =>
 				(urlCell.style.textDecoration = "line-through");
@@ -398,7 +420,7 @@ const createList = () => {
 
 		if (
 			(options.urlStorage && options.urlStorage.length > 0) ||
-			(options.urlStorageRestore || options.urlStorageRestore.length > 0)
+			(options.urlStorageRestore && options.urlStorageRestore.length > 0)
 		) {
 			const urlStorageFilter = document
 				.getElementById("filterInput")
@@ -408,7 +430,7 @@ const createList = () => {
 			chrome.tabs.query({ active: true, currentWindow: true }, (tab) => {
 				if (document.getElementById("tabThis").checked === true) {
 					urlList = options.urlStorage
-						? options.urlStorage.filter(url => url.tabId === tab[0].id)
+						? options.urlStorage.filter((url) => url.tabId === tab[0].id)
 						: [];
 				} else if (document.getElementById("tabAll").checked === true) {
 					urlList = options.urlStorage || [];
@@ -420,7 +442,7 @@ const createList = () => {
 					urlList =
 						urlList &&
 						urlList.filter(
-							url =>
+							(url) =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
 								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
@@ -436,7 +458,7 @@ const createList = () => {
 	});
 };
 
-const saveOption = e => {
+const saveOption = (e) => {
 	const options = document.getElementsByClassName("option");
 	if (e.target.type === "checkbox") {
 		chrome.storage.local.set({
@@ -491,7 +513,7 @@ const restoreOptions = () => {
 			}
 		}
 		for (const option of options) {
-			option.onchange = e => saveOption(e);
+			option.onchange = (e) => saveOption(e);
 		}
 
 		// i18n
@@ -505,15 +527,15 @@ const restoreOptions = () => {
 		}
 
 		// button and text input functionality
-		document.getElementById("copyAll").onclick = e => {
+		document.getElementById("copyAll").onclick = (e) => {
 			e.preventDefault();
 			copyAll();
 		};
-		document.getElementById("clearList").onclick = e => {
+		document.getElementById("clearList").onclick = (e) => {
 			e.preventDefault();
 			clearList();
 		};
-		document.getElementById("openOptions").onclick = e => {
+		document.getElementById("openOptions").onclick = (e) => {
 			e.preventDefault();
 			chrome.runtime.openOptionsPage();
 		};
@@ -525,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
 	createList();
 
-	chrome.runtime.onMessage.addListener(message => {
+	chrome.runtime.onMessage.addListener((message) => {
 		if (message.urlStorage) createList();
 	});
 });
