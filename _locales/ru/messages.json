@@ -1,0 +1,125 @@
+{
+	"notifTitle": {
+		"message": "Найден поток!"
+	},
+	"notifText": {
+		"message": "Обнаружен новый $1-поток:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "Скопировано!"
+	},
+	"notifCopiedText": {
+		"message": "Скопированы следующее ссылки:\n"
+	},
+	"notifIncompCopiedText": {
+		"message": "Ссылки на потоки скопированы как обычный текст из-за несовместимости с выбранной программой:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Ошибка копирования!"
+	},
+	"notifErrorText": {
+		"message": "Невозможно скопировать ссылки:\n"
+	},
+	"extText": {
+		"message": "Находит списки воспроизведения и субтитры, используемые потоками HLS/DASH/HDS/MSS. Формирует готовые командные строки для youtube-dl/FFmpeg/Streamlink/hlsdl."
+	},
+	"copyMethod": {
+		"message": "Копировать ссылку на поток как:"
+	},
+	"url": {
+		"message": "Только ссылка"
+	},
+	"youtubedl": {
+		"message": "Команда для youtube-dl"
+	},
+	"youtubedlc": {
+		"message": "Команда для youtube-dlc"
+	},
+	"ffmpeg": {
+		"message": "Команда для FFmpeg"
+	},
+	"streamlink": {
+		"message": "Команда для Streamlink"
+	},
+	"hlsdl": {
+		"message": "Команда для hlsdl"
+	},
+	"user": {
+		"message": "Пользовательская команда"
+	},
+	"streamlinkOutput": {
+		"message": "Вывод Streamlink в:"
+	},
+	"file": {
+		"message": "Файл"
+	},
+	"player": {
+		"message": "Проигрыватель по умолчанию"
+	},
+	"customCommand": {
+		"message": "Дополнительные параметры командной строки:"
+	},
+	"userCommand": {
+		"message": "Пользовательская команда:"
+	},
+	"userCommandTip": {
+		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
+	},
+	"headersPref": {
+		"message": "Включать дополнительные заголовки:"
+	},
+	"notifPref": {
+		"message": "Отключить уведомления:"
+	},
+	"disablePref": {
+		"message": "Отключить обнаружение:"
+	},
+	"clearList": {
+		"message": "Очистить список ссылок"
+	},
+	"copyAll": {
+		"message": "Скопировать все ссылки списка"
+	},
+	"proxyPref": {
+		"message": "Использовать HTTP-прокси:"
+	},
+	"downloaderPref": {
+		"message": "Использовать внешний загрузчик:"
+	},
+	"buttonClick": {
+		"message": "Функция кнопки действия браузера:"
+	},
+	"popupType": {
+		"message": "Тип"
+	},
+	"popupFilename": {
+		"message": "Имя файла"
+	},
+	"popupSource": {
+		"message": "Источник"
+	},
+	"popupTimestamp": {
+		"message": "Дата/время"
+	},
+	"deleteTooltip": {
+		"message": "Нажмите, чтобы удалить ссылку"
+	},
+	"tabThis": {
+		"message": "Эта вкладка"
+	},
+	"tabAll": {
+		"message": "Все вкладки"
+	},
+	"tabPrevious": {
+		"message": "Предыдущие сессии"
+	},
+	"filterInput": {
+		"message": "Фильтр:"
+	},
+	"openOptions": {
+		"message": "Настройки"
+	},
+	"titlePref": {
+		"message": "Показывать заголовок вкладки как источник:"
+	}
+}
