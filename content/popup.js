@@ -6,6 +6,7 @@ const _ = chrome.i18n.getMessage; // i18n
 
 const table = document.getElementById("popupUrlList");
 
+let titlePref;
 let urlList = [];
 
 const copyURL = (info) => {
@@ -233,7 +234,6 @@ const copyURL = (info) => {
 						break;
 					case "streamlink":
 						// streamlink output to file or player
-						if (!options.streamlinkOutput) options.streamlinkOutput = "file";
 						if (options.streamlinkOutput === "file")
 							code += ` -o "${outFilename}.ts"`;
 						code += ` "${streamURL}" best`;
@@ -361,6 +361,7 @@ const createList = () => {
 
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
+				titlePref &&
 				requestDetails.tabData.title &&
 				// tabData.title falls back to url
 				!requestDetails.url.includes(requestDetails.tabData.title)
@@ -485,11 +486,14 @@ const saveOption = (e) => {
 
 const restoreOptions = () => {
 	// change badge text background when clicked
-	chrome.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
+	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
 
 	const options = document.getElementsByClassName("option");
 	// should probably consolidate this with the other one at some point
 	chrome.storage.local.get((item) => {
+		// eslint-disable-next-line prefer-destructuring
+		titlePref = item.titlePref;
+
 		for (const option of options) {
 			if (defaultOptions[option.id]) {
 				if (item[option.id] !== undefined) {
@@ -540,12 +544,13 @@ const restoreOptions = () => {
 			chrome.runtime.openOptionsPage();
 		};
 		document.getElementById("filterInput").onkeyup = () => createList();
+
+		createList();
 	});
 };
 
 document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
-	createList();
 
 	chrome.runtime.onMessage.addListener((message) => {
 		if (message.urlStorage) createList();

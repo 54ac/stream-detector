@@ -8,7 +8,7 @@ const supported = [
 	},
 	{ ext: ["mpd"], ct: ["application/dash+xml"], type: "DASH" },
 	{ ext: ["f4m"], ct: ["application/f4m"], type: "HDS" },
-	{ ext: ["ism"], ct: [], type: "MSS" },
+	{ ext: ["ism/manifest"], ct: [], type: "MSS" },
 	{ ext: ["vtt"], ct: ["text/vtt"], type: "VTT" },
 	{ ext: ["srt"], ct: ["application/x-subrip"], type: "SRT" },
 	{ ext: ["ttml", "ttml2"], ct: ["application/ttml+xml"], type: "TTML" },
@@ -54,7 +54,11 @@ const urlFilter = (requestDetails) => {
 const addURL = (requestDetails) => {
 	const url = new URL(requestDetails.url);
 
-	const urlPath = url.pathname.toLowerCase();
+	// MSS workaround
+	const urlPath = url.pathname.toLowerCase().includes(".ism/manifest")
+		? url.pathname.slice(0, url.pathname.lastIndexOf("/"))
+		: url.pathname;
+
 	// eslint-disable-next-line no-nested-ternary
 	const filename = +urlPath.lastIndexOf("/")
 		? urlPath.slice(urlPath.lastIndexOf("/") + 1)
@@ -131,103 +135,111 @@ const deleteURL = (message) => {
 	});
 };
 
-const setup = () => {
-	// clear everything and/or set up
-	chrome.browserAction.setBadgeText({ text: "" });
+// clear everything and/or set up
+chrome.browserAction.setBadgeText({ text: "" });
 
-	chrome.storage.local.get((options) => {
-		if (
-			(options.version &&
-				(options.version.split(".")[0] < manifestVersion.split(".")[0] ||
-					(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
-						options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
-			!options.version
-		)
-			chrome.storage.local.clear();
+chrome.storage.local.get((options) => {
+	if (
+		(options.version &&
+			(options.version.split(".")[0] < manifestVersion.split(".")[0] ||
+				(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
+					options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
+		!options.version
+	)
+		chrome.storage.local.clear();
 
-		chrome.storage.local.set(
-			{
-				// first init also happens here
-				disablePref: options.disablePref || false,
-				copyMethod: options.copyMethod || "url",
-				headersPref: options.headersPref || true,
-				streamlinkOutput: options.streamlinkOutput || "file",
-				downloaderPref: options.downloaderPref || false,
-				downloaderCommand: options.downloaderCommand || "",
-				proxyPref: options.proxyPref || false,
-				proxyCommand: options.proxyCommand || "",
-				customCommand: options.customCommand || "",
-				userCommand: options.userCommand || "",
-				notifPref: options.notifPref || false,
-				urlStorageRestore: options.urlStorageRestore || [],
-				version: manifestVersion
-			},
-			() => {
-				if (!options.disablePref || options.disablePref === false) {
-					chrome.webRequest.onBeforeSendHeaders.addListener(
-						urlFilter,
-						{ urls: ["<all_urls>"] },
-						["requestHeaders"]
-					);
-					chrome.webRequest.onHeadersReceived.addListener(
-						urlFilter,
-						{ urls: ["<all_urls>"] },
-						["responseHeaders"]
-					);
-				}
-
-				notifPref = options.notifPref || false;
-
-				if (options.urlStorageRestore && options.urlStorageRestore.length > 0)
-					// eslint-disable-next-line prefer-destructuring
-					urlStorageRestore = options.urlStorageRestore;
-
-				if (options.urlStorage && options.urlStorage.length > 0)
-					urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
-
-				// restore urls on startup
-				if (urlStorageRestore.length > 0)
-					chrome.storage.local.set({
-						urlStorageRestore,
-						urlStorage: []
-					});
+	chrome.storage.local.set(
+		{
+			// first init also happens here
+			disablePref:
+				options.disablePref !== undefined
+					? options.disablePref === true
+					: false,
+			copyMethod: options.copyMethod || "url",
+			headersPref:
+				options.headersPref !== undefined ? options.headersPref === true : true,
+			titlePref:
+				options.titlePref !== undefined ? options.titlePref === true : true,
+			streamlinkOutput: options.streamlinkOutput || "file",
+			downloaderPref:
+				options.downloaderPref !== undefined
+					? options.downloaderPref === true
+					: false,
+			downloaderCommand: options.downloaderCommand || "",
+			proxyPref:
+				options.proxyPref !== undefined ? options.proxyPref === true : false,
+			proxyCommand: options.proxyCommand || "",
+			customCommand: options.customCommand || "",
+			userCommand: options.userCommand || "",
+			notifPref:
+				options.notifPref !== undefined ? options.notifPref === true : false,
+			urlStorageRestore: options.urlStorageRestore || [],
+			version: manifestVersion
+		},
+		() => {
+			if (options.disablePref !== true) {
+				chrome.webRequest.onBeforeSendHeaders.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["requestHeaders"]
+				);
+				chrome.webRequest.onHeadersReceived.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["responseHeaders"]
+				);
 			}
-		);
-	});
 
-	chrome.runtime.onMessage.addListener((message) => {
-		if (message.delete) deleteURL(message);
-		else if (message.options) {
-			chrome.storage.local.get((options) => {
-				if (
-					options.disablePref === true &&
-					chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-					chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-				) {
-					chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
-					chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
-				} else if (
-					options.disablePref === false &&
-					!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-					!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-				) {
-					chrome.webRequest.onBeforeSendHeaders.addListener(
-						urlFilter,
-						{ urls: ["<all_urls>"] },
-						["requestHeaders"]
-					);
-					chrome.webRequest.onHeadersReceived.addListener(
-						urlFilter,
-						{ urls: ["<all_urls>"] },
-						["responseHeaders"]
-					);
-				}
+			notifPref =
+				options.notifPref !== undefined ? options.notifPref === true : false;
 
+			if (options.urlStorageRestore && options.urlStorageRestore.length > 0)
 				// eslint-disable-next-line prefer-destructuring
-				notifPref = options.notifPref;
-			});
-		}
-	});
-};
+				urlStorageRestore = options.urlStorageRestore;
 
-setup();
+			if (options.urlStorage && options.urlStorage.length > 0)
+				urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
+
+			// restore urls on startup
+			if (urlStorageRestore.length > 0)
+				chrome.storage.local.set({
+					urlStorageRestore,
+					urlStorage: []
+				});
+		}
+	);
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+	if (message.delete) deleteURL(message);
+	else if (message.options) {
+		chrome.storage.local.get((options) => {
+			if (
+				options.disablePref === true &&
+				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+			) {
+				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
+				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
+			} else if (
+				options.disablePref === false &&
+				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+			) {
+				chrome.webRequest.onBeforeSendHeaders.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["requestHeaders"]
+				);
+				chrome.webRequest.onHeadersReceived.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["responseHeaders"]
+				);
+			}
+
+			// eslint-disable-next-line prefer-destructuring
+			notifPref = options.notifPref;
+		});
+	}
+});

@@ -5,6 +5,7 @@ const _ = chrome.i18n.getMessage; // i18n
 const checkHeadersPref = () => {
 	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("headersPref").disabled = false;
+	document.getElementById("titlePref").disabled = false;
 	document.getElementById("downloaderPref").disabled = true;
 	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
