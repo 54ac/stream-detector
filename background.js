@@ -160,6 +160,10 @@ chrome.storage.local.get((options) => {
 				options.headersPref !== undefined ? options.headersPref === true : true,
 			titlePref:
 				options.titlePref !== undefined ? options.titlePref === true : true,
+			filenamePref:
+				options.filenamePref !== undefined
+					? options.filenamePref === true
+					: true,
 			streamlinkOutput: options.streamlinkOutput || "file",
 			downloaderPref:
 				options.downloaderPref !== undefined

@@ -63,7 +63,7 @@
 		"message": "Komenda własna:"
 	},
 	"userCommandTip": {
-		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
+		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki:"
@@ -121,5 +121,8 @@
 	},
 	"titlePref": {
 		"message": "Pokaż tytuł karty jako źródło:"
+	},
+	"filenamePref": {
+		"message": "Tytuł karty jako nazwa pliku:"
 	}
 }

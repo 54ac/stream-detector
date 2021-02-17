@@ -63,7 +63,7 @@
 		"message": "User-defined command:"
 	},
 	"userCommandTip": {
-		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
+		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
 		"message": "Include additional headers:"
@@ -121,5 +121,8 @@
 	},
 	"titlePref": {
 		"message": "Show tab title as source:"
+	},
+	"filenamePref": {
+		"message": "Use tab title as filename:"
 	}
 }
