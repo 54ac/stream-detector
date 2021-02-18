@@ -63,7 +63,7 @@
 		"message": "사용자 정의 명령어:"
 	},
 	"userCommandTip": {
-		"message": "이용 가능한 옵션:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
+		"message": "이용 가능한 옵션:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
 		"message": "헤더 추가:"
@@ -120,6 +120,9 @@
 		"message": "옵션"
 	},
 	"titlePref": {
-		"message": "출처칸에 URL 대신 탭 제목 사용:"
-	}
+		"message": "출처 칸에 URL 대신 탭 제목 사용:"
+	},
+    "filenamePref": {
+	    "message": "탭 제목을 파일명으로 사용:"
+	}	
 }
