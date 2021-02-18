@@ -63,7 +63,7 @@
 		"message": "Пользовательская команда:"
 	},
 	"userCommandTip": {
-		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%"
+		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
 		"message": "Включать дополнительные заголовки:"
@@ -121,5 +121,8 @@
 	},
 	"titlePref": {
 		"message": "Показывать заголовок вкладки как источник:"
+	},
+	"filenamePref": {
+		"message": "Использовать заголовок вкладки как имя файла:"
 	}
 }
