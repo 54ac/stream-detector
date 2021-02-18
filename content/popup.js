@@ -6,6 +6,8 @@ const _ = chrome.i18n.getMessage; // i18n
 
 const table = document.getElementById("popupUrlList");
 
+let titlePref;
+let filenamePref;
 let urlList = [];
 
 const copyURL = (info) => {
@@ -100,7 +102,10 @@ const copyURL = (info) => {
 							code += ` -p "${options.proxyCommand}"`;
 							break;
 						case "user":
-							code = code.replaceAll("%proxy%", options.proxyCommand);
+							code = code.replace(
+								new RegExp("%proxy%", "g"),
+								options.proxyCommand
+							);
 							break;
 						default:
 							break;
@@ -120,7 +125,10 @@ const copyURL = (info) => {
 						(header) => header.name.toLowerCase() === "cookie"
 					);
 					if (headerCookie)
-						headerCookie = headerCookie.value.replaceAll(`"`, `'`); // double quotation marks mess up the command
+						headerCookie = headerCookie.value.replace(
+							new RegExp(`"`, "g"),
+							`'`
+						); // double quotation marks mess up the command
 
 					let headerReferer = e.headers.find(
 						(header) => header.name.toLowerCase() === "referer"
@@ -147,13 +155,16 @@ const copyURL = (info) => {
 								code += ` -u "${headerUserAgent}"`;
 								break;
 							case "user":
-								code = code.replaceAll("%useragent%", headerUserAgent);
+								code = code.replace(
+									new RegExp("%useragent%", "g"),
+									headerUserAgent
+								);
 								break;
 							default:
 								break;
 						}
 					} else if (fileMethod === "user")
-						code = code.replaceAll("%useragent%", "");
+						code = code.replace(new RegExp("%useragent%", "g"), "");
 
 					if (headerCookie && headerCookie.length > 0) {
 						switch (fileMethod) {
@@ -173,13 +184,13 @@ const copyURL = (info) => {
 								code += ` -h "Cookie:${headerCookie}"`;
 								break;
 							case "user":
-								code = code.replaceAll("%cookie%", headerCookie);
+								code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
 								break;
 							default:
 								break;
 						}
 					} else if (fileMethod === "user")
-						code = code.replaceAll("%cookie%", "");
+						code = code.replace(new RegExp("%cookie%", "g"), "");
 
 					if (headerReferer && headerReferer.length > 0) {
 						switch (fileMethod) {
@@ -199,31 +210,48 @@ const copyURL = (info) => {
 								code += ` -h "Referer:${headerReferer}"`;
 								break;
 							case "user":
-								code = code.replaceAll("%referer%", headerReferer);
+								code = code.replace(
+									new RegExp("%referer%", "g"),
+									headerReferer
+								);
 								break;
 							default:
 								break;
 						}
 					} else if (fileMethod === "user")
-						code = code.replaceAll("%referer%", "");
+						code = code.replace(new RegExp("%referer%", "g"), "");
 
 					if (
 						fileMethod === "user" &&
 						(e.documentUrl || e.originUrl || e.tabData.url)
 					)
-						code = code.replaceAll(
-							"%origin%",
+						code = code.replace(
+							new RegExp("%origin%", "g"),
 							e.documentUrl || e.originUrl || e.tabData.url
 						);
-					else code = code.replaceAll("%origin%", "");
+					else if (fileMethod === "user")
+						code = code.replace(new RegExp("%origin%", "g"), "");
+
+					if (fileMethod === "user" && e.tabData.title)
+						code = code.replace(
+							new RegExp("%tabtitle%", "g"),
+							e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
+						);
+					else if (fileMethod === "user")
+						code = code.replace(new RegExp("%tabtitle%", "g"), "");
 				}
 
-				let outFilename = filename;
-				if (outFilename.indexOf(".")) {
-					// filename without extension
-					outFilename = outFilename.split(".");
-					outFilename.pop();
-					outFilename = outFilename.join(".");
+				let outFilename;
+				if (filenamePref && e.tabData.title)
+					outFilename = e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_");
+				else {
+					outFilename = filename;
+					if (outFilename.indexOf(".")) {
+						// filename without extension
+						outFilename = outFilename.split(".");
+						outFilename.pop();
+						outFilename = outFilename.join(".");
+					}
 				}
 
 				// final part of command
@@ -233,23 +261,26 @@ const copyURL = (info) => {
 						break;
 					case "streamlink":
 						// streamlink output to file or player
-						if (!options.streamlinkOutput) options.streamlinkOutput = "file";
 						if (options.streamlinkOutput === "file")
 							code += ` -o "${outFilename}.ts"`;
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
+						if (filenamePref && e.tabData.title)
+							code += ` --output "${outFilename}.%(ext)s"`;
 						code += ` "${streamURL}"`;
 						break;
 					case "youtubedlc":
+						if (filenamePref && e.tabData.title)
+							code += ` --output "${outFilename}.%(ext)s"`;
 						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
 						break;
 					case "user":
-						code = code.replaceAll("%url%", streamURL);
-						code = code.replaceAll("%filename%", filename);
+						code = code.replace(new RegExp("%url%", "g"), streamURL);
+						code = code.replace(new RegExp("%filename%", "g"), filename);
 						break;
 					default:
 						break;
@@ -361,6 +392,7 @@ const createList = () => {
 
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
+				titlePref &&
 				requestDetails.tabData.title &&
 				// tabData.title falls back to url
 				!requestDetails.url.includes(requestDetails.tabData.title)
@@ -444,6 +476,8 @@ const createList = () => {
 						urlList.filter(
 							(url) =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
+								(url.tabData.title &&
+									url.tabData.title.toLowerCase().includes(urlStorageFilter)) ||
 								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
 						);
@@ -485,11 +519,15 @@ const saveOption = (e) => {
 
 const restoreOptions = () => {
 	// change badge text background when clicked
-	chrome.browserAction.setBadgeBackgroundColor({ color: "gainsboro" });
+	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
 
 	const options = document.getElementsByClassName("option");
 	// should probably consolidate this with the other one at some point
 	chrome.storage.local.get((item) => {
+		// eslint-disable-next-line prefer-destructuring
+		titlePref = item.titlePref;
+		filenamePref = item.filenamePref;
+
 		for (const option of options) {
 			if (defaultOptions[option.id]) {
 				if (item[option.id] !== undefined) {
@@ -540,12 +578,13 @@ const restoreOptions = () => {
 			chrome.runtime.openOptionsPage();
 		};
 		document.getElementById("filterInput").onkeyup = () => createList();
+
+		createList();
 	});
 };
 
 document.addEventListener("DOMContentLoaded", () => {
 	restoreOptions();
-	createList();
 
 	chrome.runtime.onMessage.addListener((message) => {
 		if (message.urlStorage) createList();

@@ -5,6 +5,8 @@ const _ = chrome.i18n.getMessage; // i18n
 const checkHeadersPref = () => {
 	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("headersPref").disabled = false;
+	document.getElementById("titlePref").disabled = false;
+	document.getElementById("filenamePref").disabled = false;
 	document.getElementById("downloaderPref").disabled = true;
 	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
@@ -22,6 +24,7 @@ const checkHeadersPref = () => {
 
 	if (document.getElementById("copyMethod").value === "url") {
 		document.getElementById("headersPref").disabled = true;
+		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
 		document.getElementById("customCommand").disabled = true;
@@ -34,6 +37,7 @@ const checkHeadersPref = () => {
 		document.getElementById("downloaderPref").disabled = false;
 	} else if (document.getElementById("copyMethod").value === "user") {
 		document.getElementById("headersPref").disabled = true;
+		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
 		document.getElementById("customCommand").disabled = true;
