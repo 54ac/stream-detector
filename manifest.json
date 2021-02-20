@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "2.6.4",
+	"version": "2.6.5",
 	"permissions": [
 		"<all_urls>",
 		"tabs",
@@ -21,12 +21,10 @@
 		"96": "img/icon-dark-96.png"
 	},
 	"options_ui": {
-		"browser_style": true,
 		"open_in_tab": false,
 		"page": "content/options.html"
 	},
 	"browser_action": {
-		"browser_style": true,
 		"default_title": "The Stream Detector",
 		"default_popup": "content/popup.html",
 		"default_icon": {

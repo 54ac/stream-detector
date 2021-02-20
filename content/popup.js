@@ -135,7 +135,7 @@ const copyURL = (info) => {
 					);
 					headerReferer = headerReferer
 						? headerReferer.value
-						: e.originUrl || e.documentUrl || e.tabData.url;
+						: e.originUrl || e.documentUrl || (e.tabData && e.tabData.url);
 
 					if (headerUserAgent && headerUserAgent.length > 0) {
 						switch (fileMethod) {
@@ -223,16 +223,16 @@ const copyURL = (info) => {
 
 					if (
 						fileMethod === "user" &&
-						(e.documentUrl || e.originUrl || e.tabData.url)
+						(e.documentUrl || e.originUrl || (e.tabData && e.tabData.url))
 					)
 						code = code.replace(
 							new RegExp("%origin%", "g"),
-							e.documentUrl || e.originUrl || e.tabData.url
+							e.documentUrl || e.originUrl || (e.tabData && e.tabData.url)
 						);
 					else if (fileMethod === "user")
 						code = code.replace(new RegExp("%origin%", "g"), "");
 
-					if (fileMethod === "user" && e.tabData.title)
+					if (fileMethod === "user" && e.tabData && e.tabData.title)
 						code = code.replace(
 							new RegExp("%tabtitle%", "g"),
 							e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
@@ -242,7 +242,7 @@ const copyURL = (info) => {
 				}
 
 				let outFilename;
-				if (filenamePref && e.tabData.title)
+				if (filenamePref && e.tabData && e.tabData.title)
 					outFilename = e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_");
 				else {
 					outFilename = filename;
@@ -266,12 +266,12 @@ const copyURL = (info) => {
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
-						if (filenamePref && e.tabData.title)
+						if (filenamePref && e.tabData && e.tabData.title)
 							code += ` --output "${outFilename}.%(ext)s"`;
 						code += ` "${streamURL}"`;
 						break;
 					case "youtubedlc":
-						if (filenamePref && e.tabData.title)
+						if (filenamePref && e.tabData && e.tabData.title)
 							code += ` --output "${outFilename}.%(ext)s"`;
 						code += ` "${streamURL}"`;
 						break;
@@ -393,6 +393,7 @@ const createList = () => {
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
 				titlePref &&
+				requestDetails.tabData &&
 				requestDetails.tabData.title &&
 				// tabData.title falls back to url
 				!requestDetails.url.includes(requestDetails.tabData.title)
@@ -476,7 +477,8 @@ const createList = () => {
 						urlList.filter(
 							(url) =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
-								(url.tabData.title &&
+								(url.tabData &&
+									url.tabData.title &&
 									url.tabData.title.toLowerCase().includes(urlStorageFilter)) ||
 								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
