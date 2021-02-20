@@ -18,12 +18,20 @@
 					"Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
 				background: #fff;
 				color: #202023;
+			}
 
-				/* addon popup vertical scrollbar workaround */
-				margin-right: 32px;
+			.container {
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+			}
+
+			.url-list {
+				overflow: auto;
 			}
 
 			table {
+				table-layout: fixed;
 				border-collapse: collapse;
 				width: 100%;
 			}
@@ -33,6 +41,8 @@
 			td {
 				padding: 0.75em;
 				text-align: center;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 
 			div {
@@ -56,6 +66,7 @@
 			input,
 			select {
 				margin: auto 0.25em;
+				vertical-align: middle;
 			}
 
 			a {
@@ -77,6 +88,7 @@
 		<title>The Stream Detector</title>
 	</head>
 	<body>
+	<div class="container">
 		<table>
 			<tbody>
 				<tr>
@@ -123,8 +135,9 @@
 				</tr>
 			</tbody>
 		</table>
-		<table>
-			<thead>
+		<div class="url-list">
+			<table>
+				<thead>
 				<tr>
 					<th><label for="popupType"></label></th>
 					<th><label for="popupFilename"></label></th>
@@ -132,9 +145,10 @@
 					<th><label for="popupTimestamp"></label></th>
 					<th>✖</th>
 				</tr>
-			</thead>
-			<tbody id="popupUrlList"></tbody>
-		</table>
+				</thead>
+				<tbody id="popupUrlList"></tbody>
+			</table>
+		</div>
 		<table>
 			<tbody>
 				<tr>
@@ -160,7 +174,7 @@
 				</tr>
 			</tbody>
 		</table>
-
-		<script src="popup.js"></script>
+	</div>
+	<script src="popup.js"></script>
 	</body>
 </html>
