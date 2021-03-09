@@ -44,6 +44,9 @@
 	"hlsdl": {
 		"message": "Komendę hlsdl"
 	},
+	"nm3u8dl": {
+		"message": "Komendę N_m3u8DL-CLI"
+	},
 	"user": {
 		"message": "Komendę własną"
 	},

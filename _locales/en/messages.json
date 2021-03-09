@@ -44,6 +44,9 @@
 	"hlsdl": {
 		"message": "hlsdl command"
 	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-CLI command"
+	},
 	"user": {
 		"message": "User-defined command"
 	},

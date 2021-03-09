@@ -32,7 +32,8 @@ const copyURL = (info) => {
 					type === "TTML" ||
 					type === "DFXP") &&
 					fileMethod !== "url") ||
-				(type !== "HLS" && fileMethod === "hlsdl")
+				(type !== "HLS" && fileMethod === "hlsdl") ||
+				(type !== "HLS" && fileMethod === "nm3u8dl")
 			) {
 				fileMethod = "url";
 				methodIncomp = true;
@@ -70,6 +71,9 @@ const copyURL = (info) => {
 					case "hlsdl":
 						code = "hlsdl -b -c";
 						break;
+					case "nm3u8dl":
+						code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
+						break;
 					case "user":
 						code = options.userCommand;
 						break;
@@ -100,6 +104,9 @@ const copyURL = (info) => {
 							break;
 						case "hlsdl":
 							code += ` -p "${options.proxyCommand}"`;
+							break;
+						case "nm3u8dl":
+							code += ` --proxyAddress "${options.proxyCommand}"`;
 							break;
 						case "user":
 							code = code.replace(
@@ -154,6 +161,10 @@ const copyURL = (info) => {
 							case "hlsdl":
 								code += ` -u "${headerUserAgent}"`;
 								break;
+							case "nm3u8dl":
+								code += ` --header "User-Agent:${headerUserAgent}`;
+								if (!headerCookie && !headerReferer) code += `"`;
+								break;
 							case "user":
 								code = code.replace(
 									new RegExp("%useragent%", "g"),
@@ -183,6 +194,12 @@ const copyURL = (info) => {
 							case "hlsdl":
 								code += ` -h "Cookie:${headerCookie}"`;
 								break;
+							case "nm3u8dl":
+								if (!headerUserAgent) code += ` --header "`;
+								else code += `|`;
+								code += `Cookie:${headerCookie}`;
+								if (!headerReferer) code += `"`;
+								break;
 							case "user":
 								code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
 								break;
@@ -208,6 +225,11 @@ const copyURL = (info) => {
 								break;
 							case "hlsdl":
 								code += ` -h "Referer:${headerReferer}"`;
+								break;
+							case "nm3u8dl":
+								if (!headerUserAgent && !headerCookie) code += ` --header "`;
+								else code += `|`;
+								code += `Referer:${headerReferer}"`;
 								break;
 							case "user":
 								code = code.replace(
@@ -277,6 +299,9 @@ const copyURL = (info) => {
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
+						break;
+					case "nm3u8dl":
+						code += ` --saveName "${outFilename}"`;
 						break;
 					case "user":
 						code = code.replace(new RegExp("%url%", "g"), streamURL);
@@ -363,11 +388,13 @@ const createList = () => {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
 		document.getElementById("filterInput").disabled = false;
+		document.getElementById("headers").style.display = "";
 
 		for (const requestDetails of urls) {
 			// everyone's favorite - dom manipulation in vanilla js
 			const row = document.createElement("tr");
 			row.id = requestDetails.requestId;
+			row.className = "urlEntry";
 
 			const extCell = document.createElement("td");
 			extCell.textContent = requestDetails.type.toUpperCase();
@@ -386,7 +413,6 @@ const createList = () => {
 				copyURL([requestDetails]);
 			};
 			urlCell.style.cursor = "pointer";
-			urlHref.style.whiteSpace = "nowrap";
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 
@@ -403,7 +429,6 @@ const createList = () => {
 				requestDetails.documentUrl ||
 				requestDetails.originUrl ||
 				requestDetails.tabData.url;
-			sourceCell.style.overflowWrap = "anywhere";
 
 			const timestampCell = document.createElement("td");
 			timestampCell.textContent =
@@ -435,6 +460,7 @@ const createList = () => {
 		document.getElementById("clearList").disabled = true;
 		if (document.getElementById("filterInput").value.length === 0)
 			document.getElementById("filterInput").disabled = true;
+		document.getElementById("headers").style.display = "none";
 
 		const row = document.createElement("tr");
 

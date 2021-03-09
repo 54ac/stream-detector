@@ -1,0 +1,83 @@
+html,
+body {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+		"Ubuntu", "Helvetica Neue", Arial, sans-serif;
+	background: #fff;
+	color: #202023;
+}
+
+#container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+#urlList {
+	overflow: auto;
+}
+
+table {
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table,
+th,
+td {
+	padding: 0.75em;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+div {
+	text-align: center;
+}
+
+td *,
+th * {
+	margin: auto 0;
+}
+
+.urlEntry,
+#urlList {
+	border: 1px solid gainsboro;
+	border-width: 1px 0;
+}
+
+.urlEntry:hover {
+	background-color: gainsboro;
+}
+
+.urlEntry:last-of-type {
+	border-bottom-width: 0px;
+}
+
+input,
+select {
+	margin: auto 0.25em;
+	vertical-align: middle;
+}
+
+a {
+	color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #202023;
+		color: #fff;
+	}
+
+	#popupUrlList tr:hover {
+		color: #232323;
+	}
+}

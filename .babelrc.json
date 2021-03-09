@@ -3,10 +3,7 @@
 		[
 			"@babel/preset-env",
 			{
-				"bugfixes": true,
-				"targets": {
-					"firefox": "52"
-				}
+				"bugfixes": true
 			}
 		]
 	],
