@@ -325,8 +325,7 @@ const copyURL = (info) => {
 		document.body.appendChild(copyText);
 		copyText.value = list.urls.join("\n");
 		try {
-			copyText.select();
-			document.execCommand("copy");
+			navigator.clipboard.writeText(copyText.value);
 			document.body.removeChild(copyText);
 			if (options.notifPref !== true) {
 				chrome.notifications.create("copy", {
