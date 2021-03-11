@@ -317,16 +317,21 @@ const copyURL = (info) => {
 			list.filenames.push(filename);
 			list.methodIncomp = methodIncomp;
 		}
-		// old copying method for compatibility purposes
-		const copyText = document.createElement("textarea");
-		copyText.style.position = "absolute";
-		copyText.style.left = "-5454px";
-		copyText.style.top = "-5454px";
-		document.body.appendChild(copyText);
-		copyText.value = list.urls.join("\n");
 		try {
-			navigator.clipboard.writeText(copyText.value);
-			document.body.removeChild(copyText);
+			if (navigator.clipboard && navigator.clipboard.writeText)
+				navigator.clipboard.writeText(list.urls.join("\n"));
+			else {
+				// old copying method for compatibility purposes
+				const copyText = document.createElement("textarea");
+				copyText.style.position = "absolute";
+				copyText.style.left = "-5454px";
+				copyText.style.top = "-5454px";
+				document.body.appendChild(copyText);
+				copyText.value = list.urls.join("\n");
+				copyText.select();
+				document.execCommand("copy");
+				document.body.removeChild(copyText);
+			}
 			if (options.notifPref !== true) {
 				chrome.notifications.create("copy", {
 					type: "basic",
