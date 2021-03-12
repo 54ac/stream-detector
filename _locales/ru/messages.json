@@ -44,6 +44,9 @@
 	"hlsdl": {
 		"message": "Команда для hlsdl"
 	},
+	"nm3u8dl": {
+		"message": "Команда для N_m3u8DL-CLI"
+	},
 	"user": {
 		"message": "Пользовательская команда"
 	},
