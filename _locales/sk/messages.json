@@ -1,18 +1,18 @@
 {
 	"notifTitle": {
-		"message": "Detegovaný(é) stream(y)!"
+		"message": "Bol zistený nový stream!"
 	},
 	"notifText": {
-		"message": "Bol detegovaný jeden alebo viacero streamov.\nPoužite pravé tlačidlo myši na otvorenie kontextovej ponuky a skopírovanie URL adresy(adries)."
+		"message": "Našiel sa nový stream $1:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URL adresa(y) skopírovaná(é)!"
 	},
 	"notifCopiedText": {
-		"message": "Úspešne skopírovaná(é) táto(tieto) adresa(y) URL:\n"
+		"message": "URL adresa(y) URL bola(i) úspešne skopírovaná(é):\n"
 	},
 	"notifIncompCopiedText": {
-		"message": "Odporúča sa použiť youtube-dl.\nAdres(y) URL skopírované bez formátovacích znakov kvôli kompatibilite s vybraným nástrojom:\n"
+		"message": "URL adresa(y) URL skopírovaná(é) bez formátovacích znakov kvôli kompatibilite s vybraným nástrojom:\n"
 	},
 	"notifErrorTitle": {
 		"message": "Chyba pri kopírovaní!"
@@ -21,19 +21,19 @@
 		"message": "Nebolo možné skopírovať adresu(y) URL:\n"
 	},
 	"extText": {
-		"message": "Predtým známy pod menom HLS Stream Detector. Deteguje playlisty M3U8/MPD/F4M/ISM a titulky VTT použité v streamoch HLS/DASH/HDS/MSS. Pripraví hotové príkazy pre youtube-dl (odporúčané)/FFmpeg/Streamlink."
+		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS. Pripraví hotové príkazy pre youtube-dl/FFmpeg/Streamlink/hlsdl."
 	},
 	"copyMethod": {
 		"message": "Kopírovať URL adresu streamu ako:"
-	},
-	"customCommand": {
-		"message": "Dodatočné parametre príkazu:"
 	},
 	"url": {
 		"message": "Iba URL adresa"
 	},
 	"youtubedl": {
 		"message": "príkaz youtube-dl"
+	},
+	"youtubedlc": {
+		"message": "príkaz youtube-dlc"
 	},
 	"ffmpeg": {
 		"message": "príkaz FFmpeg"
@@ -44,19 +44,88 @@
 	"hlsdl": {
 		"message": "príkaz hlsdl"
 	},
+	"nm3u8dl": {
+		"message": "príkaz N_m3u8DL-CLI"
+	},
+	"user": {
+		"message": "používateľom definovaný príkaz"
+	},
+	"streamlinkOutput": {
+		"message": "Výstup Streamlinku na/do:"
+	},
+	"file": {
+		"message": "Súbor"
+	},
+	"player": {
+		"message": "Predvolený prehrávač"
+	},
+	"customCommand": {
+		"message": "Dodatočné parametre príkazu:"
+	},
+	"userCommand": {
+		"message": "Používateľom definovaný príkaz:"
+	},
+	"userCommandTip": {
+		"message": "Dostupné kľúčové slová:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
+	},
 	"headersPref": {
-		"message": "Pridať dodatočné hlavičky pre nástroje:"
+		"message": "Pridať dodatočné hlavičky:"
 	},
 	"notifPref": {
 		"message": "Vypnúť notifikácie:"
 	},
 	"disablePref": {
-		"message": "Pozastaviť detekciu"
+		"message": "Vypnúť detekciu:"
 	},
 	"clearList": {
-		"message": "Vyčistiť zoznam"
+		"message": "Vyčistiť tento zoznam adries"
 	},
 	"copyAll": {
-		"message": "Kopírovať všetky adresy URL"
+		"message": "Kopírovať všetky viditeľné URL adresy"
+	},
+	"proxyPref": {
+		"message": "Použiť HTTP server proxy:"
+	},
+	"downloaderPref": {
+		"message": "Použiť externý sťahovač:"
+	},
+	"buttonClick": {
+		"message": "Funkcia akčného tlačidla prehliadača:"
+	},
+	"popupType": {
+		"message": "Typ"
+	},
+	"popupFilename": {
+		"message": "Názov súboru"
+	},
+	"popupSource": {
+		"message": "Zdroj"
+	},
+	"popupTimestamp": {
+		"message": "Časová značka"
+	},
+	"deleteTooltip": {
+		"message": "Kliknutím odstránite URL adresu"
+	},
+	"tabThis": {
+		"message": "tejto karty"
+	},
+	"tabAll": {
+		"message": "všetkých kariet"
+	},
+	"tabPrevious": {
+		"message": "minulých sedení"
+	},
+	"filterInput": {
+		"message": "Filter:"
+	},
+	"openOptions": {
+		"message": "Možnosti"
+	},
+	"titlePref": {
+		"message": "Zobrazovať v mene karty zdroj:"
+	},
+	"filenamePref": {
+		"message": "Súbor pomenovať podľa názvu karty:"
 	}
 }
