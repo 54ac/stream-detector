@@ -127,5 +127,8 @@
 	},
 	"filenamePref": {
 		"message": "Tytuł karty jako nazwa pliku:"
+	},
+	"timestampPref": {
+		"message": "Dodaj datę i czas do nazwy pliku:"
 	}
 }

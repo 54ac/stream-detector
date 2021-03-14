@@ -8,7 +8,13 @@ const table = document.getElementById("popupUrlList");
 
 let titlePref;
 let filenamePref;
+let timestampPref;
 let urlList = [];
+
+const getTimestamp = (timestamp) => {
+	const date = new Date(timestamp);
+	return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
 
 const copyURL = (info) => {
 	chrome.storage.local.get((options) => {
@@ -276,6 +282,8 @@ const copyURL = (info) => {
 					}
 				}
 
+				if (timestampPref) outFilename += ` ${getTimestamp(e.timestamp)}`;
+
 				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
@@ -288,14 +296,10 @@ const copyURL = (info) => {
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
-						if (filenamePref && e.tabData && e.tabData.title)
-							code += ` --output "${outFilename}.%(ext)s"`;
-						code += ` "${streamURL}"`;
+						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
 						break;
 					case "youtubedlc":
-						if (filenamePref && e.tabData && e.tabData.title)
-							code += ` --output "${outFilename}.%(ext)s"`;
-						code += ` "${streamURL}"`;
+						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
@@ -435,10 +439,7 @@ const createList = () => {
 				requestDetails.tabData.url;
 
 			const timestampCell = document.createElement("td");
-			timestampCell.textContent =
-				new Date(requestDetails.timestamp).toLocaleDateString() +
-				" " +
-				new Date(requestDetails.timestamp).toLocaleTimeString();
+			timestampCell.textContent = getTimestamp(requestDetails.timestamp);
 
 			const deleteCell = document.createElement("td");
 			deleteCell.textContent = "✖";
@@ -559,6 +560,7 @@ const restoreOptions = () => {
 		// eslint-disable-next-line prefer-destructuring
 		titlePref = item.titlePref;
 		filenamePref = item.filenamePref;
+		timestampPref = item.timestampPref;
 
 		for (const option of options) {
 			if (defaultOptions[option.id]) {
