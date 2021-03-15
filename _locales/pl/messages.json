@@ -44,6 +44,9 @@
 	"hlsdl": {
 		"message": "Komendę hlsdl"
 	},
+	"nm3u8dl": {
+		"message": "Komendę N_m3u8DL-CLI"
+	},
 	"user": {
 		"message": "Komendę własną"
 	},
@@ -124,5 +127,8 @@
 	},
 	"filenamePref": {
 		"message": "Tytuł karty jako nazwa pliku:"
+	},
+	"timestampPref": {
+		"message": "Dodaj datę i czas do nazwy pliku:"
 	}
 }

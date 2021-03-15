@@ -4,7 +4,7 @@
 
 This is a Firefox addon written in JavaScript which provides an easy way to keep track of URLs to playlists and subtitles used by Apple HLS, Adobe HDS, MPEG-DASH, and Microsoft Smooth Streaming streams.
 
-Also assembles readymade youtube-dl (recommended)/FFmpeg/Streamlink/hlsdl commands which (should) include all of the necessary cookies and headers.
+Also assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI commands which (should) include all of the necessary cookies and headers.
 
 ![A screenshot of the options menu.](https://addons.cdn.mozilla.net/user-media/previews/full/239/239286.png)
 
@@ -25,7 +25,7 @@ Being able to easily find direct URLs to streams on the Internet. I wrote this i
 
 ### Is anyone even using this?
 
-As of updating this document, the addon has been downloaded over 2,700 times within the last month and has over 7,300 average daily users.
+As of updating this document, the addon has been downloaded almost 2,600 times within the last month and has over 7,600 average daily users.
 
 ### How do I use this?
 

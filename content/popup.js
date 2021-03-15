@@ -8,7 +8,13 @@ const table = document.getElementById("popupUrlList");
 
 let titlePref;
 let filenamePref;
+let timestampPref;
 let urlList = [];
+
+const getTimestamp = (timestamp) => {
+	const date = new Date(timestamp);
+	return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
 
 const copyURL = (info) => {
 	chrome.storage.local.get((options) => {
@@ -32,7 +38,8 @@ const copyURL = (info) => {
 					type === "TTML" ||
 					type === "DFXP") &&
 					fileMethod !== "url") ||
-				(type !== "HLS" && fileMethod === "hlsdl")
+				(type !== "HLS" && fileMethod === "hlsdl") ||
+				(type !== "HLS" && fileMethod === "nm3u8dl")
 			) {
 				fileMethod = "url";
 				methodIncomp = true;
@@ -70,6 +77,9 @@ const copyURL = (info) => {
 					case "hlsdl":
 						code = "hlsdl -b -c";
 						break;
+					case "nm3u8dl":
+						code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
+						break;
 					case "user":
 						code = options.userCommand;
 						break;
@@ -100,6 +110,9 @@ const copyURL = (info) => {
 							break;
 						case "hlsdl":
 							code += ` -p "${options.proxyCommand}"`;
+							break;
+						case "nm3u8dl":
+							code += ` --proxyAddress "${options.proxyCommand}"`;
 							break;
 						case "user":
 							code = code.replace(
@@ -135,7 +148,7 @@ const copyURL = (info) => {
 					);
 					headerReferer = headerReferer
 						? headerReferer.value
-						: e.originUrl || e.documentUrl || e.tabData.url;
+						: e.originUrl || e.documentUrl || (e.tabData && e.tabData.url);
 
 					if (headerUserAgent && headerUserAgent.length > 0) {
 						switch (fileMethod) {
@@ -153,6 +166,10 @@ const copyURL = (info) => {
 								break;
 							case "hlsdl":
 								code += ` -u "${headerUserAgent}"`;
+								break;
+							case "nm3u8dl":
+								code += ` --header "User-Agent:${headerUserAgent}`;
+								if (!headerCookie && !headerReferer) code += `"`;
 								break;
 							case "user":
 								code = code.replace(
@@ -183,6 +200,12 @@ const copyURL = (info) => {
 							case "hlsdl":
 								code += ` -h "Cookie:${headerCookie}"`;
 								break;
+							case "nm3u8dl":
+								if (!headerUserAgent) code += ` --header "`;
+								else code += `|`;
+								code += `Cookie:${headerCookie}`;
+								if (!headerReferer) code += `"`;
+								break;
 							case "user":
 								code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
 								break;
@@ -209,6 +232,11 @@ const copyURL = (info) => {
 							case "hlsdl":
 								code += ` -h "Referer:${headerReferer}"`;
 								break;
+							case "nm3u8dl":
+								if (!headerUserAgent && !headerCookie) code += ` --header "`;
+								else code += `|`;
+								code += `Referer:${headerReferer}"`;
+								break;
 							case "user":
 								code = code.replace(
 									new RegExp("%referer%", "g"),
@@ -223,16 +251,16 @@ const copyURL = (info) => {
 
 					if (
 						fileMethod === "user" &&
-						(e.documentUrl || e.originUrl || e.tabData.url)
+						(e.documentUrl || e.originUrl || (e.tabData && e.tabData.url))
 					)
 						code = code.replace(
 							new RegExp("%origin%", "g"),
-							e.documentUrl || e.originUrl || e.tabData.url
+							e.documentUrl || e.originUrl || (e.tabData && e.tabData.url)
 						);
 					else if (fileMethod === "user")
 						code = code.replace(new RegExp("%origin%", "g"), "");
 
-					if (fileMethod === "user" && e.tabData.title)
+					if (fileMethod === "user" && e.tabData && e.tabData.title)
 						code = code.replace(
 							new RegExp("%tabtitle%", "g"),
 							e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
@@ -242,7 +270,7 @@ const copyURL = (info) => {
 				}
 
 				let outFilename;
-				if (filenamePref && e.tabData.title)
+				if (filenamePref && e.tabData && e.tabData.title)
 					outFilename = e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_");
 				else {
 					outFilename = filename;
@@ -253,6 +281,8 @@ const copyURL = (info) => {
 						outFilename = outFilename.join(".");
 					}
 				}
+
+				if (timestampPref) outFilename += ` ${getTimestamp(e.timestamp)}`;
 
 				// final part of command
 				switch (fileMethod) {
@@ -266,17 +296,16 @@ const copyURL = (info) => {
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
-						if (filenamePref && e.tabData.title)
-							code += ` --output "${outFilename}.%(ext)s"`;
-						code += ` "${streamURL}"`;
+						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
 						break;
 					case "youtubedlc":
-						if (filenamePref && e.tabData.title)
-							code += ` --output "${outFilename}.%(ext)s"`;
-						code += ` "${streamURL}"`;
+						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
+						break;
+					case "nm3u8dl":
+						code += ` --saveName "${outFilename}"`;
 						break;
 					case "user":
 						code = code.replace(new RegExp("%url%", "g"), streamURL);
@@ -292,17 +321,21 @@ const copyURL = (info) => {
 			list.filenames.push(filename);
 			list.methodIncomp = methodIncomp;
 		}
-		// old copying method for compatibility purposes
-		const copyText = document.createElement("textarea");
-		copyText.style.position = "absolute";
-		copyText.style.left = "-5454px";
-		copyText.style.top = "-5454px";
-		document.body.appendChild(copyText);
-		copyText.value = list.urls.join("\n");
 		try {
-			copyText.select();
-			document.execCommand("copy");
-			document.body.removeChild(copyText);
+			if (navigator.clipboard && navigator.clipboard.writeText)
+				navigator.clipboard.writeText(list.urls.join("\n"));
+			else {
+				// old copying method for compatibility purposes
+				const copyText = document.createElement("textarea");
+				copyText.style.position = "absolute";
+				copyText.style.left = "-5454px";
+				copyText.style.top = "-5454px";
+				document.body.appendChild(copyText);
+				copyText.value = list.urls.join("\n");
+				copyText.select();
+				document.execCommand("copy");
+				document.body.removeChild(copyText);
+			}
 			if (options.notifPref !== true) {
 				chrome.notifications.create("copy", {
 					type: "basic",
@@ -363,11 +396,13 @@ const createList = () => {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
 		document.getElementById("filterInput").disabled = false;
+		document.getElementById("headers").style.display = "";
 
 		for (const requestDetails of urls) {
 			// everyone's favorite - dom manipulation in vanilla js
 			const row = document.createElement("tr");
 			row.id = requestDetails.requestId;
+			row.className = "urlEntry";
 
 			const extCell = document.createElement("td");
 			extCell.textContent = requestDetails.type.toUpperCase();
@@ -386,13 +421,13 @@ const createList = () => {
 				copyURL([requestDetails]);
 			};
 			urlCell.style.cursor = "pointer";
-			urlHref.style.whiteSpace = "nowrap";
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
 				titlePref &&
+				requestDetails.tabData &&
 				requestDetails.tabData.title &&
 				// tabData.title falls back to url
 				!requestDetails.url.includes(requestDetails.tabData.title)
@@ -402,13 +437,9 @@ const createList = () => {
 				requestDetails.documentUrl ||
 				requestDetails.originUrl ||
 				requestDetails.tabData.url;
-			sourceCell.style.overflowWrap = "anywhere";
 
 			const timestampCell = document.createElement("td");
-			timestampCell.textContent =
-				new Date(requestDetails.timestamp).toLocaleDateString() +
-				" " +
-				new Date(requestDetails.timestamp).toLocaleTimeString();
+			timestampCell.textContent = getTimestamp(requestDetails.timestamp);
 
 			const deleteCell = document.createElement("td");
 			deleteCell.textContent = "✖";
@@ -434,6 +465,7 @@ const createList = () => {
 		document.getElementById("clearList").disabled = true;
 		if (document.getElementById("filterInput").value.length === 0)
 			document.getElementById("filterInput").disabled = true;
+		document.getElementById("headers").style.display = "none";
 
 		const row = document.createElement("tr");
 
@@ -476,7 +508,8 @@ const createList = () => {
 						urlList.filter(
 							(url) =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
-								(url.tabData.title &&
+								(url.tabData &&
+									url.tabData.title &&
 									url.tabData.title.toLowerCase().includes(urlStorageFilter)) ||
 								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
@@ -527,6 +560,7 @@ const restoreOptions = () => {
 		// eslint-disable-next-line prefer-destructuring
 		titlePref = item.titlePref;
 		filenamePref = item.filenamePref;
+		timestampPref = item.timestampPref;
 
 		for (const option of options) {
 			if (defaultOptions[option.id]) {

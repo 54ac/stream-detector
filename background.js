@@ -163,7 +163,11 @@ chrome.storage.local.get((options) => {
 			filenamePref:
 				options.filenamePref !== undefined
 					? options.filenamePref === true
-					: true,
+					: false,
+			timestampPref:
+				options.timestampPref !== undefined
+					? options.timestampPref === true
+					: false,
 			streamlinkOutput: options.streamlinkOutput || "file",
 			downloaderPref:
 				options.downloaderPref !== undefined

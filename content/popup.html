@@ -3,164 +3,108 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<style>
-			/* might use a css file in the future. no need for now */
-			html,
-			body {
-				padding: 0;
-				margin: 0;
-				width: 100%;
-				height: 100%;
-			}
-
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-					"Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
-				background: #fff;
-				color: #202023;
-
-				/* addon popup vertical scrollbar workaround */
-				margin-right: 32px;
-			}
-
-			table {
-				border-collapse: collapse;
-				width: 100%;
-			}
-
-			table,
-			th,
-			td {
-				padding: 0.75em;
-				text-align: center;
-			}
-
-			div {
-				text-align: center;
-			}
-
-			td *,
-			th * {
-				margin: auto 0;
-			}
-
-			#popupUrlList tr {
-				border: 1px solid gainsboro;
-				border-width: 1px 0;
-			}
-
-			#popupUrlList tr:hover {
-				background-color: gainsboro;
-			}
-
-			input,
-			select {
-				margin: auto 0.25em;
-			}
-
-			a {
-				color: inherit;
-				word-break: break-all;
-			}
-
-			@media (prefers-color-scheme: dark) {
-				body {
-					background: #202023;
-					color: #fff;
-				}
-
-				#popupUrlList tr:hover {
-					color: #232323;
-				}
-			}
-		</style>
+		<link rel="stylesheet" href="popup.css" />
 		<title>The Stream Detector</title>
 	</head>
 	<body>
-		<table>
-			<tbody>
-				<tr>
-					<td>
-						<input class="option" type="radio" id="tabThis" name="tab" /><label
-							for="tabThis"
-						></label>
-					</td>
-					<td>
-						<input class="option" type="radio" id="tabAll" name="tab" /><label
-							for="tabAll"
-						></label>
-					</td>
-					<td>
-						<input
-							class="option"
-							type="radio"
-							id="tabPrevious"
-							name="tab"
-						/><label for="tabPrevious"></label>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<table>
-			<tbody>
-				<tr>
-					<td>
-						<label for="filterInput"></label
-						><input class="option" type="text" id="filterInput" />
-					</td>
-					<td>
-						<label for="copyMethod"></label>
-						<select class="option" id="copyMethod">
-							<option value="url"></option>
-							<option value="youtubedl"></option>
-							<option value="youtubedlc"></option>
-							<option value="ffmpeg"></option>
-							<option value="streamlink"></option>
-							<option value="hlsdl"></option>
-							<option value="user"></option>
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<table>
-			<thead>
-				<tr>
-					<th><label for="popupType"></label></th>
-					<th><label for="popupFilename"></label></th>
-					<th><label for="popupSource"></label></th>
-					<th><label for="popupTimestamp"></label></th>
-					<th>✖</th>
-				</tr>
-			</thead>
-			<tbody id="popupUrlList"></tbody>
-		</table>
-		<table>
-			<tbody>
-				<tr>
-					<td>
-						<label for="disablePref"></label
-						><input class="option" id="disablePref" type="checkbox" />
-					</td>
-					<td>
-						<button id="copyAll">
-							<label for="copyAll"></label>
-						</button>
-					</td>
-					<td>
-						<button id="clearList">
-							<label for="clearList"></label>
-						</button>
-					</td>
-					<td>
-						<button id="openOptions">
-							<label for="openOptions"></label>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
+		<div id="container">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<input
+								class="option"
+								type="radio"
+								id="tabThis"
+								name="tab"
+							/><label for="tabThis"></label>
+						</td>
+						<td>
+							<input class="option" type="radio" id="tabAll" name="tab" /><label
+								for="tabAll"
+							></label>
+						</td>
+						<td>
+							<input
+								class="option"
+								type="radio"
+								id="tabPrevious"
+								name="tab"
+							/><label for="tabPrevious"></label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<label for="filterInput"></label
+							><input class="option" type="text" id="filterInput" />
+						</td>
+						<td>
+							<label for="copyMethod"></label>
+							<select class="option" id="copyMethod">
+								<option value="url"></option>
+								<option value="youtubedl"></option>
+								<option value="youtubedlc"></option>
+								<option value="ffmpeg"></option>
+								<option value="streamlink"></option>
+								<option value="hlsdl"></option>
+								<option value="nm3u8dl"></option>
+								<option value="user"></option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="urlList">
+				<table>
+					<colgroup>
+						<col style="width: 10%" />
+						<col style="width: 30%" />
+						<col style="width: 35%" />
+						<col style="width: 20%" />
+						<col style="width: 5%" />
+					</colgroup>
+					<thead id="headers">
+						<tr>
+							<th><label for="popupType"></label></th>
+							<th><label for="popupFilename"></label></th>
+							<th><label for="popupSource"></label></th>
+							<th><label for="popupTimestamp"></label></th>
+							<th>✖</th>
+						</tr>
+					</thead>
+					<tbody id="popupUrlList"></tbody>
+				</table>
+			</div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<label for="disablePref"></label
+							><input class="option" id="disablePref" type="checkbox" />
+						</td>
+						<td>
+							<button id="copyAll">
+								<label for="copyAll"></label>
+							</button>
+						</td>
+						<td>
+							<button id="clearList">
+								<label for="clearList"></label>
+							</button>
+						</td>
+						<td>
+							<button id="openOptions">
+								<label for="openOptions"></label>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<script src="popup.js"></script>
 	</body>
 </html>

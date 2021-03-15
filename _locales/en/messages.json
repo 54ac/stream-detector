@@ -44,6 +44,9 @@
 	"hlsdl": {
 		"message": "hlsdl command"
 	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-CLI command"
+	},
 	"user": {
 		"message": "User-defined command"
 	},
@@ -124,5 +127,8 @@
 	},
 	"filenamePref": {
 		"message": "Use tab title as filename:"
+	},
+	"timestampPref": {
+		"message": "Append timestamp to filename:"
 	}
 }
