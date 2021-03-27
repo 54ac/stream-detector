@@ -56,6 +56,9 @@ const copyURL = (info) => {
 			} else {
 				// the switchboard of doom begins
 				switch (fileMethod) {
+					case "kodiUrl":
+						code = streamURL;
+						break;
 					case "ffmpeg":
 						code = "ffmpeg";
 						break;
@@ -65,13 +68,13 @@ const copyURL = (info) => {
 					case "youtubedl":
 						code = "youtube-dl --no-part --restrict-filenames";
 						// use external downloader
-						if (options.downloaderPref === true && options.downloaderCommand)
+						if (options.downloaderPref && options.downloaderCommand)
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
 					// this could be implemented better - maybe someday
 					case "youtubedlc":
 						code = "youtube-dlc --no-part --restrict-filenames";
-						if (options.downloaderPref === true && options.downloaderCommand)
+						if (options.downloaderPref && options.downloaderCommand)
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
 					case "hlsdl":
@@ -94,7 +97,7 @@ const copyURL = (info) => {
 				}
 
 				// http proxy
-				if (options.proxyPref === true && options.proxyCommand) {
+				if (options.proxyPref && options.proxyCommand) {
 					switch (fileMethod) {
 						case "ffmpeg":
 							code += ` -http_proxy "${options.proxyCommand}"`;
@@ -126,7 +129,7 @@ const copyURL = (info) => {
 				}
 
 				// additional headers
-				if (options.headersPref === true) {
+				if (options.headersPref) {
 					let headerUserAgent = e.headers.find(
 						(header) => header.name.toLowerCase() === "user-agent"
 					);
@@ -148,10 +151,13 @@ const copyURL = (info) => {
 					);
 					headerReferer = headerReferer
 						? headerReferer.value
-						: e.originUrl || e.documentUrl || (e.tabData && e.tabData.url);
+						: e.originUrl || e.documentUrl || e.tabData?.url;
 
-					if (headerUserAgent && headerUserAgent.length > 0) {
+					if (headerUserAgent?.length) {
 						switch (fileMethod) {
+							case "kodiUrl":
+								code += `|User-Agent:"${headerUserAgent}"`;
+								break;
 							case "ffmpeg":
 								code += ` -user_agent "${headerUserAgent}"`;
 								break;
@@ -183,8 +189,11 @@ const copyURL = (info) => {
 					} else if (fileMethod === "user")
 						code = code.replace(new RegExp("%useragent%", "g"), "");
 
-					if (headerCookie && headerCookie.length > 0) {
+					if (headerCookie?.length) {
 						switch (fileMethod) {
+							case "kodiUrl":
+								code += `|Cookie:"${headerCookie}"`;
+								break;
 							case "ffmpeg":
 								code += ` -headers "Cookie: ${headerCookie}"`;
 								break;
@@ -215,8 +224,11 @@ const copyURL = (info) => {
 					} else if (fileMethod === "user")
 						code = code.replace(new RegExp("%cookie%", "g"), "");
 
-					if (headerReferer && headerReferer.length > 0) {
+					if (headerReferer?.length) {
 						switch (fileMethod) {
+							case "kodiUrl":
+								code += `|Referer:"${headerReferer}"`;
+								break;
 							case "ffmpeg":
 								code += ` -referer "${headerReferer}"`;
 								break;
@@ -251,16 +263,16 @@ const copyURL = (info) => {
 
 					if (
 						fileMethod === "user" &&
-						(e.documentUrl || e.originUrl || (e.tabData && e.tabData.url))
+						(e.documentUrl || e.originUrl || e.tabData?.url)
 					)
 						code = code.replace(
 							new RegExp("%origin%", "g"),
-							e.documentUrl || e.originUrl || (e.tabData && e.tabData.url)
+							e.documentUrl || e.originUrl || e.tabData?.url
 						);
 					else if (fileMethod === "user")
 						code = code.replace(new RegExp("%origin%", "g"), "");
 
-					if (fileMethod === "user" && e.tabData && e.tabData.title)
+					if (fileMethod === "user" && e.tabData?.title)
 						code = code.replace(
 							new RegExp("%tabtitle%", "g"),
 							e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
@@ -270,7 +282,7 @@ const copyURL = (info) => {
 				}
 
 				let outFilename;
-				if (filenamePref && e.tabData && e.tabData.title)
+				if (filenamePref && e.tabData?.title)
 					outFilename = e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_");
 				else {
 					outFilename = filename;
@@ -290,16 +302,19 @@ const copyURL = (info) => {
 						code += ` -i "${streamURL}" -c copy "${outFilename}.ts"`;
 						break;
 					case "streamlink":
-						// streamlink output to file or player
 						if (options.streamlinkOutput === "file")
 							code += ` -o "${outFilename}.ts"`;
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
-						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
+						if ((filenamePref && e.tabData?.title) || timestampPref)
+							code += ` --output "${outFilename}.%(ext)s"`;
+						code += ` "${streamURL}"`;
 						break;
 					case "youtubedlc":
-						code += ` --output "${outFilename}.%(ext)s" "${streamURL}"`;
+						if ((filenamePref && e.tabData?.title) || timestampPref)
+							code += ` --output "${outFilename}.%(ext)s"`;
+						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}.ts" "${streamURL}"`;
@@ -322,7 +337,7 @@ const copyURL = (info) => {
 			list.methodIncomp = methodIncomp;
 		}
 		try {
-			if (navigator.clipboard && navigator.clipboard.writeText)
+			if (navigator.clipboard?.writeText)
 				navigator.clipboard.writeText(list.urls.join("\n"));
 			else {
 				// old copying method for compatibility purposes
@@ -336,13 +351,13 @@ const copyURL = (info) => {
 				document.execCommand("copy");
 				document.body.removeChild(copyText);
 			}
-			if (options.notifPref !== true) {
+			if (!options.notifPref) {
 				chrome.notifications.create("copy", {
 					type: "basic",
 					iconUrl: "img/icon-dark-96.png",
 					title: _("notifCopiedTitle"),
 					message:
-						(list.methodIncomp === true
+						(list.methodIncomp
 							? _("notifIncompCopiedText")
 							: _("notifCopiedText")) + list.filenames.join("\n")
 				});
@@ -427,8 +442,7 @@ const createList = () => {
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
 				titlePref &&
-				requestDetails.tabData &&
-				requestDetails.tabData.title &&
+				requestDetails.tabData?.title &&
 				// tabData.title falls back to url
 				!requestDetails.url.includes(requestDetails.tabData.title)
 					? requestDetails.tabData.title
@@ -482,23 +496,20 @@ const createList = () => {
 		// clear list first just in case - quick and dirty
 		table.innerHTML = "";
 
-		if (
-			(options.urlStorage && options.urlStorage.length > 0) ||
-			(options.urlStorageRestore && options.urlStorageRestore.length > 0)
-		) {
+		if (options.urlStorage?.length || options.urlStorageRestore?.length) {
 			const urlStorageFilter = document
 				.getElementById("filterInput")
 				.value.toLowerCase();
 
 			// do the query first to avoid async issues
 			chrome.tabs.query({ active: true, currentWindow: true }, (tab) => {
-				if (document.getElementById("tabThis").checked === true) {
+				if (document.getElementById("tabThis").checked) {
 					urlList = options.urlStorage
 						? options.urlStorage.filter((url) => url.tabId === tab[0].id)
 						: [];
-				} else if (document.getElementById("tabAll").checked === true) {
+				} else if (document.getElementById("tabAll").checked) {
 					urlList = options.urlStorage || [];
-				} else if (document.getElementById("tabPrevious").checked === true) {
+				} else if (document.getElementById("tabPrevious").checked) {
 					urlList = options.urlStorageRestore || [];
 				}
 
@@ -508,14 +519,12 @@ const createList = () => {
 						urlList.filter(
 							(url) =>
 								url.filename.toLowerCase().includes(urlStorageFilter) ||
-								(url.tabData &&
-									url.tabData.title &&
-									url.tabData.title.toLowerCase().includes(urlStorageFilter)) ||
+								url.tabData?.title?.toLowerCase().includes(urlStorageFilter) ||
 								url.type.toLowerCase().includes(urlStorageFilter) ||
 								url.hostname.toLowerCase().includes(urlStorageFilter)
 						);
 
-				urlList.length > 0
+				urlList.length
 					? insertList(urlList.reverse()) // latest entries first
 					: insertPlaceholder();
 			});

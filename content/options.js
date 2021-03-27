@@ -15,16 +15,22 @@ const checkHeadersPref = () => {
 	document.getElementById("customCommand").disabled = false;
 	document.getElementById("userCommand").disabled = true;
 
-	document.getElementById("downloaderPref").checked === true
+	document.getElementById("downloaderPref").checked
 		? (document.getElementById("downloaderCommand").disabled = false)
 		: (document.getElementById("downloaderCommand").disabled = true);
 
-	document.getElementById("proxyPref").checked === true
+	document.getElementById("proxyPref").checked
 		? (document.getElementById("proxyCommand").disabled = false)
 		: (document.getElementById("proxyCommand").disabled = true);
 
 	if (document.getElementById("copyMethod").value === "url") {
 		document.getElementById("headersPref").disabled = true;
+		document.getElementById("filenamePref").disabled = true;
+		document.getElementById("timestampPref").disabled = true;
+		document.getElementById("proxyPref").disabled = true;
+		document.getElementById("proxyCommand").disabled = true;
+		document.getElementById("customCommand").disabled = true;
+	} else if (document.getElementById("copyMethod").value === "kodiUrl") {
 		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("timestampPref").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
@@ -49,7 +55,11 @@ const checkHeadersPref = () => {
 };
 
 const saveOption = (e) => {
-	if (e.target.id === "copyMethod" && e.target.value !== "url") {
+	if (
+		e.target.id === "copyMethod" &&
+		e.target.value !== "url" &&
+		e.target.value !== "kodiUrl"
+	) {
 		const prefName = "customCommand" + e.target.value;
 		chrome.storage.local.get(prefName, (res) => {
 			res[prefName]
@@ -113,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// i18n
 	const labels = document.getElementsByTagName("label");
 	for (const label of labels) {
-		label.textContent = _(label.htmlFor);
+		label.textContent = _(label.htmlFor) + ":";
 	}
 	const selectOptions = document.getElementsByTagName("option");
 	for (const selectOption of selectOptions) {
