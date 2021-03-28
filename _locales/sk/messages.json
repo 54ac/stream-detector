@@ -78,10 +78,10 @@
 		"message": "Vypnúť detekciu:"
 	},
 	"clearList": {
-		"message": "Vyčistiť tento zoznam adries"
+		"message": "Vyčistiť zoznam adries"
 	},
 	"copyAll": {
-		"message": "Kopírovať všetky viditeľné URL adresy"
+		"message": "Kopírovať viditeľné adresy"
 	},
 	"proxyPref": {
 		"message": "Použiť HTTP server proxy:"
