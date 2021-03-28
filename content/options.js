@@ -3,6 +3,7 @@
 const _ = chrome.i18n.getMessage; // i18n
 
 const checkHeadersPref = () => {
+	document.getElementById("fileExtension").disabled = true;
 	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("headersPref").disabled = false;
 	document.getElementById("titlePref").disabled = false;
@@ -43,6 +44,12 @@ const checkHeadersPref = () => {
 		document.getElementById("copyMethod").value === "youtubedlc"
 	) {
 		document.getElementById("downloaderPref").disabled = false;
+	} else if (
+		document.getElementById("copyMethod").value === "ffmpeg" ||
+		document.getElementById("copyMethod").value === "streamlink" ||
+		document.getElementById("copyMethod").value === "hlsdl"
+	) {
+		document.getElementById("fileExtension").disabled = false;
 	} else if (document.getElementById("copyMethod").value === "user") {
 		document.getElementById("headersPref").disabled = true;
 		document.getElementById("filenamePref").disabled = true;
@@ -70,8 +77,8 @@ const saveOption = (e) => {
 
 	if (e.target.id === "customCommand") {
 		chrome.storage.local.set({
-			[e.target.id + document.getElementById("copyMethod").value]: e.target
-				.value
+			[e.target.id +
+			document.getElementById("copyMethod").value]: e.target.value.trim()
 		});
 	} else if (e.target.type === "checkbox") {
 		chrome.storage.local.set({
@@ -80,7 +87,7 @@ const saveOption = (e) => {
 		chrome.runtime.sendMessage({ options: true });
 	} else {
 		chrome.storage.local.set({
-			[e.target.id]: e.target.value
+			[e.target.id]: e.target.value.trim()
 		});
 	}
 
@@ -127,7 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	const selectOptions = document.getElementsByTagName("option");
 	for (const selectOption of selectOptions) {
-		selectOption.textContent = _(selectOption.value);
+		if (!selectOption.textContent)
+			selectOption.textContent = _(selectOption.value);
 	}
 	const spans = document.getElementsByTagName("span");
 	for (const span of spans) {

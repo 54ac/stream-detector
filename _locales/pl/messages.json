@@ -133,5 +133,8 @@
 	},
 	"timestampPref": {
 		"message": "Dodaj datę i czas do nazwy pliku"
+	},
+	"fileExtension": {
+		"message": "Rozszerzenie pliku"
 	}
 }

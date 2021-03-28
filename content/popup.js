@@ -26,7 +26,7 @@ const copyURL = (info) => {
 
 			const streamURL = e.url;
 			const { filename, type } = e;
-			fileMethod = !options.copyMethod ? "url" : options.copyMethod; // default to url - just in case
+			fileMethod = options.copyMethod || "url"; // default to url - just in case
 
 			if (
 				(type === "HDS" && fileMethod === "ffmpeg") ||
@@ -46,7 +46,7 @@ const copyURL = (info) => {
 			}
 
 			// don't use user-defined command if empty
-			if (fileMethod === "user" && options.userCommand.length === 0) {
+			if (fileMethod === "user" && !options.userCommand) {
 				fileMethod = "url";
 				methodIncomp = true;
 			}
@@ -153,7 +153,7 @@ const copyURL = (info) => {
 						? headerReferer.value
 						: e.originUrl || e.documentUrl || e.tabData?.url;
 
-					if (headerUserAgent?.length) {
+					if (headerUserAgent) {
 						switch (fileMethod) {
 							case "kodiUrl":
 								code += `|User-Agent:"${headerUserAgent}"`;
@@ -189,7 +189,7 @@ const copyURL = (info) => {
 					} else if (fileMethod === "user")
 						code = code.replace(new RegExp("%useragent%", "g"), "");
 
-					if (headerCookie?.length) {
+					if (headerCookie) {
 						switch (fileMethod) {
 							case "kodiUrl":
 								code += `|Cookie:"${headerCookie}"`;
@@ -224,7 +224,7 @@ const copyURL = (info) => {
 					} else if (fileMethod === "user")
 						code = code.replace(new RegExp("%cookie%", "g"), "");
 
-					if (headerReferer?.length) {
+					if (headerReferer) {
 						switch (fileMethod) {
 							case "kodiUrl":
 								code += `|Referer:"${headerReferer}"`;
@@ -282,8 +282,7 @@ const copyURL = (info) => {
 				}
 
 				let outFilename;
-				if (filenamePref && e.tabData?.title)
-					outFilename = e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_");
+				if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
 				else {
 					outFilename = filename;
 					if (outFilename.indexOf(".")) {
@@ -296,14 +295,19 @@ const copyURL = (info) => {
 
 				if (timestampPref) outFilename += ` ${getTimestamp(e.timestamp)}`;
 
+				// sanitize tab title and/or timestamp
+				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
+
+				const outExtension = options.fileExtension || "ts";
+
 				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
-						code += ` -i "${streamURL}" -c copy "${outFilename}.ts"`;
+						code += ` -i "${streamURL}" -c copy "${outFilename}.${outExtension}"`;
 						break;
 					case "streamlink":
 						if (options.streamlinkOutput === "file")
-							code += ` -o "${outFilename}.ts"`;
+							code += ` -o "${outFilename}.${outExtension}"`;
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
@@ -317,7 +321,7 @@ const copyURL = (info) => {
 						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
-						code += ` -o "${outFilename}.ts" "${streamURL}"`;
+						code += ` -o "${outFilename}.${outExtension}" "${streamURL}"`;
 						break;
 					case "nm3u8dl":
 						code += ` --saveName "${outFilename}"`;
@@ -477,7 +481,7 @@ const createList = () => {
 	const insertPlaceholder = () => {
 		document.getElementById("copyAll").disabled = true;
 		document.getElementById("clearList").disabled = true;
-		if (document.getElementById("filterInput").value.length === 0)
+		if (!document.getElementById("filterInput").value)
 			document.getElementById("filterInput").disabled = true;
 		document.getElementById("headers").style.display = "none";
 
@@ -604,7 +608,8 @@ const restoreOptions = () => {
 		}
 		const selectOptions = document.getElementsByTagName("option");
 		for (const selectOption of selectOptions) {
-			selectOption.textContent = _(selectOption.value);
+			if (!selectOption.textContent)
+				selectOption.textContent = _(selectOption.value);
 		}
 
 		// button and text input functionality

@@ -133,5 +133,8 @@
 	},
 	"timestampPref": {
 		"message": "Append timestamp to filename"
+	},
+	"fileExtension": {
+		"message": "File extension"
 	}
 }

@@ -168,6 +168,7 @@ chrome.storage.local.get((options) => {
 				options.timestampPref !== undefined
 					? options.timestampPref === true
 					: false,
+			fileExtension: options.fileExtension || "ts",
 			streamlinkOutput: options.streamlinkOutput || "file",
 			downloaderPref:
 				options.downloaderPref !== undefined
