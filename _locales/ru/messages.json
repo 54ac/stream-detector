@@ -27,7 +27,10 @@
 		"message": "Копировать ссылку на поток как"
 	},
 	"url": {
-		"message": "Только ссылка"
+		"message": "Обычная ссылка"
+	},
+	"kodiUrl": {
+		"message": "Ссылка для Kodi"
 	},
 	"youtubedl": {
 		"message": "Команда для youtube-dl"
@@ -130,5 +133,8 @@
 	},
 	"timestampPref": {
 		"message": "Добавлять дату/время к имени файла"
+	},
+	"fileExtension": {
+		"message": "Расширение файла"
 	}
 }
