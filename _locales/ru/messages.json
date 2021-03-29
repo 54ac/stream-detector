@@ -24,7 +24,7 @@
 		"message": "Находит списки воспроизведения и субтитры, используемые потоками HLS/DASH/HDS/MSS. Формирует готовые командные строки для youtube-dl/FFmpeg/Streamlink/hlsdl."
 	},
 	"copyMethod": {
-		"message": "Копировать ссылку на поток как:"
+		"message": "Копировать ссылку на поток как"
 	},
 	"url": {
 		"message": "Только ссылка"
@@ -51,7 +51,7 @@
 		"message": "Пользовательская команда"
 	},
 	"streamlinkOutput": {
-		"message": "Вывод Streamlink в:"
+		"message": "Вывод Streamlink в"
 	},
 	"file": {
 		"message": "Файл"
@@ -60,22 +60,22 @@
 		"message": "Проигрыватель по умолчанию"
 	},
 	"customCommand": {
-		"message": "Дополнительные параметры командной строки:"
+		"message": "Дополнительные параметры командной строки"
 	},
 	"userCommand": {
-		"message": "Пользовательская команда:"
+		"message": "Пользовательская команда"
 	},
 	"userCommandTip": {
 		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
-		"message": "Включать дополнительные заголовки:"
+		"message": "Включать дополнительные заголовки"
 	},
 	"notifPref": {
-		"message": "Отключить уведомления:"
+		"message": "Отключить уведомления"
 	},
 	"disablePref": {
-		"message": "Отключить обнаружение:"
+		"message": "Отключить обнаружение"
 	},
 	"clearList": {
 		"message": "Очистить список ссылок"
@@ -84,13 +84,13 @@
 		"message": "Скопировать все ссылки списка"
 	},
 	"proxyPref": {
-		"message": "Использовать HTTP-прокси:"
+		"message": "Использовать HTTP-прокси"
 	},
 	"downloaderPref": {
-		"message": "Использовать внешний загрузчик:"
+		"message": "Использовать внешний загрузчик"
 	},
 	"buttonClick": {
-		"message": "Функция кнопки действия браузера:"
+		"message": "Функция кнопки действия браузера"
 	},
 	"popupType": {
 		"message": "Тип"
@@ -117,18 +117,18 @@
 		"message": "Предыдущие сессии"
 	},
 	"filterInput": {
-		"message": "Фильтр:"
+		"message": "Фильтр"
 	},
 	"openOptions": {
 		"message": "Настройки"
 	},
 	"titlePref": {
-		"message": "Показывать заголовок вкладки как источник:"
+		"message": "Показывать заголовок вкладки как источник"
 	},
 	"filenamePref": {
-		"message": "Использовать заголовок вкладки как имя файла:"
+		"message": "Использовать заголовок вкладки как имя файла"
 	},
 	"timestampPref": {
-		"message": "Добавлять дату/время к имени файла:"
+		"message": "Добавлять дату/время к имени файла"
 	}
 }

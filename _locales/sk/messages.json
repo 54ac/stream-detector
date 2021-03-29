@@ -24,7 +24,7 @@
 		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS. Pripraví hotové príkazy pre youtube-dl/FFmpeg/Streamlink/hlsdl."
 	},
 	"copyMethod": {
-		"message": "Kopírovať URL adresu streamu ako:"
+		"message": "Kopírovať URL adresu streamu ako"
 	},
 	"url": {
 		"message": "Iba URL adresa"
@@ -51,7 +51,7 @@
 		"message": "používateľom definovaný príkaz"
 	},
 	"streamlinkOutput": {
-		"message": "Výstup Streamlinku na/do:"
+		"message": "Výstup Streamlinku na/do"
 	},
 	"file": {
 		"message": "Súbor"
@@ -60,37 +60,37 @@
 		"message": "Predvolený prehrávač"
 	},
 	"customCommand": {
-		"message": "Dodatočné parametre príkazu:"
+		"message": "Dodatočné parametre príkazu"
 	},
 	"userCommand": {
-		"message": "Používateľom definovaný príkaz:"
+		"message": "Používateľom definovaný príkaz"
 	},
 	"userCommandTip": {
 		"message": "Dostupné kľúčové slová:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
-		"message": "Pridať dodatočné hlavičky:"
+		"message": "Pridať dodatočné hlavičky"
 	},
 	"notifPref": {
-		"message": "Vypnúť notifikácie:"
+		"message": "Vypnúť notifikácie"
 	},
 	"disablePref": {
-		"message": "Vypnúť detekciu:"
+		"message": "Vypnúť detekciu"
 	},
 	"clearList": {
-		"message": "Vyčistiť tento zoznam adries"
+		"message": "Vyčistiť zoznam adries"
 	},
 	"copyAll": {
-		"message": "Kopírovať všetky viditeľné URL adresy"
+		"message": "Kopírovať viditeľné adresy"
 	},
 	"proxyPref": {
-		"message": "Použiť HTTP server proxy:"
+		"message": "Použiť HTTP server proxy"
 	},
 	"downloaderPref": {
-		"message": "Použiť externý sťahovač:"
+		"message": "Použiť externý sťahovač"
 	},
 	"buttonClick": {
-		"message": "Funkcia akčného tlačidla prehliadača:"
+		"message": "Funkcia akčného tlačidla prehliadača"
 	},
 	"popupType": {
 		"message": "Typ"
@@ -117,15 +117,15 @@
 		"message": "minulých sedení"
 	},
 	"filterInput": {
-		"message": "Filter:"
+		"message": "Filter"
 	},
 	"openOptions": {
 		"message": "Možnosti"
 	},
 	"titlePref": {
-		"message": "Zobrazovať v mene karty zdroj:"
+		"message": "Zobrazovať v mene karty zdroj"
 	},
 	"filenamePref": {
-		"message": "Súbor pomenovať podľa názvu karty:"
+		"message": "Súbor pomenovať podľa názvu karty"
 	}
 }

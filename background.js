@@ -96,7 +96,7 @@ const addURL = (requestDetails) => {
 		});
 	});
 
-	if (notifPref === false) {
+	if (!notifPref) {
 		chrome.notifications.create("add", {
 			// id = only one notification of this type appears at a time
 			type: "basic",
@@ -168,6 +168,7 @@ chrome.storage.local.get((options) => {
 				options.timestampPref !== undefined
 					? options.timestampPref === true
 					: false,
+			fileExtension: options.fileExtension || "ts",
 			streamlinkOutput: options.streamlinkOutput || "file",
 			downloaderPref:
 				options.downloaderPref !== undefined
@@ -201,15 +202,15 @@ chrome.storage.local.get((options) => {
 			notifPref =
 				options.notifPref !== undefined ? options.notifPref === true : false;
 
-			if (options.urlStorageRestore && options.urlStorageRestore.length > 0)
+			if (options.urlStorageRestore?.length)
 				// eslint-disable-next-line prefer-destructuring
 				urlStorageRestore = options.urlStorageRestore;
 
-			if (options.urlStorage && options.urlStorage.length > 0)
+			if (options.urlStorage?.length)
 				urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
 
 			// restore urls on startup
-			if (urlStorageRestore.length > 0)
+			if (urlStorageRestore.length)
 				chrome.storage.local.set({
 					urlStorageRestore,
 					urlStorage: []
@@ -223,14 +224,14 @@ chrome.runtime.onMessage.addListener((message) => {
 	else if (message.options) {
 		chrome.storage.local.get((options) => {
 			if (
-				options.disablePref === true &&
+				options.disablePref &&
 				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
 				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
 			} else if (
-				options.disablePref === false &&
+				!options.disablePref &&
 				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {

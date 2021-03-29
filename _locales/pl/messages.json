@@ -24,10 +24,13 @@
 		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl."
 	},
 	"copyMethod": {
-		"message": "Skopiuj link do streamu jako:"
+		"message": "Skopiuj link do streamu jako"
 	},
 	"url": {
 		"message": "Zwykły link"
+	},
+	"kodiUrl": {
+		"message": "Link Kodi"
 	},
 	"youtubedl": {
 		"message": "Komendę youtube-dl"
@@ -51,7 +54,7 @@
 		"message": "Komendę własną"
 	},
 	"streamlinkOutput": {
-		"message": "Przesyłaj strumień wyjściowy Streamlink do:"
+		"message": "Przesyłaj strumień wyjściowy Streamlink do"
 	},
 	"file": {
 		"message": "Pliku"
@@ -60,22 +63,22 @@
 		"message": "Domyślnego odtwarzacza"
 	},
 	"customCommand": {
-		"message": "Dodatkowe argumenty linii poleceń:"
+		"message": "Dodatkowe argumenty linii poleceń"
 	},
 	"userCommand": {
-		"message": "Komenda własna:"
+		"message": "Komenda własna"
 	},
 	"userCommandTip": {
 		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
-		"message": "Dołącz dodatkowe nagłówki:"
+		"message": "Dołącz dodatkowe nagłówki"
 	},
 	"notifPref": {
-		"message": "Wyłącz powiadomienia:"
+		"message": "Wyłącz powiadomienia"
 	},
 	"disablePref": {
-		"message": "Wyłącz wykrywanie:"
+		"message": "Wyłącz wykrywanie"
 	},
 	"clearList": {
 		"message": "Wyczyść tę listę"
@@ -84,13 +87,13 @@
 		"message": "Skopiuj widoczne linki"
 	},
 	"proxyPref": {
-		"message": "Użyj serwera HTTP proxy:"
+		"message": "Użyj serwera HTTP proxy"
 	},
 	"downloaderPref": {
-		"message": "Użyj zewnętrznego narzędzia pobierania:"
+		"message": "Użyj zewnętrznego narzędzia pobierania"
 	},
 	"buttonClick": {
-		"message": "Działanie przycisku na pasku narzędzi:"
+		"message": "Działanie przycisku na pasku narzędzi"
 	},
 	"popupType": {
 		"message": "Rodzaj"
@@ -117,18 +120,21 @@
 		"message": "Poprzednie sesje"
 	},
 	"filterInput": {
-		"message": "Filtr:"
+		"message": "Filtr"
 	},
 	"openOptions": {
 		"message": "Ustawienia"
 	},
 	"titlePref": {
-		"message": "Pokaż tytuł karty jako źródło:"
+		"message": "Pokaż tytuł karty jako źródło"
 	},
 	"filenamePref": {
-		"message": "Tytuł karty jako nazwa pliku:"
+		"message": "Tytuł karty jako nazwa pliku"
 	},
 	"timestampPref": {
-		"message": "Dodaj datę i czas do nazwy pliku:"
+		"message": "Dodaj datę i czas do nazwy pliku"
+	},
+	"fileExtension": {
+		"message": "Rozszerzenie pliku"
 	}
 }

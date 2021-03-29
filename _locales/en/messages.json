@@ -24,10 +24,13 @@
 		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl commands."
 	},
 	"copyMethod": {
-		"message": "Copy stream URL as:"
+		"message": "Copy stream URL as"
 	},
 	"url": {
-		"message": "URL only"
+		"message": "Regular URL"
+	},
+	"kodiUrl": {
+		"message": "Kodi URL"
 	},
 	"youtubedl": {
 		"message": "youtube-dl command"
@@ -51,7 +54,7 @@
 		"message": "User-defined command"
 	},
 	"streamlinkOutput": {
-		"message": "Output Streamlink to:"
+		"message": "Output Streamlink to"
 	},
 	"file": {
 		"message": "File"
@@ -60,22 +63,22 @@
 		"message": "Default player"
 	},
 	"customCommand": {
-		"message": "Additional command line parameters:"
+		"message": "Additional command line parameters"
 	},
 	"userCommand": {
-		"message": "User-defined command:"
+		"message": "User-defined command"
 	},
 	"userCommandTip": {
 		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
-		"message": "Include additional headers:"
+		"message": "Include additional headers"
 	},
 	"notifPref": {
-		"message": "Disable notifications:"
+		"message": "Disable notifications"
 	},
 	"disablePref": {
-		"message": "Disable detection:"
+		"message": "Disable detection"
 	},
 	"clearList": {
 		"message": "Clear this URL list"
@@ -84,13 +87,13 @@
 		"message": "Copy all visible URLs"
 	},
 	"proxyPref": {
-		"message": "Use HTTP proxy server:"
+		"message": "Use HTTP proxy server"
 	},
 	"downloaderPref": {
-		"message": "Use external downloader:"
+		"message": "Use external downloader"
 	},
 	"buttonClick": {
-		"message": "Browser action button functionality:"
+		"message": "Browser action button functionality"
 	},
 	"popupType": {
 		"message": "Type"
@@ -117,18 +120,21 @@
 		"message": "Previous sessions"
 	},
 	"filterInput": {
-		"message": "Filter:"
+		"message": "Filter"
 	},
 	"openOptions": {
 		"message": "Options"
 	},
 	"titlePref": {
-		"message": "Show tab title as source:"
+		"message": "Show tab title as source"
 	},
 	"filenamePref": {
-		"message": "Use tab title as filename:"
+		"message": "Use tab title as filename"
 	},
 	"timestampPref": {
-		"message": "Append timestamp to filename:"
+		"message": "Append timestamp to filename"
+	},
+	"fileExtension": {
+		"message": "File extension"
 	}
 }

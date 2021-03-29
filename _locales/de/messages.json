@@ -24,7 +24,7 @@
 		"message": "Erkennen von Playlists und Untertiteln in HLS, DASH, HDS und MSS Streams. Generiert youtube-dl, FFmpeg, Streamlink, hlsdl und weitere (benutzerdefinierte) Kommandos."
 	},
 	"copyMethod": {
-		"message": "Kopiere Stream URL als:"
+		"message": "Kopiere Stream URL als"
 	},
 	"url": {
 		"message": "nur die URL"
@@ -48,7 +48,7 @@
 		"message": "benutzerdef. Kommando"
 	},
 	"streamlinkOutput": {
-		"message": "Speichere Streamlink zu:"
+		"message": "Speichere Streamlink zu"
 	},
 	"file": {
 		"message": "Datei"
@@ -57,22 +57,22 @@
 		"message": "Standard Player"
 	},
 	"customCommand": {
-		"message": "Zusätzliche Kommandozeilenparameter:"
+		"message": "Zusätzliche Kommandozeilenparameter"
 	},
 	"userCommand": {
-		"message": "benutzerdefiniertes Kommando:"
+		"message": "benutzerdefiniertes Kommando"
 	},
 	"userCommandTip": {
 		"message": "Verfügbare Felder:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
 	},
 	"headersPref": {
-		"message": "Füge Header hinzu:"
+		"message": "Füge Header hinzu"
 	},
 	"notifPref": {
-		"message": "Deaktiviere Benachrichtigungen:"
+		"message": "Deaktiviere Benachrichtigungen"
 	},
 	"disablePref": {
-		"message": "Deaktiviere Erkennung:"
+		"message": "Deaktiviere Erkennung"
 	},
 	"clearList": {
 		"message": "Diese URL Liste leeren"
@@ -81,13 +81,13 @@
 		"message": "Kopiere alle sichtbaren URLs"
 	},
 	"proxyPref": {
-		"message": "Nutze HTTP Proxyserver:"
+		"message": "Nutze HTTP Proxyserver"
 	},
 	"downloaderPref": {
-		"message": "Nutze externen Downloader:"
+		"message": "Nutze externen Downloader"
 	},
 	"buttonClick": {
-		"message": "Funktion des Browser Action Buttons:"
+		"message": "Funktion des Browser Action Buttons"
 	},
 	"popupType": {
 		"message": "Typ"
@@ -114,15 +114,15 @@
 		"message": "von vorherigen Sitzungen"
 	},
 	"filterInput": {
-		"message": "Filter:"
+		"message": "Filter"
 	},
 	"openOptions": {
 		"message": "Einstellungen"
 	},
 	"titlePref": {
-		"message": "Zeige den Tab Titel als Quelle:"
+		"message": "Zeige den Tab Titel als Quelle"
 	},
 	"filenamePref": {
-		"message": "Nutze den Tab Titel als Dateinamen:"
+		"message": "Nutze den Tab Titel als Dateinamen"
 	}
 }
