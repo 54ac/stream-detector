@@ -60,12 +60,17 @@ th * {
 }
 
 .urlEntry:last-of-type {
-	border-bottom-width: 0px;
+	border-bottom-width: 0;
 }
 
 input,
 select {
 	margin: auto 0.25em;
+}
+
+input,
+select,
+label {
 	vertical-align: middle;
 }
 

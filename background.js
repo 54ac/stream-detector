@@ -145,8 +145,10 @@ chrome.storage.local.get((options) => {
 				(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
 					options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
 		!options.version
-	)
-		chrome.storage.local.clear();
+	) {
+		// only when necessary
+		// chrome.storage.local.clear();
+	}
 
 	chrome.storage.local.set(
 		{
