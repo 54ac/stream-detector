@@ -25,7 +25,7 @@ const copyURL = (info) => {
 			let fileMethod;
 
 			const streamURL = e.url;
-			const { filename, type } = e;
+			const { filename, type, category } = e;
 			fileMethod = options.copyMethod || "url"; // default to url - just in case
 
 			if (
@@ -33,11 +33,7 @@ const copyURL = (info) => {
 				(type === "MSS" &&
 					fileMethod !== "youtubedl" &&
 					fileMethod !== "youtubedlc") ||
-				((type === "VTT" ||
-					type === "SRT" ||
-					type === "TTML" ||
-					type === "DFXP") &&
-					fileMethod !== "url") ||
+				(category === "subtitles" && fileMethod !== "url") ||
 				(type !== "HLS" && fileMethod === "hlsdl") ||
 				(type !== "HLS" && fileMethod === "nm3u8dl")
 			) {

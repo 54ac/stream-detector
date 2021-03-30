@@ -136,5 +136,8 @@
 	},
 	"fileExtension": {
 		"message": "File extension"
+	},
+	"subtitlePref": {
+		"message": "Ignore subtitles"
 	}
 }
