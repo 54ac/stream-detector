@@ -136,5 +136,8 @@
 	},
 	"fileExtension": {
 		"message": "Rozszerzenie pliku"
+	},
+	"subtitlePref": {
+		"message": "Nie wykrywaj napisów"
 	}
 }

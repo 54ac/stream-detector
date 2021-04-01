@@ -4,15 +4,36 @@ const supported = [
 	{
 		ext: ["m3u8"],
 		ct: ["application/x-mpegurl", "application/vnd.apple.mpegurl"],
-		type: "HLS"
+		type: "HLS",
+		category: "stream"
 	},
-	{ ext: ["mpd"], ct: ["application/dash+xml"], type: "DASH" },
-	{ ext: ["f4m"], ct: ["application/f4m"], type: "HDS" },
-	{ ext: ["ism/manifest"], ct: [], type: "MSS" },
-	{ ext: ["vtt"], ct: ["text/vtt"], type: "VTT" },
-	{ ext: ["srt"], ct: ["application/x-subrip"], type: "SRT" },
-	{ ext: ["ttml", "ttml2"], ct: ["application/ttml+xml"], type: "TTML" },
-	{ ext: ["dfxp"], ct: ["application/ttaf+xml"], type: "DFXP" }
+	{
+		ext: ["mpd"],
+		ct: ["application/dash+xml"],
+		type: "DASH",
+		category: "stream"
+	},
+	{ ext: ["f4m"], ct: ["application/f4m"], type: "HDS", category: "stream" },
+	{ ext: ["ism/manifest"], ct: [], type: "MSS", category: "stream" },
+	{ ext: ["vtt"], ct: ["text/vtt"], type: "VTT", category: "subtitles" },
+	{
+		ext: ["srt"],
+		ct: ["application/x-subrip"],
+		type: "SRT",
+		category: "subtitles"
+	},
+	{
+		ext: ["ttml", "ttml2"],
+		ct: ["application/ttml+xml"],
+		type: "TTML",
+		category: "subtitles"
+	},
+	{
+		ext: ["dfxp"],
+		ct: ["application/ttaf+xml"],
+		type: "DFXP",
+		category: "subtitles"
+	}
 ];
 
 const _ = chrome.i18n.getMessage;
@@ -24,6 +45,7 @@ let urlStorageRestore = [];
 let badgeText = 0;
 let queue = [];
 let notifPref = false;
+let subtitlePref = false;
 
 const urlFilter = (requestDetails) => {
 	let e;
@@ -43,10 +65,12 @@ const urlFilter = (requestDetails) => {
 	if (
 		e &&
 		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
-		!queue.includes(requestDetails.requestId) // queue in case urlStorage is also too slow
+		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
+		(!subtitlePref || (subtitlePref && e.category !== "subtitles"))
 	) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
+		requestDetails.category = e.category;
 		addURL(requestDetails);
 	}
 };
@@ -145,8 +169,10 @@ chrome.storage.local.get((options) => {
 				(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
 					options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
 		!options.version
-	)
-		chrome.storage.local.clear();
+	) {
+		// only when necessary
+		// chrome.storage.local.clear();
+	}
 
 	chrome.storage.local.set(
 		{
@@ -167,6 +193,10 @@ chrome.storage.local.get((options) => {
 			timestampPref:
 				options.timestampPref !== undefined
 					? options.timestampPref === true
+					: false,
+			subtitlePref:
+				options.subtitlePref !== undefined
+					? options.subtitlePref === true
 					: false,
 			fileExtension: options.fileExtension || "ts",
 			streamlinkOutput: options.streamlinkOutput || "file",
@@ -201,6 +231,10 @@ chrome.storage.local.get((options) => {
 
 			notifPref =
 				options.notifPref !== undefined ? options.notifPref === true : false;
+			subtitlePref =
+				options.subtitlePref !== undefined
+					? options.subtitlePref === true
+					: false;
 
 			if (options.urlStorageRestore?.length)
 				// eslint-disable-next-line prefer-destructuring
@@ -247,8 +281,8 @@ chrome.runtime.onMessage.addListener((message) => {
 				);
 			}
 
-			// eslint-disable-next-line prefer-destructuring
 			notifPref = options.notifPref;
+			subtitlePref = options.subtitlePref;
 		});
 	}
 });

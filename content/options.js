@@ -3,18 +3,23 @@
 const _ = chrome.i18n.getMessage; // i18n
 
 const checkHeadersPref = () => {
-	document.getElementById("fileExtension").disabled = true;
-	document.getElementById("streamlinkOutput").disabled = true;
+	document.getElementById("subtitlePref").disabled = false;
 	document.getElementById("headersPref").disabled = false;
 	document.getElementById("titlePref").disabled = false;
 	document.getElementById("filenamePref").disabled = false;
 	document.getElementById("timestampPref").disabled = false;
+	document.getElementById("fileExtension").disabled = true;
+	document.getElementById("streamlinkOutput").disabled = true;
 	document.getElementById("downloaderPref").disabled = true;
 	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
 	document.getElementById("proxyCommand").disabled = false;
 	document.getElementById("customCommand").disabled = false;
 	document.getElementById("userCommand").disabled = true;
+
+	document.getElementById("disablePref").checked
+		? (document.getElementById("subtitlePref").disabled = true)
+		: (document.getElementById("subtitlePref").disabled = false);
 
 	document.getElementById("downloaderPref").checked
 		? (document.getElementById("downloaderCommand").disabled = false)
