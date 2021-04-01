@@ -136,5 +136,8 @@
 	},
 	"fileExtension": {
 		"message": "Расширение файла"
+	},
+	"subtitlePref": {
+		"message": "Игнорировать субтитры"
 	}
 }
