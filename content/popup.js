@@ -24,7 +24,7 @@ const copyURL = (info) => {
 			let methodIncomp;
 			let fileMethod;
 
-			const streamURL = e.url;
+			const streamURL = encodeURI(e.url);
 			const { filename, type, category } = e;
 			fileMethod = options.copyMethod || "url"; // default to url - just in case
 
@@ -152,7 +152,7 @@ const copyURL = (info) => {
 					if (headerUserAgent) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|User-Agent:"${headerUserAgent}"`;
+								code += `|User-Agent:${encodeURIComponent(headerUserAgent)}`;
 								break;
 							case "ffmpeg":
 								code += ` -user_agent "${headerUserAgent}"`;
@@ -188,7 +188,9 @@ const copyURL = (info) => {
 					if (headerCookie) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|Cookie:"${headerCookie}"`;
+								if (headerUserAgent) code += "&";
+								else code += "|";
+								code += `Cookie:${encodeURIComponent(headerCookie)}`;
 								break;
 							case "ffmpeg":
 								code += ` -headers "Cookie: ${headerCookie}"`;
@@ -223,7 +225,9 @@ const copyURL = (info) => {
 					if (headerReferer) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|Referer:"${headerReferer}"`;
+								if (headerUserAgent || headerCookie) code += "&";
+								else code += "|";
+								code += `Referer:${encodeURIComponent(headerReferer)}`;
 								break;
 							case "ffmpeg":
 								code += ` -referer "${headerReferer}"`;
