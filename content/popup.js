@@ -152,7 +152,7 @@ const copyURL = (info) => {
 					if (headerUserAgent) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|User-Agent:${encodeURIComponent(headerUserAgent)}`;
+								code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
 								break;
 							case "ffmpeg":
 								code += ` -user_agent "${headerUserAgent}"`;
@@ -170,7 +170,9 @@ const copyURL = (info) => {
 								code += ` -u "${headerUserAgent}"`;
 								break;
 							case "nm3u8dl":
-								code += ` --header "User-Agent:${headerUserAgent}`;
+								code += ` --header "User-Agent:${encodeURIComponent(
+									headerUserAgent
+								)}`;
 								if (!headerCookie && !headerReferer) code += `"`;
 								break;
 							case "user":
@@ -190,7 +192,7 @@ const copyURL = (info) => {
 							case "kodiUrl":
 								if (headerUserAgent) code += "&";
 								else code += "|";
-								code += `Cookie:${encodeURIComponent(headerCookie)}`;
+								code += `Cookie=${encodeURIComponent(headerCookie)}`;
 								break;
 							case "ffmpeg":
 								code += ` -headers "Cookie: ${headerCookie}"`;
@@ -210,7 +212,7 @@ const copyURL = (info) => {
 							case "nm3u8dl":
 								if (!headerUserAgent) code += ` --header "`;
 								else code += `|`;
-								code += `Cookie:${headerCookie}`;
+								code += `Cookie:${encodeURIComponent(headerCookie)}`;
 								if (!headerReferer) code += `"`;
 								break;
 							case "user":
@@ -227,7 +229,7 @@ const copyURL = (info) => {
 							case "kodiUrl":
 								if (headerUserAgent || headerCookie) code += "&";
 								else code += "|";
-								code += `Referer:${encodeURIComponent(headerReferer)}`;
+								code += `Referer=${encodeURIComponent(headerReferer)}`;
 								break;
 							case "ffmpeg":
 								code += ` -referer "${headerReferer}"`;
@@ -247,7 +249,7 @@ const copyURL = (info) => {
 							case "nm3u8dl":
 								if (!headerUserAgent && !headerCookie) code += ` --header "`;
 								else code += `|`;
-								code += `Referer:${headerReferer}"`;
+								code += `Referer:${encodeURIComponent(headerReferer)}"`;
 								break;
 							case "user":
 								code = code.replace(
