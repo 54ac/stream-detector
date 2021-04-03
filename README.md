@@ -38,14 +38,6 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 
 ---
 
-### Future plans and things to do
-
-- [x] ~~Clean up the URL detection routine~~,
-- [x] ~~Rethink the UX~~,
-- [x] ~~Implement per-tab lists~~,
-- [ ] Sort detected URLs by video/audio quality? This would require downloading and parsing every detected manifest. Might not be feasible,
-- [ ] Search through the HTML for URLs?
-
 ### Additional notes
 
 - Websites such as YouTube, Vimeo, Facebook, etc. are very likely to use proprietary technologies which are not supported by this addon. When it comes to such "mainstream" services, it's better to use the tools (e.g. youtube-dl) directly.
