@@ -462,13 +462,27 @@ const createList = () => {
 			timestampCell.textContent = getTimestamp(requestDetails.timestamp);
 
 			const deleteCell = document.createElement("td");
-			deleteCell.textContent = "✖";
-			deleteCell.onclick = () => deleteURL(requestDetails);
+			const deleteX = document.createElement("a");
+			deleteX.textContent = "✖";
+			deleteX.href = "";
+			deleteX.style.textDecoration = "none";
+			deleteX.onclick = (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				deleteURL(requestDetails);
+			};
+			deleteCell.onclick = (e) => {
+				e.preventDefault();
+				deleteURL(requestDetails);
+			};
+			deleteX.onfocus = () => (urlCell.style.textDecoration = "line-through");
+			deleteX.onblur = () => (urlCell.style.textDecoration = "initial");
 			deleteCell.onmouseover = () =>
 				(urlCell.style.textDecoration = "line-through");
 			deleteCell.onmouseout = () => (urlCell.style.textDecoration = "initial");
 			deleteCell.style.cursor = "pointer";
 			deleteCell.title = _("deleteTooltip");
+			deleteCell.appendChild(deleteX);
 
 			row.appendChild(extCell);
 			row.appendChild(urlCell);
