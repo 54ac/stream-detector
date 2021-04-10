@@ -139,5 +139,8 @@
 	},
 	"subtitlePref": {
 		"message": "Nie wykrywaj napisów"
+	},
+	"openPopup": {
+		"message": "Otwórz główne okno"
 	}
 }

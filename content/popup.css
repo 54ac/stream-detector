@@ -55,7 +55,8 @@ th * {
 	border-width: 1px 0;
 }
 
-.urlEntry:hover {
+.urlEntry:hover,
+.urlEntry:focus-within {
 	background-color: gainsboro;
 }
 
@@ -84,7 +85,8 @@ a {
 		color: #fff;
 	}
 
-	#popupUrlList tr:hover {
+	.urlEntry:hover,
+	.urlEntry:focus-within {
 		color: #232323;
 	}
 }

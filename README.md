@@ -25,7 +25,7 @@ Being able to easily find direct URLs to streams on the Internet. I wrote this i
 
 ### Is anyone even using this?
 
-As of updating this document, the addon has been downloaded almost 2,600 times within the last month and has over 7,600 average daily users.
+As of updating this document, the addon has been downloaded over 2,600 times within the last month and has over 7,600 average daily users.
 
 ### How do I use this?
 
@@ -37,14 +37,6 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 - [The GitHub releases page.](https://github.com/rowrawer/stream-detector/releases)
 
 ---
-
-### Future plans and things to do
-
-- [x] ~~Clean up the URL detection routine~~,
-- [x] ~~Rethink the UX~~,
-- [x] ~~Implement per-tab lists~~,
-- [ ] Sort detected URLs by video/audio quality? This would require downloading and parsing every detected manifest. Might not be feasible,
-- [ ] Search through the HTML for URLs?
 
 ### Additional notes
 

@@ -286,3 +286,7 @@ chrome.runtime.onMessage.addListener((message) => {
 		});
 	}
 });
+
+browser.commands.onCommand.addListener((cmd) => {
+	if (cmd === "open-popup") browser.browserAction.openPopup();
+});

@@ -24,7 +24,7 @@ const copyURL = (info) => {
 			let methodIncomp;
 			let fileMethod;
 
-			const streamURL = e.url;
+			const streamURL = encodeURI(e.url);
 			const { filename, type, category } = e;
 			fileMethod = options.copyMethod || "url"; // default to url - just in case
 
@@ -152,7 +152,7 @@ const copyURL = (info) => {
 					if (headerUserAgent) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|User-Agent:"${headerUserAgent}"`;
+								code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
 								break;
 							case "ffmpeg":
 								code += ` -user_agent "${headerUserAgent}"`;
@@ -170,7 +170,9 @@ const copyURL = (info) => {
 								code += ` -u "${headerUserAgent}"`;
 								break;
 							case "nm3u8dl":
-								code += ` --header "User-Agent:${headerUserAgent}`;
+								code += ` --header "User-Agent:${encodeURIComponent(
+									headerUserAgent
+								)}`;
 								if (!headerCookie && !headerReferer) code += `"`;
 								break;
 							case "user":
@@ -188,7 +190,9 @@ const copyURL = (info) => {
 					if (headerCookie) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|Cookie:"${headerCookie}"`;
+								if (headerUserAgent) code += "&";
+								else code += "|";
+								code += `Cookie=${encodeURIComponent(headerCookie)}`;
 								break;
 							case "ffmpeg":
 								code += ` -headers "Cookie: ${headerCookie}"`;
@@ -208,7 +212,7 @@ const copyURL = (info) => {
 							case "nm3u8dl":
 								if (!headerUserAgent) code += ` --header "`;
 								else code += `|`;
-								code += `Cookie:${headerCookie}`;
+								code += `Cookie:${encodeURIComponent(headerCookie)}`;
 								if (!headerReferer) code += `"`;
 								break;
 							case "user":
@@ -223,7 +227,9 @@ const copyURL = (info) => {
 					if (headerReferer) {
 						switch (fileMethod) {
 							case "kodiUrl":
-								code += `|Referer:"${headerReferer}"`;
+								if (headerUserAgent || headerCookie) code += "&";
+								else code += "|";
+								code += `Referer=${encodeURIComponent(headerReferer)}`;
 								break;
 							case "ffmpeg":
 								code += ` -referer "${headerReferer}"`;
@@ -243,7 +249,7 @@ const copyURL = (info) => {
 							case "nm3u8dl":
 								if (!headerUserAgent && !headerCookie) code += ` --header "`;
 								else code += `|`;
-								code += `Referer:${headerReferer}"`;
+								code += `Referer:${encodeURIComponent(headerReferer)}"`;
 								break;
 							case "user":
 								code = code.replace(
@@ -456,13 +462,27 @@ const createList = () => {
 			timestampCell.textContent = getTimestamp(requestDetails.timestamp);
 
 			const deleteCell = document.createElement("td");
-			deleteCell.textContent = "✖";
-			deleteCell.onclick = () => deleteURL(requestDetails);
+			const deleteX = document.createElement("a");
+			deleteX.textContent = "✖";
+			deleteX.href = "";
+			deleteX.style.textDecoration = "none";
+			deleteX.onclick = (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				deleteURL(requestDetails);
+			};
+			deleteCell.onclick = (e) => {
+				e.preventDefault();
+				deleteURL(requestDetails);
+			};
+			deleteX.onfocus = () => (urlCell.style.textDecoration = "line-through");
+			deleteX.onblur = () => (urlCell.style.textDecoration = "initial");
 			deleteCell.onmouseover = () =>
 				(urlCell.style.textDecoration = "line-through");
 			deleteCell.onmouseout = () => (urlCell.style.textDecoration = "initial");
 			deleteCell.style.cursor = "pointer";
 			deleteCell.title = _("deleteTooltip");
+			deleteCell.appendChild(deleteX);
 
 			row.appendChild(extCell);
 			row.appendChild(urlCell);
