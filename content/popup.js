@@ -24,7 +24,7 @@ const copyURL = (info) => {
 			let methodIncomp;
 			let fileMethod;
 
-			const streamURL = encodeURI(e.url);
+			const streamURL = e.url;
 			const { filename, type, category } = e;
 			fileMethod = options.copyMethod || "url"; // default to url - just in case
 
@@ -505,7 +505,7 @@ const createList = () => {
 
 		const placeholderCell = document.createElement("td");
 		placeholderCell.colSpan = document.getElementsByTagName("th").length; // i would never remember to update this manually
-		placeholderCell.textContent = "No URLs available.";
+		placeholderCell.textContent = _("placeholderCell");
 
 		row.appendChild(placeholderCell);
 

@@ -142,5 +142,8 @@
 	},
 	"openPopup": {
 		"message": "Open addon popup"
+	},
+	"placeholderCell": {
+		"message": "No URLs available."
 	}
 }

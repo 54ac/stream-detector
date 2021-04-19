@@ -142,5 +142,8 @@
 	},
 	"openPopup": {
 		"message": "Otwórz główne okno"
+	},
+	"placeholderCell": {
+		"message": "Brak dostępnych linków."
 	}
 }
