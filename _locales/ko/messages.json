@@ -27,7 +27,10 @@
 		"message": "URL 복사 옵션"
 	},
 	"url": {
-		"message": "원본 URL"
+		"message": "원본 URL 형식으로..."
+	},
+	"kodiUrl": {
+		"message": "Kodi URL 형식으로..."
 	},
 	"youtubedl": {
 		"message": "youtube-dl 명령어로..."
@@ -43,6 +46,9 @@
 	},
 	"hlsdl": {
 		"message": "hlsdl 명령어로..."
+	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-CLI 명령어로..."
 	},
 	"user": {
 		"message": "사용자 정의 명령어로..."
@@ -117,12 +123,24 @@
 		"message": "필터"
 	},
 	"openOptions": {
-		"message": "옵션"
+		"message": "설정"
 	},
 	"titlePref": {
 		"message": "출처 칸에 URL 대신 탭 제목 사용"
 	},
 	"filenamePref": {
 		"message": "탭 제목을 파일명으로 사용"
+	},
+	"timestampPref": {
+		"message": "파일명에 시간 추가"
+	},
+	"fileExtension": {
+		"message": "파일 형식"
+	},
+	"subtitlePref": {
+		"message": "자막 무시"
+	},
+	"openPopup": {
+		"message": "확장기능 팝업 열기"
 	}
 }
