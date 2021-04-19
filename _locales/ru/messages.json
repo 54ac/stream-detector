@@ -142,5 +142,8 @@
 	},
 	"openPopup": {
 		"message": "Открыть панель расширения"
+	},
+	"placeholderCell": {
+		"message": "Ссылки не найдены."
 	}
 }
