@@ -287,6 +287,6 @@ chrome.runtime.onMessage.addListener((message) => {
 	}
 });
 
-browser.commands.onCommand.addListener((cmd) => {
-	if (cmd === "open-popup") browser.browserAction.openPopup();
+chrome.commands.onCommand.addListener((cmd) => {
+	if (cmd === "open-popup") chrome.browserAction.openPopup();
 });
