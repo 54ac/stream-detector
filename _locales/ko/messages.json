@@ -142,5 +142,8 @@
 	},
 	"openPopup": {
 		"message": "확장기능 팝업 열기"
+	},
+	"placeholderCell": {
+		"message": "목록이 현재 비어 있습니다."
 	}
 }
