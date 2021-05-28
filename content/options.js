@@ -4,6 +4,7 @@ const _ = chrome.i18n.getMessage; // i18n
 
 const checkHeadersPref = () => {
 	document.getElementById("subtitlePref").disabled = false;
+	document.getElementById("filePref").disabled = false;
 	document.getElementById("headersPref").disabled = false;
 	document.getElementById("titlePref").disabled = false;
 	document.getElementById("filenamePref").disabled = false;
@@ -17,9 +18,13 @@ const checkHeadersPref = () => {
 	document.getElementById("customCommand").disabled = false;
 	document.getElementById("userCommand").disabled = true;
 
-	document.getElementById("disablePref").checked
-		? (document.getElementById("subtitlePref").disabled = true)
-		: (document.getElementById("subtitlePref").disabled = false);
+	if (document.getElementById("disablePref").checked) {
+		document.getElementById("subtitlePref").disabled = true;
+		document.getElementById("filePref").disabled = true;
+	} else {
+		document.getElementById("subtitlePref").disabled = false;
+		document.getElementById("filePref").disabled = false;
+	}
 
 	document.getElementById("downloaderPref").checked
 		? (document.getElementById("downloaderCommand").disabled = false)
@@ -46,7 +51,7 @@ const checkHeadersPref = () => {
 		document.getElementById("streamlinkOutput").disabled = false;
 	} else if (
 		document.getElementById("copyMethod").value === "youtubedl" ||
-		document.getElementById("copyMethod").value === "youtubedlc"
+		document.getElementById("copyMethod").value === "ytdlp"
 	) {
 		document.getElementById("downloaderPref").disabled = false;
 	} else if (

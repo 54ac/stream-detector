@@ -32,7 +32,7 @@ const copyURL = (info) => {
 				(type === "HDS" && fileMethod === "ffmpeg") ||
 				(type === "MSS" &&
 					fileMethod !== "youtubedl" &&
-					fileMethod !== "youtubedlc") ||
+					fileMethod !== "ytdlp") ||
 				(category === "subtitles" && fileMethod !== "url") ||
 				(type !== "HLS" && fileMethod === "hlsdl") ||
 				(type !== "HLS" && fileMethod === "nm3u8dl")
@@ -68,8 +68,8 @@ const copyURL = (info) => {
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
 					// this could be implemented better - maybe someday
-					case "youtubedlc":
-						code = "youtube-dlc --no-part --restrict-filenames";
+					case "ytdlp":
+						code = "yt-dlp --no-part --restrict-filenames";
 						if (options.downloaderPref && options.downloaderCommand)
 							code += ` --external-downloader "${options.downloaderCommand}"`;
 						break;
@@ -104,7 +104,7 @@ const copyURL = (info) => {
 						case "youtubedl":
 							code += ` --proxy "${options.proxyCommand}"`;
 							break;
-						case "youtubedlc":
+						case "ytdlp":
 							code += ` --proxy "${options.proxyCommand}"`;
 							break;
 						case "hlsdl":
@@ -163,7 +163,7 @@ const copyURL = (info) => {
 							case "youtubedl":
 								code += ` --user-agent "${headerUserAgent}"`;
 								break;
-							case "youtubedlc":
+							case "ytdlp":
 								code += ` --user-agent "${headerUserAgent}"`;
 								break;
 							case "hlsdl":
@@ -203,7 +203,7 @@ const copyURL = (info) => {
 							case "youtubedl":
 								code += ` --add-header "Cookie:${headerCookie}"`;
 								break;
-							case "youtubedlc":
+							case "ytdlp":
 								code += ` --add-header "Cookie:${headerCookie}"`;
 								break;
 							case "hlsdl":
@@ -240,7 +240,7 @@ const copyURL = (info) => {
 							case "youtubedl":
 								code += ` --referer "${headerReferer}"`;
 								break;
-							case "youtubedlc":
+							case "ytdlp":
 								code += ` --referer "${headerReferer}"`;
 								break;
 							case "hlsdl":
@@ -295,8 +295,6 @@ const copyURL = (info) => {
 					}
 				}
 
-				if (timestampPref) outFilename += ` ${getTimestamp(e.timestamp)}`;
-
 				// sanitize tab title and/or timestamp
 				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
 
@@ -305,25 +303,38 @@ const copyURL = (info) => {
 				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
-						code += ` -i "${streamURL}" -c copy "${outFilename}.${outExtension}"`;
+						code += ` -i "${streamURL}" -c copy "${outFilename}`;
+						if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+						code += `.${outExtension}"`;
 						break;
 					case "streamlink":
-						if (options.streamlinkOutput === "file")
-							code += ` -o "${outFilename}.${outExtension}"`;
+						if (options.streamlinkOutput === "file") {
+							code += ` -o "${outFilename}`;
+							if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+							code += `.${outExtension}"`;
+						}
 						code += ` "${streamURL}" best`;
 						break;
 					case "youtubedl":
-						if ((filenamePref && e.tabData?.title) || timestampPref)
-							code += ` --output "${outFilename}.%(ext)s"`;
+						if ((filenamePref && e.tabData?.title) || timestampPref) {
+							code += ` --output "${outFilename}`;
+							if (timestampPref) code += ` %(epoch)s`;
+							code += `.%(ext)s"`;
+						}
 						code += ` "${streamURL}"`;
 						break;
-					case "youtubedlc":
-						if ((filenamePref && e.tabData?.title) || timestampPref)
-							code += ` --output "${outFilename}.%(ext)s"`;
+					case "ytdlp":
+						if ((filenamePref && e.tabData?.title) || timestampPref) {
+							code += ` --output "${outFilename}`;
+							if (timestampPref) code += ` %(epoch)s`;
+							code += `.%(ext)s"`;
+						}
 						code += ` "${streamURL}"`;
 						break;
 					case "hlsdl":
-						code += ` -o "${outFilename}.${outExtension}" "${streamURL}"`;
+						code += ` -o "${outFilename}`;
+						if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+						code += `.${outExtension}" "${streamURL}"`;
 						break;
 					case "nm3u8dl":
 						code += ` --saveName "${outFilename}"`;

@@ -35,8 +35,8 @@
 	"youtubedl": {
 		"message": "Команда для youtube-dl"
 	},
-	"youtubedlc": {
-		"message": "Команда для youtube-dlc"
+	"ytdlp": {
+		"message": "Команда для yt-dlp"
 	},
 	"ffmpeg": {
 		"message": "Команда для FFmpeg"

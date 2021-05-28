@@ -35,8 +35,8 @@
 	"youtubedl": {
 		"message": "Komendę youtube-dl"
 	},
-	"youtubedlc": {
-		"message": "Komendę youtube-dlc"
+	"ytdlp": {
+		"message": "Komendę yt-dlp"
 	},
 	"ffmpeg": {
 		"message": "Komendę FFmpeg"
@@ -139,6 +139,9 @@
 	},
 	"subtitlePref": {
 		"message": "Nie wykrywaj napisów"
+	},
+	"filePref": {
+		"message": "Nie wykrywaj bezpośrednich linków do plików wideo/audio"
 	},
 	"openPopup": {
 		"message": "Otwórz główne okno"

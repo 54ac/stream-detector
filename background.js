@@ -33,7 +33,20 @@ const supported = [
 		ct: ["application/ttaf+xml"],
 		type: "DFXP",
 		category: "subtitles"
-	}
+	},
+	{
+		ext: ["mp4", "m4v"],
+		ct: ["video/x-m4v", "video/m4v", "video/mp4"],
+		type: "MP4",
+		category: "files"
+	},
+	{ ext: ["m4a"], ct: ["audio/m4a"], type: "M4A", category: "files" },
+	{ ext: ["ts"], ct: ["video/mp2t"], type: "TS", category: "files" },
+	{ ext: ["aac"], ct: ["audio/aac"], type: "AAC", category: "files" },
+	{ ext: ["mp3"], ct: ["audio/mpeg"], type: "MP3", category: "files" },
+	{ ext: ["opus"], ct: ["audio/opus"], type: "OPUS", category: "files" },
+	{ ext: ["weba"], ct: ["audio/webm"], type: "WEBM", category: "files" },
+	{ ext: ["webm"], ct: ["video/webm"], type: "WEBM", category: "files" }
 ];
 
 const _ = chrome.i18n.getMessage;
@@ -44,8 +57,9 @@ let urlStorage = [];
 let urlStorageRestore = [];
 let badgeText = 0;
 let queue = [];
-let notifPref = false;
+let notifPref = true;
 let subtitlePref = false;
+let filePref = true;
 
 const urlFilter = (requestDetails) => {
 	let e;
@@ -66,7 +80,8 @@ const urlFilter = (requestDetails) => {
 		e &&
 		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
 		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
-		(!subtitlePref || (subtitlePref && e.category !== "subtitles"))
+		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
+		(!filePref || (filePref && e.category !== "files"))
 	) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
@@ -198,6 +213,8 @@ chrome.storage.local.get((options) => {
 				options.subtitlePref !== undefined
 					? options.subtitlePref === true
 					: false,
+			filePref:
+				options.filePref !== undefined ? options.filePref === true : true,
 			fileExtension: options.fileExtension || "ts",
 			streamlinkOutput: options.streamlinkOutput || "file",
 			downloaderPref:
@@ -211,7 +228,7 @@ chrome.storage.local.get((options) => {
 			customCommand: options.customCommand || "",
 			userCommand: options.userCommand || "",
 			notifPref:
-				options.notifPref !== undefined ? options.notifPref === true : false,
+				options.notifPref !== undefined ? options.notifPref === true : true,
 			urlStorageRestore: options.urlStorageRestore || [],
 			version: manifestVersion
 		},
@@ -230,11 +247,15 @@ chrome.storage.local.get((options) => {
 			}
 
 			notifPref =
-				options.notifPref !== undefined ? options.notifPref === true : false;
+				options.notifPref !== undefined ? options.notifPref === true : true;
+
 			subtitlePref =
 				options.subtitlePref !== undefined
 					? options.subtitlePref === true
 					: false;
+
+			filePref =
+				options.filePref !== undefined ? options.filePref === true : true;
 
 			if (options.urlStorageRestore?.length)
 				// eslint-disable-next-line prefer-destructuring
@@ -283,6 +304,7 @@ chrome.runtime.onMessage.addListener((message) => {
 
 			notifPref = options.notifPref;
 			subtitlePref = options.subtitlePref;
+			filePref = options.filePref;
 		});
 	}
 });

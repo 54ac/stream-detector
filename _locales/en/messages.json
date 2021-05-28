@@ -35,8 +35,8 @@
 	"youtubedl": {
 		"message": "youtube-dl command"
 	},
-	"youtubedlc": {
-		"message": "youtube-dlc command"
+	"ytdlp": {
+		"message": "yt-dlp command"
 	},
 	"ffmpeg": {
 		"message": "FFmpeg command"
@@ -139,6 +139,9 @@
 	},
 	"subtitlePref": {
 		"message": "Ignore subtitles"
+	},
+	"filePref": {
+		"message": "Ignore direct links to video/audio files"
 	},
 	"openPopup": {
 		"message": "Open addon popup"

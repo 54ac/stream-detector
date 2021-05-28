@@ -32,8 +32,8 @@
 	"youtubedl": {
 		"message": "youtube-dl Kommando"
 	},
-	"youtubedlc": {
-		"message": "youtube-dlc Kommando"
+	"ytdlp": {
+		"message": "yt-dlp Kommando"
 	},
 	"ffmpeg": {
 		"message": "FFmpeg Kommando"

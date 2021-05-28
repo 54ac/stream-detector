@@ -35,8 +35,8 @@
 	"youtubedl": {
 		"message": "youtube-dl 명령어로..."
 	},
-	"youtubedlc": {
-		"message": "youtube-dlc 명령어로..."
+	"ytdlp": {
+		"message": "yt-dlp 명령어로..."
 	},
 	"ffmpeg": {
 		"message": "FFmpeg 명령어로..."

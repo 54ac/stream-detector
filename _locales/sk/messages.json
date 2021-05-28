@@ -32,8 +32,8 @@
 	"youtubedl": {
 		"message": "príkaz youtube-dl"
 	},
-	"youtubedlc": {
-		"message": "príkaz youtube-dlc"
+	"ytdlp": {
+		"message": "príkaz yt-dlp"
 	},
 	"ffmpeg": {
 		"message": "príkaz FFmpeg"
