@@ -17,22 +17,26 @@ const checkHeadersPref = () => {
 	document.getElementById("proxyCommand").disabled = false;
 	document.getElementById("customCommand").disabled = false;
 	document.getElementById("userCommand").disabled = true;
+	document.getElementById("notifDetectPref").disabled = false;
 
-	if (document.getElementById("disablePref").checked) {
-		document.getElementById("subtitlePref").disabled = true;
-		document.getElementById("filePref").disabled = true;
-	} else {
-		document.getElementById("subtitlePref").disabled = false;
-		document.getElementById("filePref").disabled = false;
-	}
+	document.getElementById("subtitlePref").disabled = document.getElementById(
+		"disablePref"
+	).checked;
+	document.getElementById("filePref").disabled = document.getElementById(
+		"disablePref"
+	).checked;
 
-	document.getElementById("downloaderPref").checked
-		? (document.getElementById("downloaderCommand").disabled = false)
-		: (document.getElementById("downloaderCommand").disabled = true);
+	document.getElementById("notifDetectPref").disabled = document.getElementById(
+		"notifPref"
+	).checked;
 
-	document.getElementById("proxyPref").checked
-		? (document.getElementById("proxyCommand").disabled = false)
-		: (document.getElementById("proxyCommand").disabled = true);
+	document.getElementById(
+		"downloaderCommand"
+	).disabled = !document.getElementById("downloaderPref").checked;
+
+	document.getElementById("proxyCommand").disabled = !document.getElementById(
+		"proxyPref"
+	).checked;
 
 	if (document.getElementById("copyMethod").value === "url") {
 		document.getElementById("headersPref").disabled = true;

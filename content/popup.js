@@ -295,22 +295,25 @@ const copyURL = (info) => {
 					}
 				}
 
-				// sanitize tab title and/or timestamp
+				// sanitize tab title and timestamp
 				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
-
 				const outExtension = options.fileExtension || "ts";
+				const outTimestamp = getTimestamp(e.timestamp).replace(
+					/[/\\?%*:|"<>]/g,
+					"_"
+				);
 
 				// final part of command
 				switch (fileMethod) {
 					case "ffmpeg":
 						code += ` -i "${streamURL}" -c copy "${outFilename}`;
-						if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+						if (timestampPref) code += ` ${outTimestamp}`;
 						code += `.${outExtension}"`;
 						break;
 					case "streamlink":
 						if (options.streamlinkOutput === "file") {
 							code += ` -o "${outFilename}`;
-							if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+							if (timestampPref) code += ` ${outTimestamp}`;
 							code += `.${outExtension}"`;
 						}
 						code += ` "${streamURL}" best`;
@@ -333,7 +336,7 @@ const copyURL = (info) => {
 						break;
 					case "hlsdl":
 						code += ` -o "${outFilename}`;
-						if (timestampPref) code += ` ${getTimestamp(e.timestamp)}`;
+						if (timestampPref) code += ` ${outTimestamp}`;
 						code += `.${outExtension}" "${streamURL}"`;
 						break;
 					case "nm3u8dl":

@@ -74,8 +74,11 @@
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki"
 	},
+	"notifDetectPref": {
+		"message": "Wyłącz powiadomienia o wykryciu linków"
+	},
 	"notifPref": {
-		"message": "Wyłącz powiadomienia"
+		"message": "Wyłącz wszystkie powiadomienia"
 	},
 	"disablePref": {
 		"message": "Wyłącz wykrywanie"

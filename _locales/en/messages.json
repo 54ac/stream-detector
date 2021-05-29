@@ -74,8 +74,11 @@
 	"headersPref": {
 		"message": "Include additional headers"
 	},
+	"notifDetectPref": {
+		"message": "Disable detection notifications"
+	},
 	"notifPref": {
-		"message": "Disable notifications"
+		"message": "Disable all notifications"
 	},
 	"disablePref": {
 		"message": "Disable detection"

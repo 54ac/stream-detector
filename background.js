@@ -57,7 +57,8 @@ let urlStorage = [];
 let urlStorageRestore = [];
 let badgeText = 0;
 let queue = [];
-let notifPref = true;
+let notifPref = false;
+let notifDetectPref = true;
 let subtitlePref = false;
 let filePref = true;
 
@@ -135,7 +136,7 @@ const addURL = (requestDetails) => {
 		});
 	});
 
-	if (!notifPref) {
+	if (!notifDetectPref && !notifPref) {
 		chrome.notifications.create("add", {
 			// id = only one notification of this type appears at a time
 			type: "basic",
@@ -227,8 +228,12 @@ chrome.storage.local.get((options) => {
 			proxyCommand: options.proxyCommand || "",
 			customCommand: options.customCommand || "",
 			userCommand: options.userCommand || "",
+			notifDetectPref:
+				options.notifDetectPref !== undefined
+					? options.notifDetectPref === true
+					: true,
 			notifPref:
-				options.notifPref !== undefined ? options.notifPref === true : true,
+				options.notifPref !== undefined ? options.notifPref === true : false,
 			urlStorageRestore: options.urlStorageRestore || [],
 			version: manifestVersion
 		},
@@ -246,8 +251,13 @@ chrome.storage.local.get((options) => {
 				);
 			}
 
+			notifDetectPref =
+				options.notifDetectPref !== undefined
+					? options.notifDetectPref === true
+					: true;
+
 			notifPref =
-				options.notifPref !== undefined ? options.notifPref === true : true;
+				options.notifPref !== undefined ? options.notifPref === true : false;
 
 			subtitlePref =
 				options.subtitlePref !== undefined
@@ -302,6 +312,7 @@ chrome.runtime.onMessage.addListener((message) => {
 				);
 			}
 
+			notifDetectPref = options.notifDetectPref;
 			notifPref = options.notifPref;
 			subtitlePref = options.subtitlePref;
 			filePref = options.filePref;
