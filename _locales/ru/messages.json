@@ -74,8 +74,11 @@
 	"headersPref": {
 		"message": "Включать дополнительные заголовки"
 	},
+	"notifDetectPref": {
+		"message": "Отключить уведомления обнаружения"
+	},
 	"notifPref": {
-		"message": "Отключить уведомления"
+		"message": "Отключить все уведомления"
 	},
 	"disablePref": {
 		"message": "Отключить поиск"
