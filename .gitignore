@@ -8,3 +8,4 @@ package-lock.json
 dist.pem
 .babelrc.json
 postcss.config.js
+icon.png
