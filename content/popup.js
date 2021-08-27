@@ -88,7 +88,7 @@ const copyURL = (info) => {
 
 				// custom command line
 				const prefName = `customCommand${fileMethod}`;
-				if (options[prefName]) {
+				if (options.customCommandPref && options[prefName]) {
 					code += ` ${options[prefName]}`;
 				}
 
@@ -298,7 +298,7 @@ const copyURL = (info) => {
 				// sanitize tab title and timestamp
 				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
 				const outExtension = options.fileExtension || "ts";
-				const outTimestamp = getTimestamp(e.timestamp).replace(
+				const outTimestamp = getTimestamp(e.timeStamp || e.timestamp).replace(
 					/[/\\?%*:|"<>]/g,
 					"_"
 				);
@@ -473,7 +473,9 @@ const createList = () => {
 				requestDetails.tabData.url;
 
 			const timestampCell = document.createElement("td");
-			timestampCell.textContent = getTimestamp(requestDetails.timestamp);
+			timestampCell.textContent = getTimestamp(
+				requestDetails.timeStamp || requestDetails.timestamp
+			);
 
 			const deleteCell = document.createElement("td");
 			const deleteX = document.createElement("a");

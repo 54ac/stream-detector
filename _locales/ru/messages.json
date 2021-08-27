@@ -62,7 +62,7 @@
 	"player": {
 		"message": "Проигрыватель по умолчанию"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "Дополнительные параметры командной строки"
 	},
 	"userCommand": {

@@ -56,7 +56,7 @@
 	"player": {
 		"message": "Standard Player"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "Zusätzliche Kommandozeilenparameter"
 	},
 	"userCommand": {

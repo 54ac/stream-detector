@@ -11,12 +11,16 @@ const checkHeadersPref = () => {
 	document.getElementById("timestampPref").disabled = false;
 	document.getElementById("fileExtension").disabled = true;
 	document.getElementById("streamlinkOutput").disabled = true;
-	document.getElementById("downloaderPref").disabled = true;
+	document.getElementById("downloaderPref").disabled = false;
 	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
-	document.getElementById("proxyCommand").disabled = false;
-	document.getElementById("customCommand").disabled = false;
+	document.getElementById("proxyCommand").disabled = true;
+	document.getElementById("customCommandPref").disabled = false;
+	document.getElementById("customCommand").disabled = true;
 	document.getElementById("userCommand").disabled = true;
+	document.getElementById("blacklistPref").disabled = false;
+	document.getElementById("blacklistEntries").disabled = true;
+	document.getElementById("cleanupPref").disabled = false;
 	document.getElementById("notifDetectPref").disabled = false;
 
 	document.getElementById("subtitlePref").disabled = document.getElementById(
@@ -38,18 +42,28 @@ const checkHeadersPref = () => {
 		"proxyPref"
 	).checked;
 
+	document.getElementById("customCommand").disabled = !document.getElementById(
+		"customCommandPref"
+	).checked;
+
+	document.getElementById(
+		"blacklistEntries"
+	).disabled = !document.getElementById("blacklistPref").checked;
+
 	if (document.getElementById("copyMethod").value === "url") {
 		document.getElementById("headersPref").disabled = true;
 		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("timestampPref").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
+		document.getElementById("customCommandPref").disabled = true;
 		document.getElementById("customCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "kodiUrl") {
 		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("timestampPref").disabled = true;
 		document.getElementById("proxyPref").disabled = true;
 		document.getElementById("proxyCommand").disabled = true;
+		document.getElementById("customCommandPref").disabled = true;
 		document.getElementById("customCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
@@ -83,27 +97,30 @@ const saveOption = (e) => {
 	) {
 		const prefName = "customCommand" + e.target.value;
 		chrome.storage.local.get(prefName, (res) => {
-			res[prefName]
-				? (document.getElementById("customCommand").value = res[prefName])
-				: (document.getElementById("customCommand").value = "");
+			document.getElementById("customCommand").value = res[prefName] || "";
 		});
 	}
 
 	if (e.target.id === "customCommand") {
 		chrome.storage.local.set({
 			[e.target.id +
-			document.getElementById("copyMethod").value]: e.target.value.trim()
+			document.getElementById("copyMethod").value]: e.target.value?.trim()
+		});
+	} else if (e.target.id === "blacklistEntries") {
+		chrome.storage.local.set({
+			[e.target.id]: e.target.value?.split("\n").filter((ee) => ee)
 		});
 	} else if (e.target.type === "checkbox") {
 		chrome.storage.local.set({
 			[e.target.id]: e.target.checked
 		});
-		chrome.runtime.sendMessage({ options: true });
 	} else {
 		chrome.storage.local.set({
-			[e.target.id]: e.target.value.trim()
+			[e.target.id]: e.target.value?.trim()
 		});
 	}
+	// update other scripts as well
+	chrome.runtime.sendMessage({ options: true });
 
 	checkHeadersPref();
 };
@@ -116,9 +133,10 @@ const restoreOptions = () => {
 			if (option.id === "customCommand") {
 				const prefName =
 					option.id + document.getElementById("copyMethod").value;
-				item[prefName]
-					? (document.getElementById(option.id).value = item[prefName])
-					: (document.getElementById(option.id).value = "");
+				document.getElementById(option.id).value = item[prefName] || "";
+			} else if (option.id === "blacklistEntries") {
+				if (item[option.id])
+					document.getElementById(option.id).value = item[option.id].join("\n");
 			} else if (item[option.id] !== undefined) {
 				if (
 					document.getElementById(option.id).type === "checkbox" ||

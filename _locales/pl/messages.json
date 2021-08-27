@@ -62,7 +62,7 @@
 	"player": {
 		"message": "Domyślnego odtwarzacza"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "Dodatkowe argumenty linii poleceń"
 	},
 	"userCommand": {
@@ -151,5 +151,17 @@
 	},
 	"placeholderCell": {
 		"message": "Brak dostępnych linków."
+	},
+	"blacklistPref": {
+		"message": "Filtr linków"
+	},
+	"blacklistTip": {
+		"message": "Każdy wpis w nowej linii. Dotyczy linków źródłowych i docelowych - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki do streamów zawierające te frazy w adresie."
+	},
+	"cleanupPref": {
+		"message": "Usuń wpisy starsze niż tydzień"
+	},
+	"cleanupTip": {
+		"message": "Wykonywane jedynie przy restarcie w celu uniknięcia wypadków."
 	}
 }

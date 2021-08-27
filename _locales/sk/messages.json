@@ -59,7 +59,7 @@
 	"player": {
 		"message": "Predvolený prehrávač"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "Dodatočné parametre príkazu"
 	},
 	"userCommand": {

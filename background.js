@@ -61,6 +61,9 @@ let notifPref = false;
 let notifDetectPref = true;
 let subtitlePref = false;
 let filePref = true;
+let blacklistPref = false;
+let blacklistEntries = [];
+let cleanupPref = false;
 
 const urlFilter = (requestDetails) => {
 	let e;
@@ -77,12 +80,22 @@ const urlFilter = (requestDetails) => {
 			// go through content types and see if the header matches
 			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
 	}
+
 	if (
 		e &&
 		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
 		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
 		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
-		(!filePref || (filePref && e.category !== "files"))
+		(!filePref || (filePref && e.category !== "files")) &&
+		(!blacklistPref ||
+			(blacklistPref &&
+				blacklistEntries?.filter(
+					(entry) =>
+						requestDetails.url?.includes(entry) ||
+						(requestDetails.documentUrl || requestDetails.originUrl)?.includes(
+							entry
+						)
+				).length === 0))
 	) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
@@ -107,7 +120,6 @@ const addURL = (requestDetails) => {
 		: urlPath;
 
 	const { hostname } = url;
-	const timestamp = Date.now();
 	// depends on which listener caught it
 	const headers =
 		requestDetails.requestHeaders || requestDetails.responseHeaders;
@@ -118,7 +130,6 @@ const addURL = (requestDetails) => {
 			headers,
 			filename,
 			hostname,
-			timestamp,
 			tabData
 		};
 
@@ -226,8 +237,21 @@ chrome.storage.local.get((options) => {
 			proxyPref:
 				options.proxyPref !== undefined ? options.proxyPref === true : false,
 			proxyCommand: options.proxyCommand || "",
+			customCommandPref:
+				options.customCommandPref !== undefined
+					? options.customCommandPref === true
+					: false,
 			customCommand: options.customCommand || "",
 			userCommand: options.userCommand || "",
+			blacklistPref:
+				options.blacklistPref !== undefined
+					? options.blacklistPref === true
+					: false,
+			blacklistEntries: options.blacklistEntries || "",
+			cleanupPref:
+				options.cleanupPref !== undefined
+					? options.cleanupPref === true
+					: false,
 			notifDetectPref:
 				options.notifDetectPref !== undefined
 					? options.notifDetectPref === true
@@ -267,19 +291,39 @@ chrome.storage.local.get((options) => {
 			filePref =
 				options.filePref !== undefined ? options.filePref === true : true;
 
+			blacklistPref =
+				options.blacklistPref !== undefined
+					? options.blacklistPref === true
+					: false;
+
+			if (options.blacklistEntries?.length)
+				blacklistEntries = options.blacklistEntries;
+
+			cleanupPref =
+				options.cleanupPref !== undefined
+					? options.cleanupPref === true
+					: false;
+
 			if (options.urlStorageRestore?.length)
-				// eslint-disable-next-line prefer-destructuring
 				urlStorageRestore = options.urlStorageRestore;
 
 			if (options.urlStorage?.length)
 				urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
 
 			// restore urls on startup
-			if (urlStorageRestore.length)
+			if (urlStorageRestore.length) {
+				if (cleanupPref)
+					urlStorageRestore = urlStorageRestore.filter(
+						(url) =>
+							new Date().getTime() - (url.timeStamp || url.timestamp) <
+							604800000
+					);
+
 				chrome.storage.local.set({
 					urlStorageRestore,
 					urlStorage: []
 				});
+			}
 		}
 	);
 });
@@ -316,6 +360,9 @@ chrome.runtime.onMessage.addListener((message) => {
 			notifPref = options.notifPref;
 			subtitlePref = options.subtitlePref;
 			filePref = options.filePref;
+			blacklistPref = options.blacklistPref;
+			blacklistEntries = options.blacklistEntries;
+			cleanupPref = options.cleanupPref;
 		});
 	}
 });

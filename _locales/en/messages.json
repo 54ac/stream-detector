@@ -62,7 +62,7 @@
 	"player": {
 		"message": "Default player"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "Additional command line parameters"
 	},
 	"userCommand": {
@@ -151,5 +151,17 @@
 	},
 	"placeholderCell": {
 		"message": "No URLs available."
+	},
+	"blacklistPref": {
+		"message": "URL blacklist"
+	},
+	"blacklistTip": {
+		"message": "One entry per line. Concerns both source and destination URLs, i.e. the addon will be effectively disabled on any websites as well as ignore any stream URLs containing these phrases."
+	},
+	"cleanupPref": {
+		"message": "Remove entries older than 1 week"
+	},
+	"cleanupTip": {
+		"message": "Applied only on restart in case of accidents."
 	}
 }

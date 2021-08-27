@@ -62,7 +62,7 @@
 	"player": {
 		"message": "플레이어로 재생"
 	},
-	"customCommand": {
+	"customCommandPref": {
 		"message": "추가 파라미터"
 	},
 	"userCommand": {

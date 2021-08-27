@@ -5,6 +5,16 @@ body {
 	color: #202023;
 }
 
+.tipContainer {
+	display: inline;
+	cursor: help;
+}
+
+.tip {
+	font-weight: bold;
+	margin: auto 1vw;
+}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		background: #202023;
