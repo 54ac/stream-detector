@@ -11,7 +11,7 @@ const checkHeadersPref = () => {
 	document.getElementById("timestampPref").disabled = false;
 	document.getElementById("fileExtension").disabled = true;
 	document.getElementById("streamlinkOutput").disabled = true;
-	document.getElementById("downloaderPref").disabled = false;
+	document.getElementById("downloaderPref").disabled = true;
 	document.getElementById("downloaderCommand").disabled = true;
 	document.getElementById("proxyPref").disabled = false;
 	document.getElementById("proxyCommand").disabled = true;

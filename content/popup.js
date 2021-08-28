@@ -340,7 +340,9 @@ const copyURL = (info) => {
 						code += `.${outExtension}" "${streamURL}"`;
 						break;
 					case "nm3u8dl":
-						code += ` --saveName "${outFilename}"`;
+						code += ` --saveName "${outFilename}`;
+						if (timestampPref) code += ` ${outTimestamp}`;
+						code += `"`;
 						break;
 					case "user":
 						code = code.replace(new RegExp("%url%", "g"), streamURL);

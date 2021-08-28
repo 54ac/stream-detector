@@ -21,7 +21,7 @@
 		"message": "Unable to copy URL(s):\n"
 	},
 	"extText": {
-		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl commands."
+		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI commands."
 	},
 	"copyMethod": {
 		"message": "Copy stream URL as"
