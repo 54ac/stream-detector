@@ -298,7 +298,7 @@ const copyURL = (info) => {
 				// sanitize tab title and timestamp
 				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
 				const outExtension = options.fileExtension || "ts";
-				const outTimestamp = getTimestamp(e.timeStamp || e.timestamp).replace(
+				const outTimestamp = getTimestamp(e.timeStamp).replace(
 					/[/\\?%*:|"<>]/g,
 					"_"
 				);
@@ -347,6 +347,7 @@ const copyURL = (info) => {
 					case "user":
 						code = code.replace(new RegExp("%url%", "g"), streamURL);
 						code = code.replace(new RegExp("%filename%", "g"), filename);
+						code = code.replace(new RegExp("%timestamp%", "g"), outTimestamp);
 						break;
 					default:
 						break;
@@ -475,9 +476,7 @@ const createList = () => {
 				requestDetails.tabData.url;
 
 			const timestampCell = document.createElement("td");
-			timestampCell.textContent = getTimestamp(
-				requestDetails.timeStamp || requestDetails.timestamp
-			);
+			timestampCell.textContent = getTimestamp(requestDetails.timeStamp);
 
 			const deleteCell = document.createElement("td");
 			const deleteX = document.createElement("a");

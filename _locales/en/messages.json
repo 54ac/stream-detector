@@ -69,7 +69,7 @@
 		"message": "User-defined command"
 	},
 	"userCommandTip": {
-		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
+		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
 	},
 	"headersPref": {
 		"message": "Include additional headers"

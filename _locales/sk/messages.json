@@ -66,7 +66,7 @@
 		"message": "Používateľom definovaný príkaz"
 	},
 	"userCommandTip": {
-		"message": "Dostupné kľúčové slová:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%"
+		"message": "Dostupné kľúčové slová:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
 	},
 	"headersPref": {
 		"message": "Pridať dodatočné hlavičky"

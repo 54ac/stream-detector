@@ -92,9 +92,11 @@ const urlFilter = (requestDetails) => {
 				blacklistEntries?.filter(
 					(entry) =>
 						requestDetails.url?.includes(entry) ||
-						(requestDetails.documentUrl || requestDetails.originUrl)?.includes(
-							entry
-						)
+						(
+							requestDetails.documentUrl ||
+							requestDetails.originUrl ||
+							requestDetails.initiator
+						)?.includes(entry)
 				).length === 0))
 	) {
 		queue.push(requestDetails.requestId);
@@ -314,9 +316,7 @@ chrome.storage.local.get((options) => {
 			if (urlStorageRestore.length) {
 				if (cleanupPref)
 					urlStorageRestore = urlStorageRestore.filter(
-						(url) =>
-							new Date().getTime() - (url.timeStamp || url.timestamp) <
-							604800000
+						(url) => new Date().getTime() - url.timeStamp < 604800000
 					);
 
 				chrome.storage.local.set({
