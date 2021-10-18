@@ -49,6 +49,12 @@ const copyURL = (info) => {
 
 			if (fileMethod === "url") {
 				code = streamURL;
+			} else if (fileMethod === "tableForm") {
+				code = `${streamURL} | ${
+					titlePref && e.tabData?.title && !streamURL.includes(e.tabData.title)
+						? e.tabData.title
+						: e.hostname
+				} | ${getTimestamp(e.timeStamp)}`;
 			} else {
 				// the switchboard of doom begins
 				switch (fileMethod) {

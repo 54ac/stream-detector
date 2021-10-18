@@ -50,7 +50,10 @@ const checkHeadersPref = () => {
 		"blacklistEntries"
 	).disabled = !document.getElementById("blacklistPref").checked;
 
-	if (document.getElementById("copyMethod").value === "url") {
+	if (
+		document.getElementById("copyMethod").value === "url" ||
+		document.getElementById("copyMethod").value === "tableForm"
+	) {
 		document.getElementById("headersPref").disabled = true;
 		document.getElementById("filenamePref").disabled = true;
 		document.getElementById("timestampPref").disabled = true;
@@ -93,6 +96,7 @@ const saveOption = (e) => {
 	if (
 		e.target.id === "copyMethod" &&
 		e.target.value !== "url" &&
+		e.target.value !== "tableForm" &&
 		e.target.value !== "kodiUrl"
 	) {
 		const prefName = "customCommand" + e.target.value;

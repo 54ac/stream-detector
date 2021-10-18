@@ -32,6 +32,9 @@
 	"kodiUrl": {
 		"message": "Link Kodi"
 	},
+	"tableForm": {
+		"message": "Wpis tabeli"
+	},
 	"youtubedl": {
 		"message": "Komendę youtube-dl"
 	},

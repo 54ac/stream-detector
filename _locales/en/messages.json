@@ -32,6 +32,9 @@
 	"kodiUrl": {
 		"message": "Kodi URL"
 	},
+	"tableForm": {
+		"message": "Table entry"
+	},
 	"youtubedl": {
 		"message": "youtube-dl command"
 	},
