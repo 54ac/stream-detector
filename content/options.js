@@ -100,29 +100,30 @@ const saveOption = (e) => {
 		e.target.value !== "kodiUrl"
 	) {
 		const prefName = "customCommand" + e.target.value;
-		chrome.storage.local.get(prefName, (res) => {
-			document.getElementById("customCommand").value = res[prefName] || "";
-		});
+
+		if (localStorage.getItem(prefName))
+			document.getElementById("customCommand").value =
+				localStorage.getItem(prefName) || "";
 	}
 
 	if (e.target.id === "customCommand") {
-		chrome.storage.local.set({
-			[e.target.id +
-			document.getElementById("copyMethod").value]: e.target.value?.trim()
-		});
+		localStorage.setItem(
+			e.target.id + document.getElementById("copyMethod").value,
+			JSON.stringify(e.target.value?.trim())
+		);
 	} else if (e.target.id === "blacklistEntries") {
-		chrome.storage.local.set({
-			[e.target.id]: e.target.value?.split("\n").filter((ee) => ee)
-		});
+		localStorage.setItem(
+			e.target.id,
+			JSON.stringify(e.target.value?.split("\n").filter((ee) => ee))
+		);
 	} else if (e.target.type === "checkbox") {
-		chrome.storage.local.set({
-			[e.target.id]: e.target.checked
-		});
+		localStorage.setItem(e.target.id, JSON.stringify(e.target.checked));
+	} else if (e.target.type === "text" && e.target.value?.trim().length === 0) {
+		localStorage.removeItem(e.target.id);
 	} else {
-		chrome.storage.local.set({
-			[e.target.id]: e.target.value?.trim()
-		});
+		localStorage.setItem(e.target.id, JSON.stringify(e.target.value?.trim()));
 	}
+
 	// update other scripts as well
 	chrome.runtime.sendMessage({ options: true });
 
@@ -131,30 +132,34 @@ const saveOption = (e) => {
 
 const restoreOptions = () => {
 	const options = document.getElementsByClassName("option");
-	// this is truly a pain
-	chrome.storage.local.get((item) => {
-		for (const option of options) {
-			if (option.id === "customCommand") {
-				const prefName =
-					option.id + document.getElementById("copyMethod").value;
-				document.getElementById(option.id).value = item[prefName] || "";
-			} else if (option.id === "blacklistEntries") {
-				if (item[option.id])
-					document.getElementById(option.id).value = item[option.id].join("\n");
-			} else if (item[option.id] !== undefined) {
-				if (
-					document.getElementById(option.id).type === "checkbox" ||
-					document.getElementById(option.id).type === "radio"
-				) {
-					document.getElementById(option.id).checked = item[option.id];
-				} else {
-					document.getElementById(option.id).value = item[option.id];
-				}
+
+	for (const option of options) {
+		if (option.id === "customCommand") {
+			const prefName = option.id + document.getElementById("copyMethod").value;
+			document.getElementById(option.id).value =
+				localStorage.getItem(prefName) || "";
+		} else if (option.id === "blacklistEntries") {
+			if (localStorage.getItem(option.id)) {
+				const blacklistValue = JSON.parse(localStorage.getItem(option.id));
+				document.getElementById(option.id).value = blacklistValue.join("\n");
+			}
+		} else if (localStorage.getItem(option.id) !== null) {
+			if (
+				document.getElementById(option.id).type === "checkbox" ||
+				document.getElementById(option.id).type === "radio"
+			) {
+				document.getElementById(option.id).checked = JSON.parse(
+					localStorage.getItem(option.id)
+				);
+			} else {
+				document.getElementById(option.id).value = JSON.parse(
+					localStorage.getItem(option.id)
+				);
 			}
 		}
+	}
 
-		checkHeadersPref();
-	});
+	checkHeadersPref();
 };
 
 document.addEventListener("DOMContentLoaded", () => {

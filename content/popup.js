@@ -1,6 +1,11 @@
 "use strict";
 
-const defaultOptions = { tabThis: true }; // used in restoreOptions
+const defaultOptions = {
+	tabThis: true,
+	titlePref: true,
+	filenamePref: false,
+	timestampPref: false
+}; // used in restoreOptions
 
 const _ = chrome.i18n.getMessage; // i18n
 
@@ -17,389 +22,408 @@ const getTimestamp = (timestamp) => {
 };
 
 const copyURL = (info) => {
-	chrome.storage.local.get((options) => {
-		const list = { urls: [], filenames: [], methodIncomp: false };
-		for (const e of info) {
-			let code;
-			let methodIncomp;
-			let fileMethod;
+	const list = { urls: [], filenames: [], methodIncomp: false };
+	for (const e of info) {
+		let code;
+		let methodIncomp;
+		let fileMethod;
 
-			const streamURL = e.url;
-			const { filename, type, category } = e;
-			fileMethod = options.copyMethod || "url"; // default to url - just in case
+		const streamURL = e.url;
+		const { filename, type, category } = e;
+		fileMethod = JSON.parse(localStorage.getItem("copyMethod")) || "url"; // default to url - just in case
 
+		if (
+			(type === "HDS" && fileMethod === "ffmpeg") ||
+			(type === "MSS" &&
+				fileMethod !== "youtubedl" &&
+				fileMethod !== "ytdlp") ||
+			(category === "subtitles" && fileMethod !== "url") ||
+			(type !== "HLS" && fileMethod === "hlsdl") ||
+			(type !== "HLS" && fileMethod === "nm3u8dl")
+		) {
+			fileMethod = "url";
+			methodIncomp = true;
+		}
+
+		// don't use user-defined command if empty
+		if (fileMethod === "user" && localStorage.getItem("userCommand")) {
+			fileMethod = "url";
+			methodIncomp = true;
+		}
+
+		if (fileMethod === "url") {
+			code = streamURL;
+		} else if (fileMethod === "tableForm") {
+			code = `${streamURL} | ${
+				titlePref && e.tabData?.title && !streamURL.includes(e.tabData.title)
+					? e.tabData.title
+					: e.hostname
+			} | ${getTimestamp(e.timeStamp)}`;
+		} else {
+			// the switchboard of doom begins
+			switch (fileMethod) {
+				case "kodiUrl":
+					code = streamURL;
+					break;
+				case "ffmpeg":
+					code = "ffmpeg";
+					break;
+				case "streamlink":
+					code = "streamlink";
+					break;
+				case "youtubedl":
+					code = "youtube-dl --no-part --restrict-filenames";
+					// use external downloader
+					if (
+						JSON.parse(localStorage.getItem("downloaderPref")) &&
+						localStorage.getItem("downloaderCommand")
+					)
+						code += ` --external-downloader "${JSON.parse(
+							localStorage.getItem("downloaderCommand")
+						)}"`;
+					break;
+				// this could be implemented better - maybe someday
+				case "ytdlp":
+					code = "yt-dlp --no-part --restrict-filenames";
+					if (
+						JSON.parse(localStorage.getItem("downloaderPref")) &&
+						localStorage.getItem("downloaderCommand")
+					)
+						code += ` --external-downloader "${JSON.parse(
+							localStorage.getItem("downloaderCommand")
+						)}"`;
+					break;
+				case "hlsdl":
+					code = "hlsdl -b -c";
+					break;
+				case "nm3u8dl":
+					code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
+					break;
+				case "user":
+					code = JSON.parse(localStorage.getItem("userCommand"));
+					break;
+				default:
+					break;
+			}
+
+			// custom command line
+			const prefName = `customCommand${fileMethod}`;
 			if (
-				(type === "HDS" && fileMethod === "ffmpeg") ||
-				(type === "MSS" &&
-					fileMethod !== "youtubedl" &&
-					fileMethod !== "ytdlp") ||
-				(category === "subtitles" && fileMethod !== "url") ||
-				(type !== "HLS" && fileMethod === "hlsdl") ||
-				(type !== "HLS" && fileMethod === "nm3u8dl")
+				JSON.parse(localStorage.getItem("customCommandPref")) &&
+				localStorage.getItem(prefName)
 			) {
-				fileMethod = "url";
-				methodIncomp = true;
+				code += ` ${JSON.parse(localStorage.getItem(prefName))}`;
 			}
 
-			// don't use user-defined command if empty
-			if (fileMethod === "user" && !options.userCommand) {
-				fileMethod = "url";
-				methodIncomp = true;
-			}
-
-			if (fileMethod === "url") {
-				code = streamURL;
-			} else if (fileMethod === "tableForm") {
-				code = `${streamURL} | ${
-					titlePref && e.tabData?.title && !streamURL.includes(e.tabData.title)
-						? e.tabData.title
-						: e.hostname
-				} | ${getTimestamp(e.timeStamp)}`;
-			} else {
-				// the switchboard of doom begins
+			// http proxy
+			if (
+				JSON.parse(localStorage.getItem("proxyPref")) &&
+				localStorage.getItem("proxyCommand")
+			) {
 				switch (fileMethod) {
-					case "kodiUrl":
-						code = streamURL;
-						break;
 					case "ffmpeg":
-						code = "ffmpeg";
+						code += ` -http_proxy "${JSON.parse(
+							localStorage.getItem("proxyCommand")
+						)}"`;
 						break;
 					case "streamlink":
-						code = "streamlink";
+						code += ` --http-proxy "${JSON.parse(
+							localStorage.getItem("proxyCommand")
+						)}"`;
 						break;
 					case "youtubedl":
-						code = "youtube-dl --no-part --restrict-filenames";
-						// use external downloader
-						if (options.downloaderPref && options.downloaderCommand)
-							code += ` --external-downloader "${options.downloaderCommand}"`;
+						code += ` --proxy "${JSON.parse(
+							localStorage.getItem("proxyCommand")
+						)}"`;
 						break;
-					// this could be implemented better - maybe someday
 					case "ytdlp":
-						code = "yt-dlp --no-part --restrict-filenames";
-						if (options.downloaderPref && options.downloaderCommand)
-							code += ` --external-downloader "${options.downloaderCommand}"`;
+						code += ` --proxy "${JSON.parse(
+							localStorage.getItem("proxyCommand")
+						)}"`;
 						break;
 					case "hlsdl":
-						code = "hlsdl -b -c";
+						code += ` -p "${JSON.parse(localStorage.getItem("proxyCommand"))}"`;
 						break;
 					case "nm3u8dl":
-						code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
+						code += ` --proxyAddress "${JSON.parse(
+							localStorage.getItem("proxyCommand")
+						)}"`;
 						break;
 					case "user":
-						code = options.userCommand;
+						code = code.replace(
+							new RegExp("%proxy%", "g"),
+							JSON.parse(localStorage.getItem("proxyCommand"))
+						);
 						break;
 					default:
 						break;
 				}
+			}
 
-				// custom command line
-				const prefName = `customCommand${fileMethod}`;
-				if (options.customCommandPref && options[prefName]) {
-					code += ` ${options[prefName]}`;
-				}
+			// additional headers
+			if (JSON.parse(localStorage.getItem("headersPref"))) {
+				let headerUserAgent = e.headers.find(
+					(header) => header.name.toLowerCase() === "user-agent"
+				);
+				headerUserAgent
+					? (headerUserAgent = headerUserAgent.value)
+					: (headerUserAgent = navigator.userAgent);
 
-				// http proxy
-				if (options.proxyPref && options.proxyCommand) {
+				let headerCookie = e.headers.find(
+					(header) => header.name.toLowerCase() === "cookie"
+				);
+				if (headerCookie)
+					headerCookie = headerCookie.value.replace(new RegExp(`"`, "g"), `'`); // double quotation marks mess up the command
+
+				let headerReferer = e.headers.find(
+					(header) => header.name.toLowerCase() === "referer"
+				);
+				headerReferer = headerReferer
+					? headerReferer.value
+					: e.originUrl || e.documentUrl || e.tabData?.url;
+
+				if (headerUserAgent) {
 					switch (fileMethod) {
+						case "kodiUrl":
+							code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
+							break;
 						case "ffmpeg":
-							code += ` -http_proxy "${options.proxyCommand}"`;
+							code += ` -user_agent "${headerUserAgent}"`;
 							break;
 						case "streamlink":
-							code += ` --http-proxy "${options.proxyCommand}"`;
+							code += ` --http-header "User-Agent=${headerUserAgent}"`;
 							break;
 						case "youtubedl":
-							code += ` --proxy "${options.proxyCommand}"`;
+							code += ` --user-agent "${headerUserAgent}"`;
 							break;
 						case "ytdlp":
-							code += ` --proxy "${options.proxyCommand}"`;
+							code += ` --user-agent "${headerUserAgent}"`;
 							break;
 						case "hlsdl":
-							code += ` -p "${options.proxyCommand}"`;
+							code += ` -u "${headerUserAgent}"`;
 							break;
 						case "nm3u8dl":
-							code += ` --proxyAddress "${options.proxyCommand}"`;
+							code += ` --header "User-Agent:${encodeURIComponent(
+								headerUserAgent
+							)}`;
+							if (!headerCookie && !headerReferer) code += `"`;
 							break;
 						case "user":
 							code = code.replace(
-								new RegExp("%proxy%", "g"),
-								options.proxyCommand
+								new RegExp("%useragent%", "g"),
+								headerUserAgent
 							);
 							break;
 						default:
 							break;
 					}
-				}
+				} else if (fileMethod === "user")
+					code = code.replace(new RegExp("%useragent%", "g"), "");
 
-				// additional headers
-				if (options.headersPref) {
-					let headerUserAgent = e.headers.find(
-						(header) => header.name.toLowerCase() === "user-agent"
-					);
-					headerUserAgent
-						? (headerUserAgent = headerUserAgent.value)
-						: (headerUserAgent = navigator.userAgent);
-
-					let headerCookie = e.headers.find(
-						(header) => header.name.toLowerCase() === "cookie"
-					);
-					if (headerCookie)
-						headerCookie = headerCookie.value.replace(
-							new RegExp(`"`, "g"),
-							`'`
-						); // double quotation marks mess up the command
-
-					let headerReferer = e.headers.find(
-						(header) => header.name.toLowerCase() === "referer"
-					);
-					headerReferer = headerReferer
-						? headerReferer.value
-						: e.originUrl || e.documentUrl || e.tabData?.url;
-
-					if (headerUserAgent) {
-						switch (fileMethod) {
-							case "kodiUrl":
-								code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
-								break;
-							case "ffmpeg":
-								code += ` -user_agent "${headerUserAgent}"`;
-								break;
-							case "streamlink":
-								code += ` --http-header "User-Agent=${headerUserAgent}"`;
-								break;
-							case "youtubedl":
-								code += ` --user-agent "${headerUserAgent}"`;
-								break;
-							case "ytdlp":
-								code += ` --user-agent "${headerUserAgent}"`;
-								break;
-							case "hlsdl":
-								code += ` -u "${headerUserAgent}"`;
-								break;
-							case "nm3u8dl":
-								code += ` --header "User-Agent:${encodeURIComponent(
-									headerUserAgent
-								)}`;
-								if (!headerCookie && !headerReferer) code += `"`;
-								break;
-							case "user":
-								code = code.replace(
-									new RegExp("%useragent%", "g"),
-									headerUserAgent
-								);
-								break;
-							default:
-								break;
-						}
-					} else if (fileMethod === "user")
-						code = code.replace(new RegExp("%useragent%", "g"), "");
-
-					if (headerCookie) {
-						switch (fileMethod) {
-							case "kodiUrl":
-								if (headerUserAgent) code += "&";
-								else code += "|";
-								code += `Cookie=${encodeURIComponent(headerCookie)}`;
-								break;
-							case "ffmpeg":
-								code += ` -headers "Cookie: ${headerCookie}"`;
-								break;
-							case "streamlink":
-								code += ` --http-header "Cookie=${headerCookie}"`;
-								break;
-							case "youtubedl":
-								code += ` --add-header "Cookie:${headerCookie}"`;
-								break;
-							case "ytdlp":
-								code += ` --add-header "Cookie:${headerCookie}"`;
-								break;
-							case "hlsdl":
-								code += ` -h "Cookie:${headerCookie}"`;
-								break;
-							case "nm3u8dl":
-								if (!headerUserAgent) code += ` --header "`;
-								else code += `|`;
-								code += `Cookie:${encodeURIComponent(headerCookie)}`;
-								if (!headerReferer) code += `"`;
-								break;
-							case "user":
-								code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
-								break;
-							default:
-								break;
-						}
-					} else if (fileMethod === "user")
-						code = code.replace(new RegExp("%cookie%", "g"), "");
-
-					if (headerReferer) {
-						switch (fileMethod) {
-							case "kodiUrl":
-								if (headerUserAgent || headerCookie) code += "&";
-								else code += "|";
-								code += `Referer=${encodeURIComponent(headerReferer)}`;
-								break;
-							case "ffmpeg":
-								code += ` -referer "${headerReferer}"`;
-								break;
-							case "streamlink":
-								code += ` --http-header "Referer=${headerReferer}"`;
-								break;
-							case "youtubedl":
-								code += ` --referer "${headerReferer}"`;
-								break;
-							case "ytdlp":
-								code += ` --referer "${headerReferer}"`;
-								break;
-							case "hlsdl":
-								code += ` -h "Referer:${headerReferer}"`;
-								break;
-							case "nm3u8dl":
-								if (!headerUserAgent && !headerCookie) code += ` --header "`;
-								else code += `|`;
-								code += `Referer:${encodeURIComponent(headerReferer)}"`;
-								break;
-							case "user":
-								code = code.replace(
-									new RegExp("%referer%", "g"),
-									headerReferer
-								);
-								break;
-							default:
-								break;
-						}
-					} else if (fileMethod === "user")
-						code = code.replace(new RegExp("%referer%", "g"), "");
-
-					if (
-						fileMethod === "user" &&
-						(e.documentUrl || e.originUrl || e.tabData?.url)
-					)
-						code = code.replace(
-							new RegExp("%origin%", "g"),
-							e.documentUrl || e.originUrl || e.tabData?.url
-						);
-					else if (fileMethod === "user")
-						code = code.replace(new RegExp("%origin%", "g"), "");
-
-					if (fileMethod === "user" && e.tabData?.title)
-						code = code.replace(
-							new RegExp("%tabtitle%", "g"),
-							e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
-						);
-					else if (fileMethod === "user")
-						code = code.replace(new RegExp("%tabtitle%", "g"), "");
-				}
-
-				let outFilename;
-				if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
-				else {
-					outFilename = filename;
-					if (outFilename.indexOf(".")) {
-						// filename without extension
-						outFilename = outFilename.split(".");
-						outFilename.pop();
-						outFilename = outFilename.join(".");
+				if (headerCookie) {
+					switch (fileMethod) {
+						case "kodiUrl":
+							if (headerUserAgent) code += "&";
+							else code += "|";
+							code += `Cookie=${encodeURIComponent(headerCookie)}`;
+							break;
+						case "ffmpeg":
+							code += ` -headers "Cookie: ${headerCookie}"`;
+							break;
+						case "streamlink":
+							code += ` --http-header "Cookie=${headerCookie}"`;
+							break;
+						case "youtubedl":
+							code += ` --add-header "Cookie:${headerCookie}"`;
+							break;
+						case "ytdlp":
+							code += ` --add-header "Cookie:${headerCookie}"`;
+							break;
+						case "hlsdl":
+							code += ` -h "Cookie:${headerCookie}"`;
+							break;
+						case "nm3u8dl":
+							if (!headerUserAgent) code += ` --header "`;
+							else code += `|`;
+							code += `Cookie:${encodeURIComponent(headerCookie)}`;
+							if (!headerReferer) code += `"`;
+							break;
+						case "user":
+							code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
+							break;
+						default:
+							break;
 					}
+				} else if (fileMethod === "user")
+					code = code.replace(new RegExp("%cookie%", "g"), "");
+
+				if (headerReferer) {
+					switch (fileMethod) {
+						case "kodiUrl":
+							if (headerUserAgent || headerCookie) code += "&";
+							else code += "|";
+							code += `Referer=${encodeURIComponent(headerReferer)}`;
+							break;
+						case "ffmpeg":
+							code += ` -referer "${headerReferer}"`;
+							break;
+						case "streamlink":
+							code += ` --http-header "Referer=${headerReferer}"`;
+							break;
+						case "youtubedl":
+							code += ` --referer "${headerReferer}"`;
+							break;
+						case "ytdlp":
+							code += ` --referer "${headerReferer}"`;
+							break;
+						case "hlsdl":
+							code += ` -h "Referer:${headerReferer}"`;
+							break;
+						case "nm3u8dl":
+							if (!headerUserAgent && !headerCookie) code += ` --header "`;
+							else code += `|`;
+							code += `Referer:${encodeURIComponent(headerReferer)}"`;
+							break;
+						case "user":
+							code = code.replace(new RegExp("%referer%", "g"), headerReferer);
+							break;
+						default:
+							break;
+					}
+				} else if (fileMethod === "user")
+					code = code.replace(new RegExp("%referer%", "g"), "");
+
+				if (
+					fileMethod === "user" &&
+					(e.documentUrl || e.originUrl || e.tabData?.url)
+				)
+					code = code.replace(
+						new RegExp("%origin%", "g"),
+						e.documentUrl || e.originUrl || e.tabData?.url
+					);
+				else if (fileMethod === "user")
+					code = code.replace(new RegExp("%origin%", "g"), "");
+
+				if (fileMethod === "user" && e.tabData?.title)
+					code = code.replace(
+						new RegExp("%tabtitle%", "g"),
+						e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
+					);
+				else if (fileMethod === "user")
+					code = code.replace(new RegExp("%tabtitle%", "g"), "");
+			}
+
+			let outFilename;
+			if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
+			else {
+				outFilename = filename;
+				if (outFilename.indexOf(".")) {
+					// filename without extension
+					outFilename = outFilename.split(".");
+					outFilename.pop();
+					outFilename = outFilename.join(".");
 				}
+			}
 
-				// sanitize tab title and timestamp
-				outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
-				const outExtension = options.fileExtension || "ts";
-				const outTimestamp = getTimestamp(e.timeStamp).replace(
-					/[/\\?%*:|"<>]/g,
-					"_"
-				);
+			// sanitize tab title and timestamp
+			outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
+			const outExtension =
+				JSON.parse(localStorage.getItem("fileExtension")) || "ts";
+			const outTimestamp = getTimestamp(e.timeStamp).replace(
+				/[/\\?%*:|"<>]/g,
+				"_"
+			);
 
-				// final part of command
-				switch (fileMethod) {
-					case "ffmpeg":
-						code += ` -i "${streamURL}" -c copy "${outFilename}`;
-						if (timestampPref) code += ` ${outTimestamp}`;
-						code += `.${outExtension}"`;
-						break;
-					case "streamlink":
-						if (options.streamlinkOutput === "file") {
-							code += ` -o "${outFilename}`;
-							if (timestampPref) code += ` ${outTimestamp}`;
-							code += `.${outExtension}"`;
-						}
-						code += ` "${streamURL}" best`;
-						break;
-					case "youtubedl":
-						if ((filenamePref && e.tabData?.title) || timestampPref) {
-							code += ` --output "${outFilename}`;
-							if (timestampPref) code += ` %(epoch)s`;
-							code += `.%(ext)s"`;
-						}
-						code += ` "${streamURL}"`;
-						break;
-					case "ytdlp":
-						if ((filenamePref && e.tabData?.title) || timestampPref) {
-							code += ` --output "${outFilename}`;
-							if (timestampPref) code += ` %(epoch)s`;
-							code += `.%(ext)s"`;
-						}
-						code += ` "${streamURL}"`;
-						break;
-					case "hlsdl":
+			// final part of command
+			switch (fileMethod) {
+				case "ffmpeg":
+					code += ` -i "${streamURL}" -c copy "${outFilename}`;
+					if (timestampPref) code += ` ${outTimestamp}`;
+					code += `.${outExtension}"`;
+					break;
+				case "streamlink":
+					if (JSON.parse(localStorage.getItem("streamlinkOutput")) === "file") {
 						code += ` -o "${outFilename}`;
 						if (timestampPref) code += ` ${outTimestamp}`;
-						code += `.${outExtension}" "${streamURL}"`;
-						break;
-					case "nm3u8dl":
-						code += ` --saveName "${outFilename}`;
-						if (timestampPref) code += ` ${outTimestamp}`;
-						code += `"`;
-						break;
-					case "user":
-						code = code.replace(new RegExp("%url%", "g"), streamURL);
-						code = code.replace(new RegExp("%filename%", "g"), filename);
-						code = code.replace(new RegExp("%timestamp%", "g"), outTimestamp);
-						break;
-					default:
-						break;
-				}
+						code += `.${outExtension}"`;
+					}
+					code += ` "${streamURL}" best`;
+					break;
+				case "youtubedl":
+					if ((filenamePref && e.tabData?.title) || timestampPref) {
+						code += ` --output "${outFilename}`;
+						if (timestampPref) code += ` %(epoch)s`;
+						code += `.%(ext)s"`;
+					}
+					code += ` "${streamURL}"`;
+					break;
+				case "ytdlp":
+					if ((filenamePref && e.tabData?.title) || timestampPref) {
+						code += ` --output "${outFilename}`;
+						if (timestampPref) code += ` %(epoch)s`;
+						code += `.%(ext)s"`;
+					}
+					code += ` "${streamURL}"`;
+					break;
+				case "hlsdl":
+					code += ` -o "${outFilename}`;
+					if (timestampPref) code += ` ${outTimestamp}`;
+					code += `.${outExtension}" "${streamURL}"`;
+					break;
+				case "nm3u8dl":
+					code += ` --saveName "${outFilename}`;
+					if (timestampPref) code += ` ${outTimestamp}`;
+					code += `"`;
+					break;
+				case "user":
+					code = code.replace(new RegExp("%url%", "g"), streamURL);
+					code = code.replace(new RegExp("%filename%", "g"), filename);
+					code = code.replace(new RegExp("%timestamp%", "g"), outTimestamp);
+					break;
+				default:
+					break;
 			}
-
-			// used to communicate with clipboard/notifications api
-			list.urls.push(code);
-			list.filenames.push(filename);
-			list.methodIncomp = methodIncomp;
 		}
-		try {
-			if (navigator.clipboard?.writeText)
-				navigator.clipboard.writeText(list.urls.join("\n"));
-			else {
-				// old copying method for compatibility purposes
-				const copyText = document.createElement("textarea");
-				copyText.style.position = "absolute";
-				copyText.style.left = "-5454px";
-				copyText.style.top = "-5454px";
-				document.body.appendChild(copyText);
-				copyText.value = list.urls.join("\n");
-				copyText.select();
-				document.execCommand("copy");
-				document.body.removeChild(copyText);
-			}
-			if (!options.notifPref) {
-				chrome.notifications.create("copy", {
-					type: "basic",
-					iconUrl: "img/icon-dark-96.png",
-					title: _("notifCopiedTitle"),
-					message:
-						(list.methodIncomp
-							? _("notifIncompCopiedText")
-							: _("notifCopiedText")) + list.filenames.join("\n")
-				});
-			}
-		} catch (e) {
-			chrome.notifications.create("error", {
+
+		// used to communicate with clipboard/notifications api
+		list.urls.push(code);
+		list.filenames.push(filename);
+		list.methodIncomp = methodIncomp;
+	}
+	try {
+		if (navigator.clipboard?.writeText)
+			navigator.clipboard.writeText(list.urls.join("\n"));
+		else {
+			// old copying method for compatibility purposes
+			const copyText = document.createElement("textarea");
+			copyText.style.position = "absolute";
+			copyText.style.left = "-5454px";
+			copyText.style.top = "-5454px";
+			document.body.appendChild(copyText);
+			copyText.value = list.urls.join("\n");
+			copyText.select();
+			document.execCommand("copy");
+			document.body.removeChild(copyText);
+		}
+		if (!JSON.parse(localStorage.getItem("notifPref"))) {
+			chrome.notifications.create("copy", {
 				type: "basic",
 				iconUrl: "img/icon-dark-96.png",
-				title: _("notifErrorTitle"),
-				message: _("notifErrorText") + e
+				title: _("notifCopiedTitle"),
+				message:
+					(list.methodIncomp
+						? _("notifIncompCopiedText")
+						: _("notifCopiedText")) + list.filenames.join("\n")
 			});
 		}
-	});
+	} catch (e) {
+		chrome.notifications.create("error", {
+			type: "basic",
+			iconUrl: "img/icon-dark-96.png",
+			title: _("notifErrorTitle"),
+			message: _("notifErrorText") + e
+		});
+	}
 };
 
 const deleteURL = (requestDetails) => {
@@ -535,69 +559,71 @@ const createList = () => {
 		table.appendChild(row);
 	};
 
-	chrome.storage.local.get((options) => {
-		// clear list first just in case - quick and dirty
-		table.innerHTML = "";
+	// clear list first just in case - quick and dirty
+	table.innerHTML = "";
 
-		if (options.urlStorage?.length || options.urlStorageRestore?.length) {
-			const urlStorageFilter = document
-				.getElementById("filterInput")
-				.value.toLowerCase();
+	const urlStorage = localStorage.getItem("urlStorage")
+		? JSON.parse(localStorage.getItem("urlStorage"))
+		: [];
+	const urlStorageRestore = localStorage.getItem("urlStorageRestore")
+		? JSON.parse(localStorage.getItem("urlStorageRestore"))
+		: [];
 
-			// do the query first to avoid async issues
-			chrome.tabs.query({ active: true, currentWindow: true }, (tab) => {
-				if (document.getElementById("tabThis").checked) {
-					urlList = options.urlStorage
-						? options.urlStorage.filter((url) => url.tabId === tab[0].id)
-						: [];
-				} else if (document.getElementById("tabAll").checked) {
-					urlList = options.urlStorage || [];
-				} else if (document.getElementById("tabPrevious").checked) {
-					urlList = options.urlStorageRestore || [];
-				}
+	if (urlStorage.length > 0 || urlStorageRestore.length > 0) {
+		const urlStorageFilter = document
+			.getElementById("filterInput")
+			.value.toLowerCase();
 
-				if (urlStorageFilter)
-					urlList =
-						urlList &&
-						urlList.filter(
-							(url) =>
-								url.filename.toLowerCase().includes(urlStorageFilter) ||
-								url.tabData?.title?.toLowerCase().includes(urlStorageFilter) ||
-								url.type.toLowerCase().includes(urlStorageFilter) ||
-								url.hostname.toLowerCase().includes(urlStorageFilter)
-						);
+		// do the query first to avoid async issues
+		chrome.tabs.query({ active: true, currentWindow: true }, (tab) => {
+			if (document.getElementById("tabThis").checked) {
+				urlList = urlStorage
+					? urlStorage.filter((url) => url.tabId === tab[0].id)
+					: [];
+			} else if (document.getElementById("tabAll").checked) {
+				urlList = urlStorage || [];
+			} else if (document.getElementById("tabPrevious").checked) {
+				urlList = urlStorageRestore || [];
+			}
 
-				urlList.length
-					? insertList(urlList.reverse()) // latest entries first
-					: insertPlaceholder();
-			});
-		} else {
-			insertPlaceholder();
-		}
-	});
+			if (urlStorageFilter)
+				urlList =
+					urlList &&
+					urlList.filter(
+						(url) =>
+							url.filename.toLowerCase().includes(urlStorageFilter) ||
+							url.tabData?.title?.toLowerCase().includes(urlStorageFilter) ||
+							url.type.toLowerCase().includes(urlStorageFilter) ||
+							url.hostname.toLowerCase().includes(urlStorageFilter)
+					);
+
+			urlList.length
+				? insertList(urlList.reverse()) // latest entries first
+				: insertPlaceholder();
+		});
+	} else {
+		insertPlaceholder();
+	}
 };
 
 const saveOption = (e) => {
 	const options = document.getElementsByClassName("option");
 	if (e.target.type === "checkbox") {
-		chrome.storage.local.set({
-			[e.target.id]: e.target.checked
-		});
+		localStorage.setItem(e.target.id, JSON.stringify(e.target.checked));
 		chrome.runtime.sendMessage({ options: true });
 	} else if (e.target.type === "radio") {
 		// update entire radio group
 		for (const option of options) {
 			if (option.name === e.target.name) {
-				chrome.storage.local.set({
-					[option.id]: document.getElementById(option.id).checked
-				});
+				localStorage.setItem(
+					option.id,
+					JSON.stringify(document.getElementById(option.id).checked)
+				);
 			}
 		}
 		createList();
 	} else {
-		chrome.storage.local.set({
-			[e.target.id]: e.target.value
-		});
+		localStorage.setItem(e.target.id, JSON.stringify(e.target.value));
 		chrome.runtime.sendMessage({ options: true });
 	}
 };
@@ -608,66 +634,76 @@ const restoreOptions = () => {
 
 	const options = document.getElementsByClassName("option");
 	// should probably consolidate this with the other one at some point
-	chrome.storage.local.get((item) => {
-		// eslint-disable-next-line prefer-destructuring
-		titlePref = item.titlePref;
-		filenamePref = item.filenamePref;
-		timestampPref = item.timestampPref;
 
-		for (const option of options) {
-			if (defaultOptions[option.id]) {
-				if (item[option.id] !== undefined) {
-					document.getElementById(option.id).checked = item[option.id];
-				} else {
-					document.getElementById(option.id).checked =
-						defaultOptions[option.id];
-					chrome.storage.local.set({
-						[option.id]: defaultOptions[option.id]
-					});
-				}
-			} else if (item[option.id] !== undefined) {
-				if (
-					document.getElementById(option.id).type === "checkbox" ||
-					document.getElementById(option.id).type === "radio"
-				) {
-					document.getElementById(option.id).checked = item[option.id];
-				} else {
-					document.getElementById(option.id).value = item[option.id];
-				}
+	titlePref = localStorage.getItem("titlePref")
+		? JSON.parse(localStorage.getItem("titlePref"))
+		: defaultOptions.titlePref;
+	filenamePref = localStorage.getItem("filenamePref")
+		? JSON.parse(localStorage.getItem("filenamePref"))
+		: defaultOptions.filenamePref;
+	timestampPref = localStorage.getItem("timestampPref")
+		? JSON.parse(localStorage.getItem("timestampPref"))
+		: defaultOptions.timestampPref;
+
+	for (const option of options) {
+		if (defaultOptions[option.id]) {
+			if (localStorage.getItem(option.id) !== null) {
+				document.getElementById(option.id).checked = JSON.parse(
+					localStorage.getItem(option.id)
+				);
+			} else {
+				document.getElementById(option.id).checked = defaultOptions[option.id];
+				localStorage.setItem(
+					option.id,
+					JSON.stringify(defaultOptions[option.id])
+				);
+			}
+		} else if (localStorage.getItem(option.id) !== null) {
+			if (
+				document.getElementById(option.id).type === "checkbox" ||
+				document.getElementById(option.id).type === "radio"
+			) {
+				document.getElementById(option.id).checked = JSON.parse(
+					localStorage.getItem(option.id)
+				);
+			} else {
+				document.getElementById(option.id).value = JSON.parse(
+					localStorage.getItem(option.id)
+				);
 			}
 		}
-		for (const option of options) {
-			option.onchange = (e) => saveOption(e);
-		}
+	}
+	for (const option of options) {
+		option.onchange = (e) => saveOption(e);
+	}
 
-		// i18n
-		const labels = document.getElementsByTagName("label");
-		for (const label of labels) {
-			label.textContent = _(label.htmlFor);
-		}
-		const selectOptions = document.getElementsByTagName("option");
-		for (const selectOption of selectOptions) {
-			if (!selectOption.textContent)
-				selectOption.textContent = _(selectOption.value);
-		}
+	// i18n
+	const labels = document.getElementsByTagName("label");
+	for (const label of labels) {
+		label.textContent = _(label.htmlFor);
+	}
+	const selectOptions = document.getElementsByTagName("option");
+	for (const selectOption of selectOptions) {
+		if (!selectOption.textContent)
+			selectOption.textContent = _(selectOption.value);
+	}
 
-		// button and text input functionality
-		document.getElementById("copyAll").onclick = (e) => {
-			e.preventDefault();
-			copyAll();
-		};
-		document.getElementById("clearList").onclick = (e) => {
-			e.preventDefault();
-			clearList();
-		};
-		document.getElementById("openOptions").onclick = (e) => {
-			e.preventDefault();
-			chrome.runtime.openOptionsPage();
-		};
-		document.getElementById("filterInput").onkeyup = () => createList();
+	// button and text input functionality
+	document.getElementById("copyAll").onclick = (e) => {
+		e.preventDefault();
+		copyAll();
+	};
+	document.getElementById("clearList").onclick = (e) => {
+		e.preventDefault();
+		clearList();
+	};
+	document.getElementById("openOptions").onclick = (e) => {
+		e.preventDefault();
+		chrome.runtime.openOptionsPage();
+	};
+	document.getElementById("filterInput").onkeyup = () => createList();
 
-		createList();
-	});
+	createList();
 };
 
 document.addEventListener("DOMContentLoaded", () => {

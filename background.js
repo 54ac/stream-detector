@@ -8,7 +8,7 @@ const supported = [
 		category: "stream"
 	},
 	{
-		ext: ["mpd"],
+		ext: ["mpd", "json?base64_init=1"],
 		ct: ["application/dash+xml"],
 		type: "DASH",
 		category: "stream"
@@ -49,21 +49,51 @@ const supported = [
 	{ ext: ["webm"], ct: ["video/webm"], type: "WEBM", category: "files" }
 ];
 
-const _ = chrome.i18n.getMessage;
+const defaults = {
+	disablePref: false,
+	copyMethod: "url",
+	headersPref: true,
+	titlePref: true,
+	filenamePref: false,
+	timestampPref: false,
+	subtitlePref: false,
+	filePref: false,
+	fileExtension: "ts",
+	streamlinkOutput: "file",
+	downloaderPref: false,
+	proxyPref: false,
+	customCommandPref: false,
+	blacklistPref: false,
+	blacklistEntries: [],
+	cleanupPref: false,
+	notifDetectPref: true,
+	notifPref: false,
+	urlStorageRestore: [],
+	urlStorage: []
+};
 
-const manifestVersion = chrome.runtime.getManifest().version;
+const _ = chrome.i18n.getMessage;
 
 let urlStorage = [];
 let urlStorageRestore = [];
 let badgeText = 0;
 let queue = [];
-let notifPref = false;
-let notifDetectPref = true;
-let subtitlePref = false;
-let filePref = true;
-let blacklistPref = false;
-let blacklistEntries = [];
-let cleanupPref = false;
+
+let subtitlePref;
+let filePref;
+let blacklistPref;
+let blacklistEntries;
+let cleanupPref;
+let disablePref;
+
+const updateVars = () => {
+	subtitlePref = JSON.parse(localStorage.getItem("subtitlePref"));
+	filePref = JSON.parse(localStorage.getItem("filePref"));
+	blacklistPref = JSON.parse(localStorage.getItem("blacklistPref"));
+	blacklistEntries = JSON.parse(localStorage.getItem("blacklistEntries"));
+	cleanupPref = JSON.parse(localStorage.getItem("cleanupPref"));
+	disablePref = JSON.parse(localStorage.getItem("disablePref"));
+};
 
 const urlFilter = (requestDetails) => {
 	let e;
@@ -143,13 +173,17 @@ const addURL = (requestDetails) => {
 			text: badgeText.toString()
 		});
 
-		chrome.storage.local.set({ urlStorage, badgeText }, () => {
-			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-			queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
-		});
+		localStorage.setItem("urlStorage", JSON.stringify(urlStorage));
+		localStorage.setItem("badgeText", JSON.stringify(badgeText));
+
+		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+		queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
 	});
 
-	if (!notifDetectPref && !notifPref) {
+	if (
+		JSON.parse(localStorage.getItem("notifDetectPref")) &&
+		JSON.parse(localStorage.getItem("notifPref"))
+	) {
 		chrome.notifications.create("add", {
 			// id = only one notification of this type appears at a time
 			type: "basic",
@@ -179,191 +213,108 @@ const deleteURL = (message) => {
 		);
 	}
 
-	chrome.storage.local.set({ urlStorage, urlStorageRestore, badgeText }, () => {
-		chrome.runtime.sendMessage({ urlStorage: true });
-		if (message.previous === false)
-			chrome.browserAction.setBadgeText({
-				text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
-			});
-	});
+	localStorage.setItem("urlStorage", JSON.stringify(urlStorage));
+	localStorage.setItem("urlStorageRestore", JSON.stringify(urlStorageRestore));
+	localStorage.setItem("badgeText", JSON.stringify(badgeText));
+	chrome.runtime.sendMessage({ urlStorage: true });
+	if (message.previous === false)
+		chrome.browserAction.setBadgeText({
+			text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
+		});
 };
 
 // clear everything and/or set up
 chrome.browserAction.setBadgeText({ text: "" });
 
-chrome.storage.local.get((options) => {
-	if (
-		(options.version &&
-			(options.version.split(".")[0] < manifestVersion.split(".")[0] ||
-				(options.version.split(".")[0] === manifestVersion.split(".")[0] &&
-					options.version.split(".")[1] < manifestVersion.split(".")[1]))) ||
-		!options.version
-	) {
-		// only when necessary
-		// chrome.storage.local.clear();
+// convert options object to separate entries in localstorage - temp
+if (localStorage.getItem("options")) {
+	const oldOptions = JSON.parse(localStorage.getItem("options"));
+	for (const option in oldOptions) {
+		localStorage.setItem(option, JSON.stringify(oldOptions[option]));
 	}
+	localStorage.removeItem("options");
+}
 
-	chrome.storage.local.set(
-		{
-			// first init also happens here
-			disablePref:
-				options.disablePref !== undefined
-					? options.disablePref === true
-					: false,
-			copyMethod: options.copyMethod || "url",
-			headersPref:
-				options.headersPref !== undefined ? options.headersPref === true : true,
-			titlePref:
-				options.titlePref !== undefined ? options.titlePref === true : true,
-			filenamePref:
-				options.filenamePref !== undefined
-					? options.filenamePref === true
-					: false,
-			timestampPref:
-				options.timestampPref !== undefined
-					? options.timestampPref === true
-					: false,
-			subtitlePref:
-				options.subtitlePref !== undefined
-					? options.subtitlePref === true
-					: false,
-			filePref:
-				options.filePref !== undefined ? options.filePref === true : true,
-			fileExtension: options.fileExtension || "ts",
-			streamlinkOutput: options.streamlinkOutput || "file",
-			downloaderPref:
-				options.downloaderPref !== undefined
-					? options.downloaderPref === true
-					: false,
-			downloaderCommand: options.downloaderCommand || "",
-			proxyPref:
-				options.proxyPref !== undefined ? options.proxyPref === true : false,
-			proxyCommand: options.proxyCommand || "",
-			customCommandPref:
-				options.customCommandPref !== undefined
-					? options.customCommandPref === true
-					: false,
-			customCommand: options.customCommand || "",
-			userCommand: options.userCommand || "",
-			blacklistPref:
-				options.blacklistPref !== undefined
-					? options.blacklistPref === true
-					: false,
-			blacklistEntries: options.blacklistEntries || "",
-			cleanupPref:
-				options.cleanupPref !== undefined
-					? options.cleanupPref === true
-					: false,
-			notifDetectPref:
-				options.notifDetectPref !== undefined
-					? options.notifDetectPref === true
-					: true,
-			notifPref:
-				options.notifPref !== undefined ? options.notifPref === true : false,
-			urlStorageRestore: options.urlStorageRestore || [],
-			version: manifestVersion
-		},
-		() => {
-			if (options.disablePref !== true) {
-				chrome.webRequest.onBeforeSendHeaders.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["requestHeaders"]
-				);
-				chrome.webRequest.onHeadersReceived.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["responseHeaders"]
-				);
-			}
+// cleanup for major updates
+/*
+const manifestVersion = chrome.runtime.getManifest().version;
+const addonVersion = localStorage.getItem("version");
+if (
+	(addonVersion &&
+		(addonVersion.split(".")[0] < manifestVersion.split(".")[0] ||
+			(addonVersion.split(".")[0] === manifestVersion.split(".")[0] &&
+				addonVersion.split(".")[1] < manifestVersion.split(".")[1]))) ||
+	!addonVersion
+) {
+	// only when necessary
+	// localStorage.clear();
+}
+*/
 
-			notifDetectPref =
-				options.notifDetectPref !== undefined
-					? options.notifDetectPref === true
-					: true;
+// first init happens here
+for (const option in defaults) {
+	if (localStorage.getItem(option) === null)
+		localStorage.setItem(option, JSON.stringify(defaults[option]));
+}
 
-			notifPref =
-				options.notifPref !== undefined ? options.notifPref === true : false;
+updateVars();
+urlStorage = JSON.parse(localStorage.getItem("urlStorage"));
+urlStorageRestore = JSON.parse(localStorage.getItem("urlStorageRestore"));
 
-			subtitlePref =
-				options.subtitlePref !== undefined
-					? options.subtitlePref === true
-					: false;
-
-			filePref =
-				options.filePref !== undefined ? options.filePref === true : true;
-
-			blacklistPref =
-				options.blacklistPref !== undefined
-					? options.blacklistPref === true
-					: false;
-
-			if (options.blacklistEntries?.length)
-				blacklistEntries = options.blacklistEntries;
-
-			cleanupPref =
-				options.cleanupPref !== undefined
-					? options.cleanupPref === true
-					: false;
-
-			if (options.urlStorageRestore?.length)
-				urlStorageRestore = options.urlStorageRestore;
-
-			if (options.urlStorage?.length)
-				urlStorageRestore = [...urlStorageRestore, ...options.urlStorage];
-
-			// restore urls on startup
-			if (urlStorageRestore.length) {
-				if (cleanupPref)
-					urlStorageRestore = urlStorageRestore.filter(
-						(url) => new Date().getTime() - url.timeStamp < 604800000
-					);
-
-				chrome.storage.local.set({
-					urlStorageRestore,
-					urlStorage: []
-				});
-			}
-		}
+if (disablePref === false) {
+	chrome.webRequest.onBeforeSendHeaders.addListener(
+		urlFilter,
+		{ urls: ["<all_urls>"] },
+		["requestHeaders"]
 	);
-});
+	chrome.webRequest.onHeadersReceived.addListener(
+		urlFilter,
+		{ urls: ["<all_urls>"] },
+		["responseHeaders"]
+	);
+}
+
+// restore urls on startup
+if (urlStorage.length > 0)
+	urlStorageRestore = [...urlStorageRestore, ...urlStorage];
+
+if (urlStorageRestore.length > 0) {
+	if (cleanupPref)
+		urlStorageRestore = urlStorageRestore.filter(
+			(url) => new Date().getTime() - url.timeStamp < 604800000
+		);
+
+	localStorage.setItem("urlStorageRestore", JSON.stringify(urlStorageRestore));
+	localStorage.setItem("urlStorage", JSON.stringify([]));
+}
 
 chrome.runtime.onMessage.addListener((message) => {
 	if (message.delete) deleteURL(message);
 	else if (message.options) {
-		chrome.storage.local.get((options) => {
-			if (
-				options.disablePref &&
-				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-			) {
-				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
-				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
-			} else if (
-				!options.disablePref &&
-				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-			) {
-				chrome.webRequest.onBeforeSendHeaders.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["requestHeaders"]
-				);
-				chrome.webRequest.onHeadersReceived.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["responseHeaders"]
-				);
-			}
-
-			notifDetectPref = options.notifDetectPref;
-			notifPref = options.notifPref;
-			subtitlePref = options.subtitlePref;
-			filePref = options.filePref;
-			blacklistPref = options.blacklistPref;
-			blacklistEntries = options.blacklistEntries;
-			cleanupPref = options.cleanupPref;
-		});
+		updateVars();
+		if (
+			disablePref &&
+			chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+			chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+		) {
+			chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
+			chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
+		} else if (
+			!disablePref &&
+			!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+			!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+		) {
+			chrome.webRequest.onBeforeSendHeaders.addListener(
+				urlFilter,
+				{ urls: ["<all_urls>"] },
+				["requestHeaders"]
+			);
+			chrome.webRequest.onHeadersReceived.addListener(
+				urlFilter,
+				{ urls: ["<all_urls>"] },
+				["responseHeaders"]
+			);
+		}
 	}
 });
 

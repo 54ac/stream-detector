@@ -9,7 +9,6 @@
 		"tabs",
 		"clipboardWrite",
 		"notifications",
-		"storage",
 		"webRequest"
 	],
 	"background": {
