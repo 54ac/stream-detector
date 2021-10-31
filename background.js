@@ -181,8 +181,8 @@ const addURL = (requestDetails) => {
 	});
 
 	if (
-		JSON.parse(localStorage.getItem("notifDetectPref")) &&
-		JSON.parse(localStorage.getItem("notifPref"))
+		!JSON.parse(localStorage.getItem("notifDetectPref")) &&
+		!JSON.parse(localStorage.getItem("notifPref"))
 	) {
 		chrome.notifications.create("add", {
 			// id = only one notification of this type appears at a time
