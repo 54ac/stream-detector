@@ -46,7 +46,7 @@ const copyURL = (info) => {
 		}
 
 		// don't use user-defined command if empty
-		if (fileMethod === "user" && localStorage.getItem("userCommand")) {
+		if (fileMethod === "user" && !localStorage.getItem("userCommand")) {
 			fileMethod = "url";
 			methodIncomp = true;
 		}
