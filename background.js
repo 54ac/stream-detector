@@ -258,6 +258,14 @@ for (const option in defaults) {
 }
 
 updateVars();
+
+// newline shouldn't really be an issue but just in case
+chrome.runtime.getPlatformInfo((info) => {
+	if (info.os === "win")
+		localStorage.setItem("newline", JSON.stringify("\r\n"));
+	else localStorage.setItem("newline", JSON.stringify("\n"));
+});
+
 urlStorage = JSON.parse(localStorage.getItem("urlStorage"));
 urlStorageRestore = JSON.parse(localStorage.getItem("urlStorageRestore"));
 

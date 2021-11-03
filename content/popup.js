@@ -4,7 +4,8 @@ const defaultOptions = {
 	tabThis: true,
 	titlePref: true,
 	filenamePref: false,
-	timestampPref: false
+	timestampPref: false,
+	newline: "\r\n"
 }; // used in restoreOptions
 
 const _ = chrome.i18n.getMessage; // i18n
@@ -14,6 +15,7 @@ const table = document.getElementById("popupUrlList");
 let titlePref;
 let filenamePref;
 let timestampPref;
+let newline;
 let urlList = [];
 
 const getTimestamp = (timestamp) => {
@@ -390,9 +392,10 @@ const copyURL = (info) => {
 		list.filenames.push(filename);
 		list.methodIncomp = methodIncomp;
 	}
+
 	try {
 		if (navigator.clipboard?.writeText)
-			navigator.clipboard.writeText(list.urls.join("\n"));
+			navigator.clipboard.writeText(list.urls.join(newline));
 		else {
 			// old copying method for compatibility purposes
 			const copyText = document.createElement("textarea");
@@ -400,7 +403,7 @@ const copyURL = (info) => {
 			copyText.style.left = "-5454px";
 			copyText.style.top = "-5454px";
 			document.body.appendChild(copyText);
-			copyText.value = list.urls.join("\n");
+			copyText.value = list.urls.join(newline);
 			copyText.select();
 			document.execCommand("copy");
 			document.body.removeChild(copyText);
@@ -413,7 +416,7 @@ const copyURL = (info) => {
 				message:
 					(list.methodIncomp
 						? _("notifIncompCopiedText")
-						: _("notifCopiedText")) + list.filenames.join("\n")
+						: _("notifCopiedText")) + list.filenames.join(newline)
 			});
 		}
 	} catch (e) {
@@ -644,6 +647,9 @@ const restoreOptions = () => {
 	timestampPref = localStorage.getItem("timestampPref")
 		? JSON.parse(localStorage.getItem("timestampPref"))
 		: defaultOptions.timestampPref;
+	newline = localStorage.getItem("newline")
+		? JSON.parse(localStorage.getItem("newline"))
+		: defaultOptions.newline;
 
 	for (const option of options) {
 		if (defaultOptions[option.id]) {
