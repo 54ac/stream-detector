@@ -166,5 +166,14 @@
 	},
 	"cleanupTip": {
 		"message": "Applied only on restart in case of accidents."
+	},
+	"resetButtonLabel": {
+		"message": "Reset all settings (in case of emergency)"
+	},
+	"resetButton": {
+		"message": "Reset settings"
+	},
+	"resetButtonConfirm": {
+		"message": "Are you sure you wish to reset all settings?"
 	}
 }

@@ -86,6 +86,13 @@ let blacklistEntries;
 let cleanupPref;
 let disablePref;
 
+const init = () => {
+	for (const option in defaults) {
+		if (localStorage.getItem(option) === null)
+			localStorage.setItem(option, JSON.stringify(defaults[option]));
+	}
+};
+
 const updateVars = () => {
 	subtitlePref = JSON.parse(localStorage.getItem("subtitlePref"));
 	filePref = JSON.parse(localStorage.getItem("filePref"));
@@ -251,12 +258,7 @@ if (
 }
 */
 
-// first init happens here
-for (const option in defaults) {
-	if (localStorage.getItem(option) === null)
-		localStorage.setItem(option, JSON.stringify(defaults[option]));
-}
-
+init();
 updateVars();
 
 // newline shouldn't really be an issue but just in case
@@ -323,6 +325,11 @@ chrome.runtime.onMessage.addListener((message) => {
 				["responseHeaders"]
 			);
 		}
+	} else if (message.reset) {
+		localStorage.clear();
+		init();
+		updateVars();
+		chrome.runtime.sendMessage({ options: true });
 	}
 });
 

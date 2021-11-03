@@ -166,5 +166,14 @@
 	},
 	"cleanupTip": {
 		"message": "Wykonywane jedynie przy restarcie w celu uniknięcia wypadków."
+	},
+	"resetButtonLabel": {
+		"message": "Reset wszystkich ustawień (w przypadku awarii)"
+	},
+	"resetButton": {
+		"message": "Reset ustawień"
+	},
+	"resetButtonConfirm": {
+		"message": "Czy na pewno chcesz zresetować ustawienia?"
 	}
 }

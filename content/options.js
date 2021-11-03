@@ -165,8 +165,13 @@ const restoreOptions = () => {
 document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
-		option.onchange = (e) => saveOption(e);
+		if (option.type !== "button") option.onchange = (e) => saveOption(e);
 	}
+
+	// reset button
+	document.getElementById("resetButton").onclick = () =>
+		window.confirm(_("resetButtonConfirm")) &&
+		chrome.runtime.sendMessage({ reset: true });
 
 	// i18n
 	const labels = document.getElementsByTagName("label");
@@ -182,6 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	for (const span of spans) {
 		// mouseover tooltip
 		span.parentElement.title = _(span.id);
+	}
+	const buttons = document.getElementsByTagName("button");
+	for (const button of buttons) {
+		button.textContent = _(button.id);
 	}
 
 	restoreOptions();
