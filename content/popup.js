@@ -182,7 +182,7 @@ const copyURL = (info) => {
 				);
 				headerReferer = headerReferer
 					? headerReferer.value
-					: e.originUrl || e.documentUrl || e.tabData?.url;
+					: e.originUrl || e.documentUrl || e.initiator || e.tabData?.url;
 
 				if (headerUserAgent) {
 					switch (fileMethod) {
@@ -297,11 +297,11 @@ const copyURL = (info) => {
 
 				if (
 					fileMethod === "user" &&
-					(e.documentUrl || e.originUrl || e.tabData?.url)
+					(e.documentUrl || e.originUrl || e.initiator || e.tabData?.url)
 				)
 					code = code.replace(
 						new RegExp("%origin%", "g"),
-						e.documentUrl || e.originUrl || e.tabData?.url
+						e.documentUrl || e.originUrl || e.initiator || e.tabData?.url
 					);
 				else if (fileMethod === "user")
 					code = code.replace(new RegExp("%origin%", "g"), "");
@@ -506,6 +506,7 @@ const createList = () => {
 			sourceCell.title =
 				requestDetails.documentUrl ||
 				requestDetails.originUrl ||
+				requestDetails.initiator ||
 				requestDetails.tabData.url;
 
 			const timestampCell = document.createElement("td");

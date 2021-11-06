@@ -57,7 +57,7 @@ const defaults = {
 	filenamePref: false,
 	timestampPref: false,
 	subtitlePref: false,
-	filePref: false,
+	filePref: true,
 	fileExtension: "ts",
 	streamlinkOutput: "file",
 	downloaderPref: false,

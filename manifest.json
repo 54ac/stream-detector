@@ -6,9 +6,9 @@
 	"version": "2.8.7",
 	"permissions": [
 		"<all_urls>",
-		"tabs",
 		"clipboardWrite",
 		"notifications",
+		"tabs",
 		"webRequest"
 	],
 	"background": {
