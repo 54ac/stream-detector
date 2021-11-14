@@ -40,6 +40,7 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 
 ### Additional notes
 
+- Currently broken in private browsing mode in Firefox. Version 2.8.3 works fine. Will be fixed eventually.
 - The Chrome version of this addon is not maintained or supported in any way. It's only included on the off chance that it works. Don't expect it to.
 - Websites such as YouTube, Vimeo, Facebook, etc. are very likely to use proprietary technologies which are not supported by this addon. When it comes to such "mainstream" services, it's better to use the tools (e.g. youtube-dl) directly.
 - This should go without saying, but I am not responsible for and do not condone this addon being used for any nefarious purposes. Copyrighted content is probably DRM-ed anyway.
