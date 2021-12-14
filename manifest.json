@@ -1,9 +1,9 @@
 {
+	"name": "The Stream Detector",
 	"description": "__MSG_extText__",
 	"manifest_version": 2,
-	"name": "The Stream Detector",
 	"default_locale": "en",
-	"version": "2.8.7",
+	"version": "2.9.0",
 	"permissions": [
 		"<all_urls>",
 		"clipboardWrite",
@@ -12,7 +12,7 @@
 		"webRequest"
 	],
 	"background": {
-		"scripts": ["background.js"]
+		"page": "content/background.html"
 	},
 	"icons": {
 		"16": "img/icon-dark-16.png",
