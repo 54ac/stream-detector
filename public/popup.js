@@ -1,13 +1,5 @@
 "use strict";
 
-const defaultOptions = {
-	tabThis: true,
-	titlePref: true,
-	filenamePref: false,
-	timestampPref: false,
-	newline: "\r\n"
-}; // used in restoreOptions
-
 const _ = chrome.i18n.getMessage; // i18n
 
 const table = document.getElementById("popupUrlList");
@@ -639,45 +631,24 @@ const restoreOptions = () => {
 	const options = document.getElementsByClassName("option");
 	// should probably consolidate this with the other one at some point
 
-	titlePref = localStorage.getItem("titlePref")
-		? JSON.parse(localStorage.getItem("titlePref"))
-		: defaultOptions.titlePref;
-	filenamePref = localStorage.getItem("filenamePref")
-		? JSON.parse(localStorage.getItem("filenamePref"))
-		: defaultOptions.filenamePref;
-	timestampPref = localStorage.getItem("timestampPref")
-		? JSON.parse(localStorage.getItem("timestampPref"))
-		: defaultOptions.timestampPref;
-	newline = localStorage.getItem("newline")
-		? JSON.parse(localStorage.getItem("newline"))
-		: defaultOptions.newline;
+	titlePref = JSON.parse(localStorage.getItem("titlePref"));
+	filenamePref = JSON.parse(localStorage.getItem("filenamePref"));
+	timestampPref = JSON.parse(localStorage.getItem("timestampPref"));
+	newline = JSON.parse(localStorage.getItem("newline"));
 
 	for (const option of options) {
-		if (defaultOptions[option.id]) {
-			if (localStorage.getItem(option.id) !== null) {
-				document.getElementById(option.id).checked = JSON.parse(
-					localStorage.getItem(option.id)
-				);
-			} else {
-				document.getElementById(option.id).checked = defaultOptions[option.id];
-				localStorage.setItem(
-					option.id,
-					JSON.stringify(defaultOptions[option.id])
-				);
-			}
-		} else if (localStorage.getItem(option.id) !== null) {
+		if (localStorage.getItem(option.id) !== null) {
 			if (
 				document.getElementById(option.id).type === "checkbox" ||
 				document.getElementById(option.id).type === "radio"
-			) {
+			)
 				document.getElementById(option.id).checked = JSON.parse(
 					localStorage.getItem(option.id)
 				);
-			} else {
+			else
 				document.getElementById(option.id).value = JSON.parse(
 					localStorage.getItem(option.id)
 				);
-			}
 		}
 	}
 	for (const option of options) {

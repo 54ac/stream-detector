@@ -12,7 +12,7 @@
 		"webRequest"
 	],
 	"background": {
-		"page": "content/background.html"
+		"page": "public/background.html"
 	},
 	"icons": {
 		"16": "img/icon-dark-16.png",
@@ -28,13 +28,13 @@
 		"browser_style": true,
 		"chrome_style": true,
 		"open_in_tab": false,
-		"page": "content/options.html"
+		"page": "public/options.html"
 	},
 	"browser_action": {
 		"browser_style": true,
 		"chrome_style": true,
 		"default_title": "The Stream Detector",
-		"default_popup": "content/popup.html",
+		"default_popup": "public/popup.html",
 		"default_icon": {
 			"16": "img/icon-dark-16.png",
 			"48": "img/icon-dark-48.png"
