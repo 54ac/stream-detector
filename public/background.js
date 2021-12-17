@@ -1,12 +1,8 @@
 "use strict";
 
+import defaults from "./components/defaults.js";
 import supported from "./components/supported.js";
-import {
-	init,
-	getStorage,
-	setStorage,
-	clearStorage
-} from "./components/storage.js";
+import { getStorage, setStorage, clearStorage } from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage;
 
@@ -21,6 +17,21 @@ let blacklistPref;
 let blacklistEntries;
 let cleanupPref;
 let disablePref;
+
+const init = async () => {
+	for (const option in defaults) {
+		if ((await getStorage(option)) === null)
+			await setStorage({ [option]: defaults[option] });
+	}
+
+	setStorage({ version: chrome.runtime.getManifest().version });
+
+	// newline shouldn't really be an issue but just in case
+	chrome.runtime.getPlatformInfo(async (info) => {
+		if (info.os === "win") setStorage({ newline: "\r\n" });
+		else setStorage({ newline: "\n" });
+	});
+};
 
 const updateVars = async () => {
 	subtitlePref = await getStorage("subtitlePref");
@@ -110,7 +121,6 @@ const addURL = async (requestDetails) => {
 		});
 
 		await setStorage({ urlStorage });
-		await setStorage({ badgeText });
 
 		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
 		queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
@@ -151,7 +161,6 @@ const deleteURL = async (message) => {
 
 	await setStorage({ urlStorage });
 	await setStorage({ urlStorageRestore });
-	await setStorage({ badgeText });
 	chrome.runtime.sendMessage({ urlStorage: true });
 	if (message.previous === false)
 		chrome.browserAction.setBadgeText({
@@ -165,7 +174,7 @@ const deleteURL = async (message) => {
 
 	// cleanup for major updates
 	const manifestVersion = chrome.runtime.getManifest().version;
-	const addonVersion = localStorage.getItem("version");
+	const addonVersion = await getStorage("version");
 	if (
 		(addonVersion &&
 			(addonVersion.split(".")[0] < manifestVersion.split(".")[0] ||
@@ -174,17 +183,11 @@ const deleteURL = async (message) => {
 		!addonVersion
 	) {
 		// only when necessary
-		//	await clearStorage();
+		await clearStorage();
 	}
 
 	await init();
 	await updateVars();
-
-	// newline shouldn't really be an issue but just in case
-	chrome.runtime.getPlatformInfo(async (info) => {
-		if (info.os === "win") await setStorage({ newline: "\r\n" });
-		else await setStorage({ newline: "\n" });
-	});
 
 	if (disablePref === false) {
 		chrome.webRequest.onBeforeSendHeaders.addListener(

@@ -19,8 +19,7 @@ const defaults = {
 	notifPref: false,
 	urlStorageRestore: [],
 	urlStorage: [],
-	tabThis: true,
-	newline: "\r\n"
+	tabThis: true
 };
 
 export default defaults;

@@ -1,5 +1,3 @@
-import defaults from "./defaults.js";
-
 export const getStorage = async (key) =>
 	new Promise((resolve) =>
 		chrome.storage.local.get(key, (value) => {
@@ -16,13 +14,6 @@ const removeStorage = async (key) =>
 
 export const clearStorage = async () =>
 	new Promise((resolve) => chrome.storage.local.clear(() => resolve()));
-
-export const init = async () => {
-	for (const option in defaults) {
-		if ((await getStorage(option)) === null)
-			await setStorage({ [option]: defaults[option] });
-	}
-};
 
 export const saveOptionStorage = async (e, options) => {
 	if (
