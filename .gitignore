@@ -1,12 +1,12 @@
 .firefox.exe.lnk
 .firefox-beta.exe.lnk
-.firefox-esr.exe.lnk
 /web-ext-artifacts
 /dist
 package.json
 package-lock.json
 /node_modules
 dist.pem
+dist.crx
 .babelrc.json
 postcss.config.js
 icon.png

@@ -1,7 +1,12 @@
 "use strict";
 
 import supported from "./components/supported.js";
-import defaults from "./components/defaults.js";
+import {
+	init,
+	getStorage,
+	setStorage,
+	clearStorage
+} from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage;
 
@@ -17,20 +22,13 @@ let blacklistEntries;
 let cleanupPref;
 let disablePref;
 
-const init = () => {
-	for (const option in defaults) {
-		if (localStorage.getItem(option) === null)
-			localStorage.setItem(option, JSON.stringify(defaults[option]));
-	}
-};
-
-const updateVars = () => {
-	subtitlePref = JSON.parse(localStorage.getItem("subtitlePref"));
-	filePref = JSON.parse(localStorage.getItem("filePref"));
-	blacklistPref = JSON.parse(localStorage.getItem("blacklistPref"));
-	blacklistEntries = JSON.parse(localStorage.getItem("blacklistEntries"));
-	cleanupPref = JSON.parse(localStorage.getItem("cleanupPref"));
-	disablePref = JSON.parse(localStorage.getItem("disablePref"));
+const updateVars = async () => {
+	subtitlePref = await getStorage("subtitlePref");
+	filePref = await getStorage("filePref");
+	blacklistPref = await getStorage("blacklistPref");
+	blacklistEntries = await getStorage("blacklistEntries");
+	cleanupPref = await getStorage("cleanupPref");
+	disablePref = await getStorage("disablePref");
 };
 
 const urlFilter = (requestDetails) => {
@@ -74,7 +72,7 @@ const urlFilter = (requestDetails) => {
 	}
 };
 
-const addURL = (requestDetails) => {
+const addURL = async (requestDetails) => {
 	const url = new URL(requestDetails.url);
 
 	// MSS workaround
@@ -94,7 +92,7 @@ const addURL = (requestDetails) => {
 	const headers =
 		requestDetails.requestHeaders || requestDetails.responseHeaders;
 
-	chrome.tabs.get(requestDetails.tabId, (tabData) => {
+	chrome.tabs.get(requestDetails.tabId, async (tabData) => {
 		const newRequestDetails = {
 			...requestDetails,
 			headers,
@@ -111,16 +109,16 @@ const addURL = (requestDetails) => {
 			text: badgeText.toString()
 		});
 
-		localStorage.setItem("urlStorage", JSON.stringify(urlStorage));
-		localStorage.setItem("badgeText", JSON.stringify(badgeText));
+		await setStorage({ urlStorage });
+		await setStorage({ badgeText });
 
 		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
 		queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
 	});
 
 	if (
-		!JSON.parse(localStorage.getItem("notifDetectPref")) &&
-		!JSON.parse(localStorage.getItem("notifPref"))
+		(await getStorage("notifDetectPref")) === false &&
+		(await getStorage("notifPref")) === false
 	) {
 		chrome.notifications.create("add", {
 			// id = only one notification of this type appears at a time
@@ -132,7 +130,7 @@ const addURL = (requestDetails) => {
 	}
 };
 
-const deleteURL = (message) => {
+const deleteURL = async (message) => {
 	// url deletion
 	if (message.previous === false) {
 		urlStorage = urlStorage.filter(
@@ -151,9 +149,9 @@ const deleteURL = (message) => {
 		);
 	}
 
-	localStorage.setItem("urlStorage", JSON.stringify(urlStorage));
-	localStorage.setItem("urlStorageRestore", JSON.stringify(urlStorageRestore));
-	localStorage.setItem("badgeText", JSON.stringify(badgeText));
+	await setStorage({ urlStorage });
+	await setStorage({ urlStorageRestore });
+	await setStorage({ badgeText });
 	chrome.runtime.sendMessage({ urlStorage: true });
 	if (message.previous === false)
 		chrome.browserAction.setBadgeText({
@@ -161,109 +159,99 @@ const deleteURL = (message) => {
 		});
 };
 
-// clear everything and/or set up
-chrome.browserAction.setBadgeText({ text: "" });
+(async () => {
+	// clear everything and/or set up
+	chrome.browserAction.setBadgeText({ text: "" });
 
-// convert options object to separate entries in localstorage - temp
-if (localStorage.getItem("options")) {
-	const oldOptions = JSON.parse(localStorage.getItem("options"));
-	for (const option in oldOptions) {
-		localStorage.setItem(option, JSON.stringify(oldOptions[option]));
+	// cleanup for major updates
+	const manifestVersion = chrome.runtime.getManifest().version;
+	const addonVersion = localStorage.getItem("version");
+	if (
+		(addonVersion &&
+			(addonVersion.split(".")[0] < manifestVersion.split(".")[0] ||
+				(addonVersion.split(".")[0] === manifestVersion.split(".")[0] &&
+					addonVersion.split(".")[1] < manifestVersion.split(".")[1]))) ||
+		!addonVersion
+	) {
+		// only when necessary
+		//	await clearStorage();
 	}
-	localStorage.removeItem("options");
-}
 
-// cleanup for major updates
-/*
-const manifestVersion = chrome.runtime.getManifest().version;
-const addonVersion = localStorage.getItem("version");
-if (
-	(addonVersion &&
-		(addonVersion.split(".")[0] < manifestVersion.split(".")[0] ||
-			(addonVersion.split(".")[0] === manifestVersion.split(".")[0] &&
-				addonVersion.split(".")[1] < manifestVersion.split(".")[1]))) ||
-	!addonVersion
-) {
-	// only when necessary
-	// localStorage.clear();
-}
-*/
+	await init();
+	await updateVars();
 
-init();
-updateVars();
+	// newline shouldn't really be an issue but just in case
+	chrome.runtime.getPlatformInfo(async (info) => {
+		if (info.os === "win") await setStorage({ newline: "\r\n" });
+		else await setStorage({ newline: "\n" });
+	});
 
-// newline shouldn't really be an issue but just in case
-chrome.runtime.getPlatformInfo((info) => {
-	if (info.os === "win")
-		localStorage.setItem("newline", JSON.stringify("\r\n"));
-	else localStorage.setItem("newline", JSON.stringify("\n"));
-});
-
-urlStorage = JSON.parse(localStorage.getItem("urlStorage"));
-urlStorageRestore = JSON.parse(localStorage.getItem("urlStorageRestore"));
-
-if (disablePref === false) {
-	chrome.webRequest.onBeforeSendHeaders.addListener(
-		urlFilter,
-		{ urls: ["<all_urls>"] },
-		["requestHeaders"]
-	);
-	chrome.webRequest.onHeadersReceived.addListener(
-		urlFilter,
-		{ urls: ["<all_urls>"] },
-		["responseHeaders"]
-	);
-}
-
-// restore urls on startup
-if (urlStorage.length > 0)
-	urlStorageRestore = [...urlStorageRestore, ...urlStorage];
-
-if (urlStorageRestore.length > 0) {
-	if (cleanupPref)
-		urlStorageRestore = urlStorageRestore.filter(
-			(url) => new Date().getTime() - url.timeStamp < 604800000
+	if (disablePref === false) {
+		chrome.webRequest.onBeforeSendHeaders.addListener(
+			urlFilter,
+			{ urls: ["<all_urls>"] },
+			["requestHeaders"]
 		);
-
-	localStorage.setItem("urlStorageRestore", JSON.stringify(urlStorageRestore));
-	localStorage.setItem("urlStorage", JSON.stringify([]));
-}
-
-chrome.runtime.onMessage.addListener((message) => {
-	if (message.delete) deleteURL(message);
-	else if (message.options) {
-		updateVars();
-		if (
-			disablePref &&
-			chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-			chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-		) {
-			chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
-			chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
-		} else if (
-			!disablePref &&
-			!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
-			!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-		) {
-			chrome.webRequest.onBeforeSendHeaders.addListener(
-				urlFilter,
-				{ urls: ["<all_urls>"] },
-				["requestHeaders"]
-			);
-			chrome.webRequest.onHeadersReceived.addListener(
-				urlFilter,
-				{ urls: ["<all_urls>"] },
-				["responseHeaders"]
-			);
-		}
-	} else if (message.reset) {
-		localStorage.clear();
-		init();
-		updateVars();
-		chrome.runtime.sendMessage({ options: true });
+		chrome.webRequest.onHeadersReceived.addListener(
+			urlFilter,
+			{ urls: ["<all_urls>"] },
+			["responseHeaders"]
+		);
 	}
-});
 
-chrome.commands.onCommand.addListener((cmd) => {
-	if (cmd === "open-popup") chrome.browserAction.openPopup();
-});
+	urlStorage = await getStorage("urlStorage");
+	urlStorageRestore = await getStorage("urlStorageRestore");
+
+	// restore urls on startup
+	if (urlStorage && urlStorage.length > 0)
+		urlStorageRestore = [...urlStorageRestore, ...urlStorage];
+
+	if (urlStorageRestore && urlStorageRestore.length > 0) {
+		if (cleanupPref)
+			urlStorageRestore = urlStorageRestore.filter(
+				(url) => new Date().getTime() - url.timeStamp < 604800000
+			);
+
+		await setStorage({ urlStorageRestore });
+		await setStorage({ urlStorage: [] });
+	}
+
+	chrome.runtime.onMessage.addListener(async (message) => {
+		if (message.delete) deleteURL(message);
+		else if (message.options) {
+			updateVars();
+			if (
+				disablePref &&
+				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+			) {
+				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
+				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
+			} else if (
+				!disablePref &&
+				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
+				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
+			) {
+				chrome.webRequest.onBeforeSendHeaders.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["requestHeaders"]
+				);
+				chrome.webRequest.onHeadersReceived.addListener(
+					urlFilter,
+					{ urls: ["<all_urls>"] },
+					["responseHeaders"]
+				);
+			}
+		} else if (message.reset) {
+			await clearStorage();
+			init();
+			updateVars();
+			chrome.runtime.sendMessage({ options: true });
+		}
+	});
+
+	chrome.commands.onCommand.addListener((cmd) => {
+		if (cmd === "open-popup") chrome.browserAction.openPopup();
+	});
+})();

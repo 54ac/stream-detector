@@ -8,6 +8,7 @@
 		"<all_urls>",
 		"clipboardWrite",
 		"notifications",
+		"storage",
 		"tabs",
 		"webRequest"
 	],

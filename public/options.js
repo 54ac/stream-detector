@@ -1,5 +1,7 @@
 "use strict";
 
+import { saveOptionStorage, getStorage } from "./components/storage.js";
+
 const _ = chrome.i18n.getMessage; // i18n
 
 const checkHeadersPref = () => {
@@ -93,68 +95,32 @@ const checkHeadersPref = () => {
 };
 
 const saveOption = (e) => {
-	if (
-		e.target.id === "copyMethod" &&
-		e.target.value !== "url" &&
-		e.target.value !== "tableForm" &&
-		e.target.value !== "kodiUrl"
-	) {
-		const prefName = "customCommand" + e.target.value;
-
-		if (localStorage.getItem(prefName))
-			document.getElementById("customCommand").value =
-				localStorage.getItem(prefName) || "";
-	}
-
-	if (e.target.id === "customCommand") {
-		localStorage.setItem(
-			e.target.id + document.getElementById("copyMethod").value,
-			JSON.stringify(e.target.value?.trim())
-		);
-	} else if (e.target.id === "blacklistEntries") {
-		localStorage.setItem(
-			e.target.id,
-			JSON.stringify(e.target.value?.split("\n").filter((ee) => ee))
-		);
-	} else if (e.target.type === "checkbox") {
-		localStorage.setItem(e.target.id, JSON.stringify(e.target.checked));
-	} else if (e.target.type === "text" && e.target.value?.trim().length === 0) {
-		localStorage.removeItem(e.target.id);
-	} else {
-		localStorage.setItem(e.target.id, JSON.stringify(e.target.value?.trim()));
-	}
-
-	// update other scripts as well
-	chrome.runtime.sendMessage({ options: true });
-
+	saveOptionStorage(e);
 	checkHeadersPref();
 };
 
-const restoreOptions = () => {
+const restoreOptions = async () => {
 	const options = document.getElementsByClassName("option");
-
 	for (const option of options) {
 		if (option.id === "customCommand") {
 			const prefName = option.id + document.getElementById("copyMethod").value;
 			document.getElementById(option.id).value =
-				localStorage.getItem(prefName) || "";
+				(await getStorage(prefName)) || "";
 		} else if (option.id === "blacklistEntries") {
-			if (localStorage.getItem(option.id)) {
-				const blacklistValue = JSON.parse(localStorage.getItem(option.id));
+			if (await getStorage(option.id)) {
+				const blacklistValue = await getStorage(option.id);
 				document.getElementById(option.id).value = blacklistValue.join("\n");
 			}
-		} else if (localStorage.getItem(option.id) !== null) {
+		} else if ((await getStorage(option.id)) !== null) {
 			if (
 				document.getElementById(option.id).type === "checkbox" ||
 				document.getElementById(option.id).type === "radio"
 			) {
-				document.getElementById(option.id).checked = JSON.parse(
-					localStorage.getItem(option.id)
+				document.getElementById(option.id).checked = await getStorage(
+					option.id
 				);
 			} else {
-				document.getElementById(option.id).value = JSON.parse(
-					localStorage.getItem(option.id)
-				);
+				document.getElementById(option.id).value = await getStorage(option.id);
 			}
 		}
 	}

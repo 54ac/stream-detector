@@ -1,5 +1,7 @@
 "use strict";
 
+import { saveOptionStorage, getStorage } from "./components/storage.js";
+
 const _ = chrome.i18n.getMessage; // i18n
 
 const table = document.getElementById("popupUrlList");
@@ -15,7 +17,7 @@ const getTimestamp = (timestamp) => {
 	return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };
 
-const copyURL = (info) => {
+const copyURL = async (info) => {
 	const list = { urls: [], filenames: [], methodIncomp: false };
 	for (const e of info) {
 		let code;
@@ -24,7 +26,7 @@ const copyURL = (info) => {
 
 		const streamURL = e.url;
 		const { filename, type, category } = e;
-		fileMethod = JSON.parse(localStorage.getItem("copyMethod")) || "url"; // default to url - just in case
+		fileMethod = (await getStorage("copyMethod")) || "url"; // default to url - just in case
 
 		if (
 			(type === "HDS" && fileMethod === "ffmpeg") ||
@@ -40,7 +42,7 @@ const copyURL = (info) => {
 		}
 
 		// don't use user-defined command if empty
-		if (fileMethod === "user" && !localStorage.getItem("userCommand")) {
+		if (fileMethod === "user" && (await getStorage("userCommand")) === null) {
 			fileMethod = "url";
 			methodIncomp = true;
 		}
@@ -69,22 +71,22 @@ const copyURL = (info) => {
 					code = "youtube-dl --no-part --restrict-filenames";
 					// use external downloader
 					if (
-						JSON.parse(localStorage.getItem("downloaderPref")) &&
-						localStorage.getItem("downloaderCommand")
+						(await getStorage("downloaderPref")) &&
+						(await getStorage("downloaderCommand"))
 					)
-						code += ` --external-downloader "${JSON.parse(
-							localStorage.getItem("downloaderCommand")
+						code += ` --external-downloader "${await getStorage(
+							"downloaderCommand"
 						)}"`;
 					break;
 				// this could be implemented better - maybe someday
 				case "ytdlp":
 					code = "yt-dlp --no-part --restrict-filenames";
 					if (
-						JSON.parse(localStorage.getItem("downloaderPref")) &&
-						localStorage.getItem("downloaderCommand")
+						(await getStorage("downloaderPref")) &&
+						(await getStorage("downloaderCommand"))
 					)
-						code += ` --external-downloader "${JSON.parse(
-							localStorage.getItem("downloaderCommand")
+						code += ` --external-downloader "${await getStorage(
+							"downloaderCommand"
 						)}"`;
 					break;
 				case "hlsdl":
@@ -94,7 +96,7 @@ const copyURL = (info) => {
 					code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
 					break;
 				case "user":
-					code = JSON.parse(localStorage.getItem("userCommand"));
+					code = await getStorage("userCommand");
 					break;
 				default:
 					break;
@@ -103,50 +105,40 @@ const copyURL = (info) => {
 			// custom command line
 			const prefName = `customCommand${fileMethod}`;
 			if (
-				JSON.parse(localStorage.getItem("customCommandPref")) &&
-				localStorage.getItem(prefName)
+				(await getStorage("customCommandPref")) &&
+				(await getStorage(prefName))
 			) {
-				code += ` ${JSON.parse(localStorage.getItem(prefName))}`;
+				code += ` ${await getStorage(prefName)}`;
 			}
 
 			// http proxy
 			if (
-				JSON.parse(localStorage.getItem("proxyPref")) &&
-				localStorage.getItem("proxyCommand")
+				(await getStorage("proxyPref")) &&
+				(await getStorage("proxyCommand"))
 			) {
 				switch (fileMethod) {
 					case "ffmpeg":
-						code += ` -http_proxy "${JSON.parse(
-							localStorage.getItem("proxyCommand")
-						)}"`;
+						code += ` -http_proxy "${await getStorage("proxyCommand")}"`;
 						break;
 					case "streamlink":
-						code += ` --http-proxy "${JSON.parse(
-							localStorage.getItem("proxyCommand")
-						)}"`;
+						code += ` --http-proxy "${await getStorage("proxyCommand")}"`;
 						break;
 					case "youtubedl":
-						code += ` --proxy "${JSON.parse(
-							localStorage.getItem("proxyCommand")
-						)}"`;
+						code += ` --proxy "${await getStorage("proxyCommand")}"`;
 						break;
 					case "ytdlp":
-						code += ` --proxy "${JSON.parse(
-							localStorage.getItem("proxyCommand")
-						)}"`;
+						code += ` --proxy "${await getStorage("proxyCommand")}"`;
 						break;
 					case "hlsdl":
-						code += ` -p "${JSON.parse(localStorage.getItem("proxyCommand"))}"`;
+						code += ` -p "${await getStorage("proxyCommand")}"`;
 						break;
 					case "nm3u8dl":
-						code += ` --proxyAddress "${JSON.parse(
-							localStorage.getItem("proxyCommand")
-						)}"`;
+						code += ` --proxyAddress "${await getStorage("proxyCommand")}"`;
 						break;
 					case "user":
 						code = code.replace(
 							new RegExp("%proxy%", "g"),
-							JSON.parse(localStorage.getItem("proxyCommand"))
+							await getStorage("proxyCommand")
 						);
 						break;
 					default:
@@ -155,7 +147,7 @@ const copyURL = (info) => {
 			}
 
 			// additional headers
-			if (JSON.parse(localStorage.getItem("headersPref"))) {
+			if (await getStorage("headersPref")) {
 				let headerUserAgent = e.headers.find(
 					(header) => header.name.toLowerCase() === "user-agent"
 				);
@@ -321,8 +313,7 @@ const copyURL = (info) => {
 
 			// sanitize tab title and timestamp
 			outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
-			const outExtension =
-				JSON.parse(localStorage.getItem("fileExtension")) || "ts";
+			const outExtension = (await getStorage("fileExtension")) || "ts";
 			const outTimestamp = getTimestamp(e.timeStamp).replace(
 				/[/\\?%*:|"<>]/g,
 				"_"
@@ -336,7 +327,7 @@ const copyURL = (info) => {
 					code += `.${outExtension}"`;
 					break;
 				case "streamlink":
-					if (JSON.parse(localStorage.getItem("streamlinkOutput")) === "file") {
+					if ((await getStorage("streamlinkOutput")) === "file") {
 						code += ` -o "${outFilename}`;
 						if (timestampPref) code += ` ${outTimestamp}`;
 						code += `.${outExtension}"`;
@@ -400,7 +391,7 @@ const copyURL = (info) => {
 			document.execCommand("copy");
 			document.body.removeChild(copyText);
 		}
-		if (!JSON.parse(localStorage.getItem("notifPref"))) {
+		if ((await getStorage("notifPref")) === false) {
 			chrome.notifications.create("copy", {
 				type: "basic",
 				iconUrl: "img/icon-dark-96.png",
@@ -454,7 +445,7 @@ const clearList = () => {
 	});
 };
 
-const createList = () => {
+const createList = async () => {
 	const insertList = (urls) => {
 		document.getElementById("copyAll").disabled = false;
 		document.getElementById("clearList").disabled = false;
@@ -558,12 +549,8 @@ const createList = () => {
 	// clear list first just in case - quick and dirty
 	table.innerHTML = "";
 
-	const urlStorage = localStorage.getItem("urlStorage")
-		? JSON.parse(localStorage.getItem("urlStorage"))
-		: [];
-	const urlStorageRestore = localStorage.getItem("urlStorageRestore")
-		? JSON.parse(localStorage.getItem("urlStorageRestore"))
-		: [];
+	const urlStorage = await getStorage("urlStorage");
+	const urlStorageRestore = await getStorage("urlStorageRestore");
 
 	if (urlStorage.length > 0 || urlStorageRestore.length > 0) {
 		const urlStorageFilter = document
@@ -603,56 +590,34 @@ const createList = () => {
 };
 
 const saveOption = (e) => {
+	if (e.target.type === "radio") createList();
 	const options = document.getElementsByClassName("option");
-	if (e.target.type === "checkbox") {
-		localStorage.setItem(e.target.id, JSON.stringify(e.target.checked));
-		chrome.runtime.sendMessage({ options: true });
-	} else if (e.target.type === "radio") {
-		// update entire radio group
-		for (const option of options) {
-			if (option.name === e.target.name) {
-				localStorage.setItem(
-					option.id,
-					JSON.stringify(document.getElementById(option.id).checked)
-				);
-			}
-		}
-		createList();
-	} else {
-		localStorage.setItem(e.target.id, JSON.stringify(e.target.value));
-		chrome.runtime.sendMessage({ options: true });
-	}
+	saveOptionStorage(e, options);
 };
 
-const restoreOptions = () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	// change badge text background when clicked
 	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
 
+	titlePref = await getStorage("titlePref");
+	filenamePref = await getStorage("filenamePref");
+	timestampPref = await getStorage("timestampPref");
+	newline = await getStorage("newline");
+
 	const options = document.getElementsByClassName("option");
-	// should probably consolidate this with the other one at some point
-
-	titlePref = JSON.parse(localStorage.getItem("titlePref"));
-	filenamePref = JSON.parse(localStorage.getItem("filenamePref"));
-	timestampPref = JSON.parse(localStorage.getItem("timestampPref"));
-	newline = JSON.parse(localStorage.getItem("newline"));
-
 	for (const option of options) {
-		if (localStorage.getItem(option.id) !== null) {
+		option.onchange = (e) => saveOption(e);
+		if ((await getStorage(option.id)) !== null) {
 			if (
 				document.getElementById(option.id).type === "checkbox" ||
 				document.getElementById(option.id).type === "radio"
 			)
-				document.getElementById(option.id).checked = JSON.parse(
-					localStorage.getItem(option.id)
+				document.getElementById(option.id).checked = await getStorage(
+					option.id
 				);
 			else
-				document.getElementById(option.id).value = JSON.parse(
-					localStorage.getItem(option.id)
-				);
+				document.getElementById(option.id).value = await getStorage(option.id);
 		}
-	}
-	for (const option of options) {
-		option.onchange = (e) => saveOption(e);
 	}
 
 	// i18n
@@ -682,10 +647,6 @@ const restoreOptions = () => {
 	document.getElementById("filterInput").onkeyup = () => createList();
 
 	createList();
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-	restoreOptions();
 
 	chrome.runtime.onMessage.addListener((message) => {
 		if (message.urlStorage) createList();
