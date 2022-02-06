@@ -1,5 +1,6 @@
 "use strict";
 
+import "../css/options.css";
 import { saveOptionStorage, getStorage } from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage; // i18n

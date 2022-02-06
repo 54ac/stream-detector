@@ -3,7 +3,7 @@
 	"description": "__MSG_extText__",
 	"manifest_version": 2,
 	"default_locale": "en",
-	"version": "2.9.0",
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
 	"permissions": [
 		"<all_urls>",
 		"clipboardWrite",
@@ -13,7 +13,7 @@
 		"webRequest"
 	],
 	"background": {
-		"page": "public/background.html"
+		"page": "background.html"
 	},
 	"icons": {
 		"16": "img/icon-dark-16.png",
@@ -29,13 +29,13 @@
 		"browser_style": true,
 		"chrome_style": true,
 		"open_in_tab": false,
-		"page": "public/options.html"
+		"page": "options.html"
 	},
 	"browser_action": {
 		"browser_style": true,
 		"chrome_style": true,
 		"default_title": "The Stream Detector",
-		"default_popup": "public/popup.html",
+		"default_popup": "popup.html",
 		"default_icon": {
 			"16": "img/icon-dark-16.png",
 			"48": "img/icon-dark-48.png"

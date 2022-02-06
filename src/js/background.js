@@ -172,6 +172,8 @@ const deleteURL = async (message) => {
 	// clear everything and/or set up
 	chrome.browserAction.setBadgeText({ text: "" });
 
+	await init();
+
 	// cleanup for major updates
 	const manifestVersion = chrome.runtime.getManifest().version;
 	const addonVersion = await getStorage("version");
@@ -184,10 +186,10 @@ const deleteURL = async (message) => {
 	) {
 		// only when necessary
 		await clearStorage();
+		await init();
 	}
 
-	await init();
-	await updateVars();
+	updateVars();
 
 	if (disablePref === false) {
 		chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -224,14 +226,14 @@ const deleteURL = async (message) => {
 		else if (message.options) {
 			updateVars();
 			if (
-				disablePref &&
+				disablePref === true &&
 				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
 				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
 			} else if (
-				!disablePref &&
+				disablePref !== true &&
 				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
