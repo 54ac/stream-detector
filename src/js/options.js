@@ -11,6 +11,7 @@ const checkHeadersPref = () => {
 	document.getElementById("headersPref").disabled = false;
 	document.getElementById("titlePref").disabled = false;
 	document.getElementById("filenamePref").disabled = false;
+	document.getElementById("manifestPref").disabled = false;
 	document.getElementById("timestampPref").disabled = false;
 	document.getElementById("fileExtension").disabled = true;
 	document.getElementById("streamlinkOutput").disabled = true;
@@ -21,6 +22,10 @@ const checkHeadersPref = () => {
 	document.getElementById("customCommandPref").disabled = false;
 	document.getElementById("customCommand").disabled = true;
 	document.getElementById("userCommand").disabled = true;
+	document.getElementById("customExtPref").disabled = false;
+	document.getElementById("customExtEntries").disabled = true;
+	document.getElementById("customCtPref").disabled = false;
+	document.getElementById("customCtEntries").disabled = true;
 	document.getElementById("blacklistPref").disabled = false;
 	document.getElementById("blacklistEntries").disabled = true;
 	document.getElementById("cleanupPref").disabled = false;
@@ -30,6 +35,9 @@ const checkHeadersPref = () => {
 		"disablePref"
 	).checked;
 	document.getElementById("filePref").disabled = document.getElementById(
+		"disablePref"
+	).checked;
+	document.getElementById("manifestPref").disabled = document.getElementById(
 		"disablePref"
 	).checked;
 
@@ -49,6 +57,12 @@ const checkHeadersPref = () => {
 		"customCommandPref"
 	).checked;
 
+	document.getElementById(
+		"customExtEntries"
+	).disabled = !document.getElementById("customExtPref").checked;
+	document.getElementById(
+		"customCtEntries"
+	).disabled = !document.getElementById("customCtPref").checked;
 	document.getElementById(
 		"blacklistEntries"
 	).disabled = !document.getElementById("blacklistPref").checked;
@@ -107,10 +121,11 @@ const restoreOptions = async () => {
 			const prefName = option.id + document.getElementById("copyMethod").value;
 			document.getElementById(option.id).value =
 				(await getStorage(prefName)) || "";
-		} else if (option.id === "blacklistEntries") {
+		} else if (option.tagName.toLowerCase() === "textarea") {
 			if (await getStorage(option.id)) {
-				const blacklistValue = await getStorage(option.id);
-				document.getElementById(option.id).value = blacklistValue.join("\n");
+				const textareaValue = await getStorage(option.id);
+				if (textareaValue !== null)
+					document.getElementById(option.id).value = textareaValue.join("\n");
 			}
 		} else if ((await getStorage(option.id)) !== null) {
 			if (

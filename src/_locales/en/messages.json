@@ -149,6 +149,12 @@
 	"filePref": {
 		"message": "Ignore direct links to video/audio files"
 	},
+	"manifestPref": {
+		"message": "Ignore streams"
+	},
+	"manifestTip": {
+		"message": "This is the main purpose of the addon. Disable if you want to e.g. only use custom file extensions/content types."
+	},
 	"openPopup": {
 		"message": "Open addon popup"
 	},
@@ -156,10 +162,22 @@
 		"message": "No URLs available."
 	},
 	"blacklistPref": {
-		"message": "URL blacklist"
+		"message": "Use URL blacklist"
 	},
 	"blacklistTip": {
 		"message": "One entry per line. Concerns both source and destination URLs, i.e. the addon will be effectively disabled on any websites as well as ignore any stream URLs containing these phrases."
+	},
+	"customExtPref": {
+		"message": "Detect additional file extensions"
+	},
+	"customExtTip": {
+		"message": "One entry per line."
+	},
+	"customCtPref": {
+		"message": "Detect additional Content-Type headers"
+	},
+	"customCtTip": {
+		"message": "One entry per line. Case insensitive."
 	},
 	"cleanupPref": {
 		"message": "Remove entries older than 1 week"

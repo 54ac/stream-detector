@@ -3,7 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import env from "postcss-preset-env";
 import babel from "@rollup/plugin-babel";
-import copy from "rollup-plugin-copy";
+import copy from "rollup-plugin-copy-watch";
 import cleaner from "rollup-plugin-cleaner";
 import multiInput from "rollup-plugin-multi-input";
 
@@ -30,6 +30,7 @@ export default {
 			presets: [["@babel/preset-env", { bugfixes: true }]]
 		}),
 		copy({
+			watch: !production && "src/**",
 			targets: [
 				{
 					src: "src/manifest.json",
@@ -44,7 +45,8 @@ export default {
 					src: ["src/img", "src/_locales", "src/*.html"],
 					dest: "build"
 				}
-			]
+			],
+			verbose: true
 		})
 	]
 };

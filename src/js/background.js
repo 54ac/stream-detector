@@ -13,14 +13,19 @@ let queue = [];
 
 let subtitlePref;
 let filePref;
+let manifestPref;
 let blacklistPref;
 let blacklistEntries;
+let customExtPref;
+let customCtPref;
 let cleanupPref;
 let disablePref;
+const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 
 const init = async () => {
 	for (const option in defaults) {
 		if ((await getStorage(option)) === null)
+			// write defaults to storage
 			await setStorage({ [option]: defaults[option] });
 	}
 
@@ -33,11 +38,20 @@ const init = async () => {
 	});
 };
 
+const getTabData = async (tab) =>
+	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
+
 const updateVars = async () => {
+	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
 	subtitlePref = await getStorage("subtitlePref");
 	filePref = await getStorage("filePref");
+	manifestPref = await getStorage("manifestPref");
 	blacklistPref = await getStorage("blacklistPref");
 	blacklistEntries = await getStorage("blacklistEntries");
+	customExtPref = await getStorage("customExtPref");
+	customSupported.ext = await getStorage("customExtEntries");
+	customCtPref = await getStorage("customCtPref");
+	customSupported.ct = await getStorage("customCtEntries");
 	cleanupPref = await getStorage("cleanupPref");
 	disablePref = await getStorage("disablePref");
 };
@@ -48,13 +62,25 @@ const urlFilter = (requestDetails) => {
 	if (requestDetails.requestHeaders) {
 		const url = new URL(requestDetails.url).pathname.toLowerCase();
 		// go through the extensions and see if the url contains any
-		e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
+		e =
+			customExtPref === true &&
+			customSupported.ext.length > 0 &&
+			customSupported.ext.some((fe) => url.includes("." + fe)) &&
+			customSupported;
+		if (!e)
+			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
 	} else if (requestDetails.responseHeaders) {
 		const header = requestDetails.responseHeaders.find(
 			(h) => h.name.toLowerCase() === "content-type"
 		);
 		if (header)
 			// go through content types and see if the header matches
+			e =
+				customCtPref === true &&
+				customSupported.ct.length > 0 &&
+				customSupported.ct.includes(header.value.toLowerCase()) &&
+				customSupported;
+		if (!e)
 			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
 	}
 
@@ -64,6 +90,7 @@ const urlFilter = (requestDetails) => {
 		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
 		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
 		(!filePref || (filePref && e.category !== "files")) &&
+		(!manifestPref || (manifestPref && e.category !== "stream")) &&
 		(!blacklistPref ||
 			(blacklistPref &&
 				blacklistEntries?.filter(
@@ -103,28 +130,40 @@ const addURL = async (requestDetails) => {
 	const headers =
 		requestDetails.requestHeaders || requestDetails.responseHeaders;
 
-	chrome.tabs.get(requestDetails.tabId, async (tabData) => {
-		const newRequestDetails = {
-			...requestDetails,
-			headers,
-			filename,
-			hostname,
-			tabData
-		};
+	const tabData = await getTabData(requestDetails.tabId);
 
-		urlStorage.push(newRequestDetails);
+	// web storage api optimization
+	const newRequestDetails = {
+		category: requestDetails.category,
+		documentUrl: requestDetails.documentUrl,
+		originUrl: requestDetails.originUrl,
+		initiator: requestDetails.initiator,
+		requestId: requestDetails.requestId,
+		tabId: requestDetails.tabId,
+		timeStamp: requestDetails.timeStamp,
+		type: requestDetails.type,
+		url: requestDetails.url,
+		headers: headers?.filter(
+			(h) =>
+				h.name.toLowerCase() === "user-agent" ||
+				h.name.toLowerCase() === "referer"
+		),
+		filename,
+		hostname,
+		tabData: { title: tabData?.title, url: tabData?.url }
+	};
+	urlStorage.push(newRequestDetails);
 
-		badgeText = urlStorage.length;
-		chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
-		chrome.browserAction.setBadgeText({
-			text: badgeText.toString()
-		});
-
-		await setStorage({ urlStorage });
-
-		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-		queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
+	badgeText = urlStorage.length;
+	chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
+	chrome.browserAction.setBadgeText({
+		text: badgeText.toString()
 	});
+
+	await setStorage({ urlStorage });
+
+	chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+	queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
 
 	if (
 		(await getStorage("notifDetectPref")) === false &&
@@ -172,8 +211,6 @@ const deleteURL = async (message) => {
 	// clear everything and/or set up
 	chrome.browserAction.setBadgeText({ text: "" });
 
-	await init();
-
 	// cleanup for major updates
 	const manifestVersion = chrome.runtime.getManifest().version;
 	const addonVersion = await getStorage("version");
@@ -186,10 +223,10 @@ const deleteURL = async (message) => {
 	) {
 		// only when necessary
 		await clearStorage();
-		await init();
 	}
 
-	updateVars();
+	await init();
+	await updateVars();
 
 	if (disablePref === false) {
 		chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -224,7 +261,7 @@ const deleteURL = async (message) => {
 	chrome.runtime.onMessage.addListener(async (message) => {
 		if (message.delete) deleteURL(message);
 		else if (message.options) {
-			updateVars();
+			await updateVars();
 			if (
 				disablePref === true &&
 				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
@@ -250,8 +287,8 @@ const deleteURL = async (message) => {
 			}
 		} else if (message.reset) {
 			await clearStorage();
-			init();
-			updateVars();
+			await init();
+			await updateVars();
 			chrome.runtime.sendMessage({ options: true });
 		}
 	});

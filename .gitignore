@@ -1,7 +1,8 @@
 .firefox.exe.lnk
+chrome-pack.bat
 /web-ext-artifacts
 /build
 /node_modules
 dist.pem
-dist.crx
+build.crx
 icon.png

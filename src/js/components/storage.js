@@ -34,7 +34,7 @@ export const saveOptionStorage = async (e, options) => {
 			[e.target.id +
 			document.getElementById("copyMethod").value]: e.target.value?.trim()
 		});
-	else if (e.target.id === "blacklistEntries")
+	else if (e.target.tagName.toLowerCase() === "textarea")
 		await setStorage({
 			[e.target.id]: e.target.value?.split("\n").filter((ee) => ee)
 		});

@@ -149,6 +149,12 @@
 	"filePref": {
 		"message": "Nie wykrywaj bezpośrednich linków do plików wideo/audio"
 	},
+	"manifestPref": {
+		"message": "Nie wykrywaj streamów"
+	},
+	"manifestTip": {
+		"message": "Główny cel tego dodatku. Wyłącz, jeśli chcesz np. wykrywać jedynie własne rozszerzenia/nagłówki content type."
+	},
 	"openPopup": {
 		"message": "Otwórz główne okno"
 	},
@@ -160,6 +166,18 @@
 	},
 	"blacklistTip": {
 		"message": "Każdy wpis w nowej linii. Dotyczy linków źródłowych i docelowych - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki do streamów zawierające te frazy w adresie."
+	},
+	"customExtPref": {
+		"message": "Wykrywaj dodatkowe rozszerzenia plików"
+	},
+	"customExtTip": {
+		"message": "Każdy wpis w nowej linii."
+	},
+	"customCtPref": {
+		"message": "Wykrywaj dodatkowe nagłówki Content-Type"
+	},
+	"customCtTip": {
+		"message": "Każdy wpis w nowej linii. Wielkość liter nieistotna."
 	},
 	"cleanupPref": {
 		"message": "Usuń wpisy starsze niż tydzień"

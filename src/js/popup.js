@@ -33,10 +33,14 @@ const copyURL = async (info) => {
 			(type === "HDS" && fileMethod === "ffmpeg") ||
 			(type === "MSS" &&
 				fileMethod !== "youtubedl" &&
-				fileMethod !== "ytdlp") ||
-			(category === "subtitles" && fileMethod !== "url") ||
+				fileMethod !== "ytdlp" &&
+				fileMethod !== "user") ||
+			(category === "subtitles" &&
+				fileMethod !== "url" &&
+				fileMethod !== "user") ||
 			(type !== "HLS" && fileMethod === "hlsdl") ||
-			(type !== "HLS" && fileMethod === "nm3u8dl")
+			(type !== "HLS" && fileMethod === "nm3u8dl") ||
+			(type === "CUSTOM" && fileMethod !== "url" && fileMethod !== "user")
 		) {
 			fileMethod = "url";
 			methodIncomp = true;
