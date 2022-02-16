@@ -569,7 +569,11 @@ const createList = async () => {
 					? urlStorage.filter((url) => url.tabId === tab[0].id)
 					: [];
 			} else if (document.getElementById("tabAll").checked) {
-				urlList = urlStorage || [];
+				urlList = urlStorage
+					? urlStorage.filter(
+							(url) => url.tabData?.incognito === tab[0].incognito
+					  )
+					: [];
 			} else if (document.getElementById("tabPrevious").checked) {
 				urlList = urlStorageRestore || [];
 			}

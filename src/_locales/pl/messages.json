@@ -21,7 +21,7 @@
 		"message": "Nie udało się skopiować danych:\n"
 	},
 	"extText": {
-		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
+		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
 	},
 	"copyMethod": {
 		"message": "Skopiuj link do streamu jako"

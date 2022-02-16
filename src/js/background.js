@@ -22,25 +22,6 @@ let cleanupPref;
 let disablePref;
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 
-const init = async () => {
-	for (const option in defaults) {
-		if ((await getStorage(option)) === null)
-			// write defaults to storage
-			await setStorage({ [option]: defaults[option] });
-	}
-
-	setStorage({ version: chrome.runtime.getManifest().version });
-
-	// newline shouldn't really be an issue but just in case
-	chrome.runtime.getPlatformInfo(async (info) => {
-		if (info.os === "win") setStorage({ newline: "\r\n" });
-		else setStorage({ newline: "\n" });
-	});
-};
-
-const getTabData = async (tab) =>
-	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
-
 const updateVars = async () => {
 	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
 	subtitlePref = await getStorage("subtitlePref");
@@ -56,6 +37,27 @@ const updateVars = async () => {
 	disablePref = await getStorage("disablePref");
 };
 
+const init = async () => {
+	for (const option in defaults) {
+		if ((await getStorage(option)) === null)
+			// write defaults to storage
+			await setStorage({ [option]: defaults[option] });
+	}
+
+	setStorage({ version: chrome.runtime.getManifest().version });
+
+	// newline shouldn't really be an issue but just in case
+	chrome.runtime.getPlatformInfo(async (info) => {
+		if (info.os === "win") setStorage({ newline: "\r\n" });
+		else setStorage({ newline: "\n" });
+	});
+
+	await updateVars();
+};
+
+const getTabData = async (tab) =>
+	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
+
 const urlFilter = (requestDetails) => {
 	let e;
 
@@ -64,8 +66,7 @@ const urlFilter = (requestDetails) => {
 		// go through the extensions and see if the url contains any
 		e =
 			customExtPref === true &&
-			customSupported.ext.length > 0 &&
-			customSupported.ext.some((fe) => url.includes("." + fe)) &&
+			customSupported.ext?.some((fe) => url.includes("." + fe)) &&
 			customSupported;
 		if (!e)
 			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
@@ -77,8 +78,7 @@ const urlFilter = (requestDetails) => {
 			// go through content types and see if the header matches
 			e =
 				customCtPref === true &&
-				customSupported.ct.length > 0 &&
-				customSupported.ct.includes(header.value.toLowerCase()) &&
+				customSupported.ct?.includes(header.value.toLowerCase()) &&
 				customSupported;
 		if (!e)
 			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
@@ -150,7 +150,11 @@ const addURL = async (requestDetails) => {
 		),
 		filename,
 		hostname,
-		tabData: { title: tabData?.title, url: tabData?.url }
+		tabData: {
+			title: tabData?.title,
+			url: tabData?.url,
+			incognito: tabData?.incognito
+		}
 	};
 	urlStorage.push(newRequestDetails);
 
@@ -212,6 +216,7 @@ const deleteURL = async (message) => {
 	chrome.browserAction.setBadgeText({ text: "" });
 
 	// cleanup for major updates
+	/*
 	const manifestVersion = chrome.runtime.getManifest().version;
 	const addonVersion = await getStorage("version");
 	if (
@@ -224,9 +229,9 @@ const deleteURL = async (message) => {
 		// only when necessary
 		await clearStorage();
 	}
+	*/
 
 	await init();
-	await updateVars();
 
 	if (disablePref === false) {
 		chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -253,6 +258,11 @@ const deleteURL = async (message) => {
 			urlStorageRestore = urlStorageRestore.filter(
 				(url) => new Date().getTime() - url.timeStamp < 604800000
 			);
+
+		// remove all entries previously detected in private windows
+		urlStorageRestore = urlStorageRestore.filter(
+			(url) => url.tabData?.incognito === true
+		);
 
 		await setStorage({ urlStorageRestore });
 		await setStorage({ urlStorage: [] });
@@ -288,7 +298,6 @@ const deleteURL = async (message) => {
 		} else if (message.reset) {
 			await clearStorage();
 			await init();
-			await updateVars();
 			chrome.runtime.sendMessage({ options: true });
 		}
 	});
