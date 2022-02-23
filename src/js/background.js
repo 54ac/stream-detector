@@ -21,6 +21,7 @@ let customCtPref;
 let cleanupPref;
 let disablePref;
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
+const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
 
 const updateVars = async () => {
 	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
@@ -35,6 +36,19 @@ const updateVars = async () => {
 	customSupported.ct = await getStorage("customCtEntries");
 	cleanupPref = await getStorage("cleanupPref");
 	disablePref = await getStorage("disablePref");
+};
+
+const addListeners = () => {
+	chrome.webRequest.onBeforeSendHeaders.addListener(
+		urlFilter,
+		{ urls: ["<all_urls>"] },
+		isChrome ? ["requestHeaders", "extraHeaders"] : ["requestHeaders"]
+	);
+	chrome.webRequest.onHeadersReceived.addListener(
+		urlFilter,
+		{ urls: ["<all_urls>"] },
+		isChrome ? ["responseHeaders", "extraHeaders"] : ["responseHeaders"]
+	);
 };
 
 const init = async () => {
@@ -146,7 +160,8 @@ const addURL = async (requestDetails) => {
 		headers: headers?.filter(
 			(h) =>
 				h.name.toLowerCase() === "user-agent" ||
-				h.name.toLowerCase() === "referer"
+				h.name.toLowerCase() === "referer" ||
+				h.name.toLowerCase() === "cookie"
 		),
 		filename,
 		hostname,
@@ -226,25 +241,13 @@ const deleteURL = async (message) => {
 					addonVersion.split(".")[1] < manifestVersion.split(".")[1]))) ||
 		!addonVersion
 	) {
-		// only when necessary
 		await clearStorage();
 	}
 	*/
 
 	await init();
 
-	if (disablePref === false) {
-		chrome.webRequest.onBeforeSendHeaders.addListener(
-			urlFilter,
-			{ urls: ["<all_urls>"] },
-			["requestHeaders"]
-		);
-		chrome.webRequest.onHeadersReceived.addListener(
-			urlFilter,
-			{ urls: ["<all_urls>"] },
-			["responseHeaders"]
-		);
-	}
+	if (disablePref === false) addListeners();
 
 	urlStorage = await getStorage("urlStorage");
 	urlStorageRestore = await getStorage("urlStorageRestore");
@@ -283,18 +286,8 @@ const deleteURL = async (message) => {
 				disablePref !== true &&
 				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-			) {
-				chrome.webRequest.onBeforeSendHeaders.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["requestHeaders"]
-				);
-				chrome.webRequest.onHeadersReceived.addListener(
-					urlFilter,
-					{ urls: ["<all_urls>"] },
-					["responseHeaders"]
-				);
-			}
+			)
+				addListeners();
 		} else if (message.reset) {
 			await clearStorage();
 			await init();

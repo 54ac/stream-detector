@@ -172,6 +172,11 @@ const copyURL = async (info) => {
 				headerReferer = headerReferer
 					? headerReferer.value
 					: e.originUrl || e.documentUrl || e.initiator || e.tabData?.url;
+				if (
+					headerReferer?.startsWith("about:") ||
+					headerReferer?.startsWith("chrome:")
+				)
+					headerReferer = undefined;
 
 				if (headerUserAgent) {
 					switch (fileMethod) {
