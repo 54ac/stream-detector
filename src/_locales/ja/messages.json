@@ -1,0 +1,197 @@
+{
+	"notifTitle": {
+		"message": "ストリームを検出しました!"
+	},
+	"notifText": {
+		"message": "新たな $1 ストリームを検出しました:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "URLをコピーしました!"
+	},
+	"notifCopiedText": {
+		"message": "次のURLのコピーに成功しました:\n"
+	},
+	"notifIncompCopiedText": {
+		"message": "選択したツールとの互換性がないため、ストリームのURLは通常どおりコピーします:\n"
+	},
+	"notifErrorTitle": {
+		"message": "コピーエラー!"
+	},
+	"notifErrorText": {
+		"message": "URLをコピーできません:\n"
+	},
+	"extText": {
+		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyoutube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLIのコマンドを組み立てます。"
+	},
+	"copyMethod": {
+		"message": "ストリームURLのコピー形式"
+	},
+	"url": {
+		"message": "通常のURL"
+	},
+	"kodiUrl": {
+		"message": "Kodi URL"
+	},
+	"tableForm": {
+		"message": "テーブルエントリ"
+	},
+	"youtubedl": {
+		"message": "youtube-dl コマンド"
+	},
+	"ytdlp": {
+		"message": "yt-dlp コマンド"
+	},
+	"ffmpeg": {
+		"message": "FFmpeg コマンド"
+	},
+	"streamlink": {
+		"message": "Streamlink コマンド"
+	},
+	"hlsdl": {
+		"message": "hlsdl コマンド"
+	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-CLI コマンド"
+	},
+	"user": {
+		"message": "ユーザ定義コマンド"
+	},
+	"streamlinkOutput": {
+		"message": "Streamlinkの出力先"
+	},
+	"file": {
+		"message": "ファイルに保存"
+	},
+	"player": {
+		"message": "デフォルトプレーヤで再生"
+	},
+	"customCommandPref": {
+		"message": "CLIパラメータを追加する"
+	},
+	"userCommand": {
+		"message": "ユーザ定義コマンド"
+	},
+	"userCommandTip": {
+		"message": "利用可能な変数:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"headersPref": {
+		"message": "追加のヘッダを含める"
+	},
+	"notifDetectPref": {
+		"message": "検出通知を無効にする"
+	},
+	"notifPref": {
+		"message": "全通知を無効にする"
+	},
+	"disablePref": {
+		"message": "The Stream Detector 無効"
+	},
+	"clearList": {
+		"message": "このURLリストを消去"
+	},
+	"copyAll": {
+		"message": "表示URLを全てコピー"
+	},
+	"proxyPref": {
+		"message": "HTTPプロキシサーバを使う"
+	},
+	"downloaderPref": {
+		"message": "外部ダウンローダを使う"
+	},
+	"buttonClick": {
+		"message": "ブラウザのアクションボタン機能"
+	},
+	"popupType": {
+		"message": "タイプ"
+	},
+	"popupFilename": {
+		"message": "ファイル名"
+	},
+	"popupSource": {
+		"message": "検出ソース"
+	},
+	"popupTimestamp": {
+		"message": "タイムスタンプ"
+	},
+	"deleteTooltip": {
+		"message": "クリックしてこのURLを削除"
+	},
+	"tabThis": {
+		"message": "このタブ"
+	},
+	"tabAll": {
+		"message": "全てのタブ"
+	},
+	"tabPrevious": {
+		"message": "以前のセッション"
+	},
+	"filterInput": {
+		"message": "フィルター"
+	},
+	"openOptions": {
+		"message": "設定"
+	},
+	"titlePref": {
+		"message": "検出ソースにタブのタイトルを表示"
+	},
+	"filenamePref": {
+		"message": "ファイル名にタブのタイトルを使用"
+	},
+	"timestampPref": {
+		"message": "ファイル名にタイムスタンプを追加"
+	},
+	"fileExtension": {
+		"message": "ファイル拡張子"
+	},
+	"subtitlePref": {
+		"message": "字幕を無視する"
+	},
+	"filePref": {
+		"message": "video/audioファイルの直接リンクを無視する"
+	},
+	"manifestPref": {
+		"message": "ストリームを無視する"
+	},
+	"manifestTip": {
+		"message": "これはこのアドオンの主目的です。例えば、カスタムのファイル拡張子/Content-Typeのみを使用したい場合は、無効にしてください。"
+	},
+	"openPopup": {
+		"message": "アドオンのパネルを開く"
+	},
+	"placeholderCell": {
+		"message": "検出したURLがありません"
+	},
+	"blacklistPref": {
+		"message": "ブラックリストURLを使う"
+	},
+	"blacklistTip": {
+		"message": "1行に1項目です。送信元と送信先のURLの両方が対象です。つまり、アドオンは効果的にこれらのフレーズを含むWebサイトを無効にするだけでなく、ストリームURLも無視します。"
+	},
+	"customExtPref": {
+		"message": "検出ファイル拡張子追加"
+	},
+	"customExtTip": {
+		"message": "1行に1項目です。"
+	},
+	"customCtPref": {
+		"message": "検出Content-Typeヘッダ追加"
+	},
+	"customCtTip": {
+		"message": "1行に1項目です。大文字・小文字を区別しません。"
+	},
+	"cleanupPref": {
+		"message": "1週間以上前のエントリを削除する"
+	},
+	"cleanupTip": {
+		"message": "障害発生による再起動時のみ適用されます。"
+	},
+	"resetButtonLabel": {
+		"message": "全設定をリセット(緊急用)"
+	},
+	"resetButton": {
+		"message": "全設定のリセット"
+	},
+	"resetButtonConfirm": {
+		"message": "本当にすべての設定をリセットしますか?"
+	}
+}
