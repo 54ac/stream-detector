@@ -41,5 +41,6 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 ### Additional notes
 
 - The Chrome version of this addon is not maintained or supported in any way. It's only included on the off chance that it works. Don't expect it to.
+- Feel free to submit a translation by way of a pull request if the addon is not available in your preferred language.
 - Websites such as YouTube, Vimeo, Facebook, etc. are very likely to use proprietary technologies which are not supported by this addon. When it comes to such "mainstream" services, it's better to use the tools (e.g. youtube-dl/yt-dlp) directly.
 - This should go without saying, but I am not responsible for and do not condone this addon being used for any nefarious purposes. Copyrighted content is probably DRM-ed anyway.
