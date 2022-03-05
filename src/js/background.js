@@ -80,22 +80,23 @@ const urlFilter = (requestDetails) => {
 		// go through the extensions and see if the url contains any
 		e =
 			customExtPref === true &&
-			customSupported.ext?.some((fe) => url.includes("." + fe)) &&
-			customSupported;
+			customSupported &&
+			customSupported.ext?.some((fe) => url.includes("." + fe));
 		if (!e)
 			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
 	} else if (requestDetails.responseHeaders) {
 		const header = requestDetails.responseHeaders.find(
 			(h) => h.name.toLowerCase() === "content-type"
 		);
-		if (header)
+		if (header && header.value) {
 			// go through content types and see if the header matches
 			e =
 				customCtPref === true &&
-				customSupported.ct?.includes(header.value.toLowerCase()) &&
-				customSupported;
-		if (!e)
-			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
+				customSupported &&
+				customSupported.ct?.includes(header.value.toLowerCase());
+			if (!e)
+				e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
+		}
 	}
 
 	if (
