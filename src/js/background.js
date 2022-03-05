@@ -80,7 +80,7 @@ const urlFilter = (requestDetails) => {
 		// go through the extensions and see if the url contains any
 		e =
 			customExtPref === true &&
-			customSupported.ext?.some((fe) => url.includes("." + fe))
+			customSupported.ext?.some((fe) => url.includes("." + fe)) &&
 			customSupported;
 		if (!e)
 			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
