@@ -88,14 +88,15 @@ const urlFilter = (requestDetails) => {
 		const header = requestDetails.responseHeaders.find(
 			(h) => h.name.toLowerCase() === "content-type"
 		);
-		if (header)
+		if (header && header.value) {
 			// go through content types and see if the header matches
 			e =
 				customCtPref === true &&
 				customSupported.ct?.includes(header.value.toLowerCase()) &&
 				customSupported;
-		if (!e)
-			e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
+			if (!e)
+				e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
+		}
 	}
 
 	if (
