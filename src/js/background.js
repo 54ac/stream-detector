@@ -80,8 +80,8 @@ const urlFilter = (requestDetails) => {
 		// go through the extensions and see if the url contains any
 		e =
 			customExtPref === true &&
-			customSupported &&
-			customSupported.ext?.some((fe) => url.includes("." + fe));
+			customSupported.ext?.some((fe) => url.includes("." + fe))
+			customSupported;
 		if (!e)
 			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
 	} else if (requestDetails.responseHeaders) {
@@ -92,8 +92,8 @@ const urlFilter = (requestDetails) => {
 			// go through content types and see if the header matches
 			e =
 				customCtPref === true &&
-				customSupported &&
-				customSupported.ct?.includes(header.value.toLowerCase());
+				customSupported.ct?.includes(header.value.toLowerCase()) &&
+				customSupported;
 			if (!e)
 				e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
 		}
