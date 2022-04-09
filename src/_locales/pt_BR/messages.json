@@ -1,0 +1,197 @@
+{
+	"notifTitle": {
+		"message": "Stream detectado!"
+	},
+	"notifText": {
+		"message": "$1 novo stream detectado:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "URL(s) copiada(s)!"
+	},
+	"notifCopiedText": {
+		"message": "URL(s) copiada(s) com sucesso:\n"
+	},
+	"notifIncompCopiedText": {
+		"message": "URL(s) streams copiado(s) no formato simples devido à falta de compatibilidade com a ferramenta escolhida:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Erro ao copiar!"
+	},
+	"notifErrorText": {
+		"message": "Não foi possível copiar a(s) URL(s):\n"
+	},
+	"extText": {
+		"message": "Detecta listas de reprodução e legendas usadas por HLS/DASH/HDS/MSS streams, assim como extensões de arquivos personalizados e cabeçalhos tipo Content-Type. Cria comandos prontos para youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
+	},
+	"copyMethod": {
+		"message": "Copiar a URL do stream como"
+	},
+	"url": {
+		"message": "URL normal"
+	},
+	"kodiUrl": {
+		"message": "URL Kodi"
+	},
+	"tableForm": {
+		"message": "Entrada de tabela"
+	},
+	"youtubedl": {
+		"message": "comando youtube-dl"
+	},
+	"ytdlp": {
+		"message": "comando yt-dlp"
+	},
+	"ffmpeg": {
+		"message": "comando FFmpeg"
+	},
+	"streamlink": {
+		"message": "comando Streamlink"
+	},
+	"hlsdl": {
+		"message": "comando hlsdl"
+	},
+	"nm3u8dl": {
+		"message": "comando N_m3u8DL-CLI"
+	},
+	"user": {
+		"message": "Comando definido por usuário"
+	},
+	"streamlinkOutput": {
+		"message": "Enviar Streamlink para"
+	},
+	"file": {
+		"message": "Arquivo"
+	},
+	"player": {
+		"message": "Reprodutor padrão"
+	},
+	"customCommandPref": {
+		"message": "Parâmetros adicionais da linha de comando"
+	},
+	"userCommand": {
+		"message": "Comando definido por usuário"
+	},
+	"userCommandTip": {
+		"message": "Campos disponíveis:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"headersPref": {
+		"message": "Incluir cabeçalhos adicionais"
+	},
+	"notifDetectPref": {
+		"message": "Desativar notificações de detecção"
+	},
+	"notifPref": {
+		"message": "Desativar todas notificações"
+	},
+	"disablePref": {
+		"message": "Desativar detecção"
+	},
+	"clearList": {
+		"message": "Limpar esta lista de URL"
+	},
+	"copyAll": {
+		"message": "Copiar todas URLs visíveis"
+	},
+	"proxyPref": {
+		"message": "Usar servidor proxy de HTTP"
+	},
+	"downloaderPref": {
+		"message": "Usar downloader externo"
+	},
+	"buttonClick": {
+		"message": "Funcionalidade do botão de ação no navegador"
+	},
+	"popupType": {
+		"message": "Tipo"
+	},
+	"popupFilename": {
+		"message": "Nome do arquivo"
+	},
+	"popupSource": {
+		"message": "Fonte"
+	},
+	"popupTimestamp": {
+		"message": "Registro de data"
+	},
+	"deleteTooltip": {
+		"message": "Clique para remover a URL."
+	},
+	"tabThis": {
+		"message": "Esta aba"
+	},
+	"tabAll": {
+		"message": "Todas abas"
+	},
+	"tabPrevious": {
+		"message": "Sessões anteriores "
+	},
+	"filterInput": {
+		"message": "Filtro"
+	},
+	"openOptions": {
+		"message": "Opções"
+	},
+	"titlePref": {
+		"message": "Mostrar o título da aba como fonte"
+	},
+	"filenamePref": {
+		"message": "Usar o título da aba como nome de arquivo"
+	},
+	"timestampPref": {
+		"message": "Anexar registro com data ao nome do arquivo"
+	},
+	"fileExtension": {
+		"message": "Extensão do arquivo"
+	},
+	"subtitlePref": {
+		"message": "Ignorar legendas"
+	},
+	"filePref": {
+		"message": "Ignorar links diretos para arquivos de vídeo/áudio"
+	},
+	"manifestPref": {
+		"message": "Ignorar streams"
+	},
+	"manifestTip": {
+		"message": "Esta é a principal função da extensão. Desative isto se você quiser, por exemplo, usar apenas extensões de arquivos/conteúdo personalizados."
+	},
+	"openPopup": {
+		"message": "Abrir popup da extensão"
+	},
+	"placeholderCell": {
+		"message": "Nenhuma URL disponível."
+	},
+	"blacklistPref": {
+		"message": "Use a URL com lista de não autorizados"
+	},
+	"blacklistTip": {
+		"message": "Uma entrada por linha. Refere-se tanto às URLs de origem como de destino, ou seja, a extensão será efetivamente desativada em qualquer site, além de ignorar qualquer URL de stream que contenha estas frases."
+	},
+	"customExtPref": {
+		"message": "Detectar extensões de arquivos adicionais"
+	},
+	"customExtTip": {
+		"message": "Uma entrada por linha."
+	},
+	"customCtPref": {
+		"message": "Detectar cabeçalhos adicionais do tipo Content-Type"
+	},
+	"customCtTip": {
+		"message": "Uma entrada por linha. Indiferente a maiúsculas e minúsculas."
+	},
+	"cleanupPref": {
+		"message": "Remover entradas com mais de uma semana"
+	},
+	"cleanupTip": {
+		"message": "Aplicado somente no reinício em caso de falhas."
+	},
+	"resetButtonLabel": {
+		"message": "Resetar todas as configurações (em caso de emergência)"
+	},
+	"resetButton": {
+		"message": "Resetar configurações"
+	},
+	"resetButtonConfirm": {
+		"message": "Você tem certeza que quer resetar todas as configurações?"
+	}
+}
