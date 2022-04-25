@@ -556,9 +556,6 @@ const createList = async () => {
 		table.appendChild(row);
 	};
 
-	// clear list first just in case - quick and dirty
-	table.innerHTML = "";
-
 	const urlStorage = await getStorage("urlStorage");
 	const urlStorageRestore = await getStorage("urlStorageRestore");
 
@@ -594,11 +591,15 @@ const createList = async () => {
 							url.hostname.toLowerCase().includes(urlStorageFilter)
 					);
 
+			// clear list first just in case - quick and dirty
+			table.innerHTML = "";
+
 			urlList.length
 				? insertList(urlList.reverse()) // latest entries first
 				: insertPlaceholder();
 		});
 	} else {
+		table.innerHTML = "";
 		insertPlaceholder();
 	}
 };
@@ -658,7 +659,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 		e.preventDefault();
 		chrome.runtime.openOptionsPage();
 	};
-	document.getElementById("filterInput").onkeyup = () => createList();
+	document.getElementById("filterInput").onkeyup = () => {
+		createList();
+		if (!document.getElementById("filterInput").value) {
+			document.getElementById("clearFilterInput").disabled = true;
+			document.getElementById("clearFilterInput").style.cursor = "default";
+		} else {
+			document.getElementById("clearFilterInput").disabled = false;
+			document.getElementById("clearFilterInput").style.cursor = "pointer";
+		}
+	};
+
+	if (!document.getElementById("filterInput").value) {
+		document.getElementById("clearFilterInput").disabled = true;
+		document.getElementById("clearFilterInput").style.cursor = "default";
+	} else {
+		document.getElementById("clearFilterInput").disabled = false;
+		document.getElementById("clearFilterInput").style.cursor = "pointer";
+	}
+
+	document.getElementById("clearFilterInput").onclick = () => {
+		document.getElementById("filterInput").value = "";
+		createList();
+		document.getElementById("clearFilterInput").style.cursor = "default";
+	};
 
 	createList();
 

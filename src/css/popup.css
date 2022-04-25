@@ -88,6 +88,10 @@ a {
 	color: inherit;
 }
 
+#clearFilterInput {
+	text-decoration: none;
+}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		background: #202023;

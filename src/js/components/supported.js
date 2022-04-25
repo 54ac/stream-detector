@@ -33,7 +33,7 @@ const supported = [
 		category: "subtitles"
 	},
 	{
-		ext: ["mp4", "m4v"],
+		ext: ["mp4", "m4v", "m4s"],
 		ct: ["video/x-m4v", "video/m4v", "video/mp4"],
 		type: "MP4",
 		category: "files"

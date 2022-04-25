@@ -58,6 +58,9 @@ const init = async () => {
 			await setStorage({ [option]: defaults[option] });
 	}
 
+	// reset filter on startup
+	await setStorage({ filterInput: "" });
+
 	setStorage({ version: chrome.runtime.getManifest().version });
 
 	// newline shouldn't really be an issue but just in case
