@@ -30,13 +30,25 @@ const checkHeadersPref = () => {
 	document.getElementById("blacklistEntries").disabled = true;
 	document.getElementById("cleanupPref").disabled = false;
 	document.getElementById("notifDetectPref").disabled = false;
+	document.getElementById("downloadDirectPref").disabled = false;
+	document.getElementById("autoDownloadPref").disabled = false;
 
 	document.getElementById("subtitlePref").disabled = document.getElementById(
 		"disablePref"
 	).checked;
+
 	document.getElementById("filePref").disabled = document.getElementById(
 		"disablePref"
 	).checked;
+
+	document.getElementById(
+		"downloadDirectPref"
+	).disabled = document.getElementById("filePref").checked;
+
+	document.getElementById("autoDownloadPref").disabled =
+		!document.getElementById("downloadDirectPref").checked ||
+		document.getElementById("filePref").checked;
+
 	document.getElementById("manifestPref").disabled = document.getElementById(
 		"disablePref"
 	).checked;

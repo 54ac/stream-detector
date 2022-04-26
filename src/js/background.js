@@ -106,6 +106,7 @@ const urlFilter = (requestDetails) => {
 		e &&
 		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
 		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
+		requestDetails.tabId !== -1 &&
 		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
 		(!filePref || (filePref && e.category !== "files")) &&
 		(!manifestPref || (manifestPref && e.category !== "stream")) &&
@@ -268,7 +269,7 @@ const deleteURL = async (message) => {
 
 		// remove all entries previously detected in private windows
 		urlStorageRestore = urlStorageRestore.filter(
-			(url) => url.tabData?.incognito === true
+			(url) => url.tabData?.incognito !== true
 		);
 
 		await setStorage({ urlStorageRestore });

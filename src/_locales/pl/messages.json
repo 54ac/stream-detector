@@ -18,7 +18,13 @@
 		"message": "Błąd kopiowania!"
 	},
 	"notifErrorText": {
-		"message": "Nie udało się skopiować danych:\n"
+		"message": "Nie udało się skopiować linków:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Błąd ściągania!"
+	},
+	"notifDownErrorText": {
+		"message": "Nie udało się ściągnąć pliku:\n"
 	},
 	"extText": {
 		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
@@ -149,11 +155,20 @@
 	"filePref": {
 		"message": "Nie wykrywaj bezpośrednich linków do plików wideo/audio"
 	},
+	"downloadDirectPref": {
+		"message": "Ściągnij pliki wideo/audio bezpośrednio zamiast kopiować ich linki"
+	},
+	"autoDownloadPref": {
+		"message": "Automatycznie ściągaj pliki wideo/audio"
+	},
+	"autoDownloadTip": {
+		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania."
+	},
 	"manifestPref": {
 		"message": "Nie wykrywaj streamów"
 	},
 	"manifestTip": {
-		"message": "Główny cel tego dodatku. Wyłącz, jeśli chcesz np. wykrywać jedynie własne rozszerzenia/nagłówki content type."
+		"message": "Główny cel tego dodatku. Wyłącz, jeśli chcesz np. wykrywać pliki bezpośrednio lub wyłącznie używać własnych rozszerzeń/nagłówków content type."
 	},
 	"openPopup": {
 		"message": "Otwórz główne okno"

@@ -20,6 +20,12 @@
 	"notifErrorText": {
 		"message": "Unable to copy URL(s):\n"
 	},
+	"notifDownErrorTitle": {
+		"message": "Download error!"
+	},
+	"notifDownErrorText": {
+		"message": "Unable to download URL:\n"
+	},
 	"extText": {
 		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI commands."
 	},
@@ -149,11 +155,20 @@
 	"filePref": {
 		"message": "Ignore direct links to video/audio files"
 	},
+	"downloadDirectPref": {
+		"message": "Download video/audio files instead of copying their URLs"
+	},
+	"autoDownloadPref": {
+		"message": "Automatically download video/audio files"
+	},
+	"autoDownloadTip": {
+		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching."
+	},
 	"manifestPref": {
 		"message": "Ignore streams"
 	},
 	"manifestTip": {
-		"message": "This is the main purpose of the addon. Disable if you want to e.g. only use custom file extensions/content types."
+		"message": "This is the main purpose of the addon. Disable if you want to e.g. only capture files directly or use custom file extensions/content types."
 	},
 	"openPopup": {
 		"message": "Open addon popup"

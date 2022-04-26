@@ -6,14 +6,14 @@
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.10.3",
+	"version": "2.10.4",
 	"private": true,
 	"devDependencies": {
 		"@babel/cli": "^7.13.16",
 		"@babel/core": "^7.14.0",
 		"@babel/preset-env": "^7.14.1",
 		"@rollup/plugin-babel": "^5.2.2",
-		"@rollup/plugin-commonjs": "^21.0.1",
+		"@rollup/plugin-commonjs": "^22.0.0",
 		"@rollup/plugin-node-resolve": "^13.0.0",
 		"browserlist": "^1.0.1",
 		"postcss": "^8.2.15",

@@ -10,12 +10,39 @@ const table = document.getElementById("popupUrlList");
 let titlePref;
 let filenamePref;
 let timestampPref;
+let downloadDirectPref;
 let newline;
 let urlList = [];
 
 const getTimestamp = (timestamp) => {
 	const date = new Date(timestamp);
 	return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
+
+const downloadURL = (file) => {
+	const dlOptions = chrome.runtime.getURL("").startsWith("chrome-extension://")
+		? {
+				filename: file.filename,
+				url: file.url
+		  }
+		: {
+				filename: file.filename,
+				headers: file.headers || [],
+				incognito: file.incognito,
+				url: file.url
+		  };
+
+	chrome.downloads.download(
+		dlOptions,
+		(err) =>
+			err === undefined &&
+			chrome.notifications.create("error", {
+				type: "basic",
+				iconUrl: "img/icon-dark-96.png",
+				title: _("notifDownErrorTitle"),
+				message: _("notifDownErrorText") + file.filename
+			})
+	);
 };
 
 const copyURL = async (info) => {
@@ -422,6 +449,11 @@ const copyURL = async (info) => {
 	}
 };
 
+const handleURL = (url) => {
+	if (downloadDirectPref && url.category === "files") downloadURL(url);
+	else copyURL([url]);
+};
+
 const deleteURL = (requestDetails) => {
 	const deleteUrlStorage = [requestDetails];
 	chrome.runtime.sendMessage({
@@ -469,7 +501,10 @@ const createList = async () => {
 			row.className = "urlEntry";
 
 			const extCell = document.createElement("td");
-			extCell.textContent = requestDetails.type.toUpperCase();
+			extCell.textContent =
+				requestDetails.category === "files" && downloadDirectPref
+					? "🔽 " + requestDetails.type.toUpperCase()
+					: requestDetails.type.toUpperCase();
 
 			const urlCell = document.createElement("td");
 			const urlHref = document.createElement("a");
@@ -477,12 +512,12 @@ const createList = async () => {
 			urlHref.href = requestDetails.url;
 			urlCell.onclick = (e) => {
 				e.preventDefault();
-				copyURL([requestDetails]);
+				handleURL(requestDetails);
 			};
 			urlHref.onclick = (e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				copyURL([requestDetails]);
+				handleURL(requestDetails);
 			};
 			urlCell.style.cursor = "pointer";
 			urlHref.title = requestDetails.url;
@@ -617,6 +652,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	titlePref = await getStorage("titlePref");
 	filenamePref = await getStorage("filenamePref");
 	timestampPref = await getStorage("timestampPref");
+	downloadDirectPref = await getStorage("downloadDirectPref");
 	newline = await getStorage("newline");
 
 	const options = document.getElementsByClassName("option");
@@ -651,14 +687,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 		e.preventDefault();
 		copyAll();
 	};
+
 	document.getElementById("clearList").onclick = (e) => {
 		e.preventDefault();
 		clearList();
 	};
+
 	document.getElementById("openOptions").onclick = (e) => {
 		e.preventDefault();
 		chrome.runtime.openOptionsPage();
 	};
+
 	document.getElementById("filterInput").onkeyup = () => {
 		createList();
 		if (!document.getElementById("filterInput").value) {
