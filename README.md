@@ -2,7 +2,7 @@
 
 ### What is this?
 
-This is a Firefox addon written in JavaScript which provides an easy way to keep track of URLs to playlists and subtitles used by Apple HLS, Adobe HDS, MPEG-DASH, and Microsoft Smooth Streaming streams as well as custom file extensions and Content-Type headers.
+This is a Firefox addon written in JavaScript which provides an easy way to keep track of URLs to playlists and subtitles used by Apple HLS, Adobe HDS, MPEG-DASH, and Microsoft Smooth Streaming streams as well as download video/audio files directly and monitor any other file extensions and Content-Type headers.
 
 Also assembles readymade youtube-dl (yt-dlp)/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI commands which (should) include all of the necessary cookies and headers.
 
@@ -14,8 +14,9 @@ More details and screenshots available [in the AMO listing](https://addons.mozil
 
 - Javascript,
 - WebExtensions API, including:
-  - Notifications,
   - Clipboard,
+  - Downloads,
+  - Notifications,
   - Storage,
   - Tabs.
 
@@ -29,7 +30,7 @@ As of updating this document, the addon has almost 10,000 average daily users.
 
 ### How do I use this?
 
-Upon being notified that a stream has been detected (as in the screenshot above), click the toolbar button, and then click on the appropriate filename to copy the URL in its desired form. Use the addon's options page to customize your experience.
+Upon being notified that a stream has been detected (as in the screenshot above), click the toolbar button, and then click on the appropriate filename to copy the URL in its desired form. Use the addon's options page to customize your experience and e.g. download media files directly.
 
 ### Where can I download this?
 
