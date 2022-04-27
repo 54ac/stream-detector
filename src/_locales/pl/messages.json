@@ -162,7 +162,7 @@
 		"message": "Automatycznie ściągaj pliki wideo/audio"
 	},
 	"autoDownloadTip": {
-		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Nie dodaje linków do listy ani nie pokazuje powiadomień, aby nie spamować użytkownika."
+		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Nie dodaje linków do listy ani nie pokazuje powiadomień, aby nie spamować użytkownika. Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."
 	},
 	"manifestPref": {
 		"message": "Nie wykrywaj streamów"
