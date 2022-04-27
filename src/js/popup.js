@@ -20,14 +20,14 @@ const getTimestamp = (timestamp) => {
 };
 
 const downloadURL = (file) => {
+	// only firefox supports replacing the referer header
 	const dlOptions = chrome.runtime.getURL("").startsWith("chrome-extension://")
 		? {
-				filename: file.filename,
 				url: file.url
 		  }
 		: {
-				filename: file.filename,
-				headers: file.headers || [],
+				headers:
+					file.headers?.filter((h) => h.name.toLowerCase() === "referer") || [],
 				incognito: file.incognito,
 				url: file.url
 		  };
@@ -35,6 +35,7 @@ const downloadURL = (file) => {
 	chrome.downloads.download(
 		dlOptions,
 		(err) =>
+			// returns undefined if download is not successful
 			err === undefined &&
 			chrome.notifications.create("error", {
 				type: "basic",

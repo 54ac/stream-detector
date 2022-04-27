@@ -20,6 +20,10 @@ let customExtPref;
 let customCtPref;
 let cleanupPref;
 let disablePref;
+let notifDetectPref;
+let notifPref;
+let downloadDirectPref;
+let autoDownloadPref;
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
 
@@ -36,6 +40,10 @@ const updateVars = async () => {
 	customSupported.ct = await getStorage("customCtEntries");
 	cleanupPref = await getStorage("cleanupPref");
 	disablePref = await getStorage("disablePref");
+	notifDetectPref = await getStorage("notifDetectPref");
+	notifPref = await getStorage("notifPref");
+	downloadDirectPref = await getStorage("downloadDirectPref");
+	autoDownloadPref = await getStorage("autoDownloadPref");
 };
 
 const addListeners = () => {
@@ -151,55 +159,83 @@ const addURL = async (requestDetails) => {
 
 	const tabData = await getTabData(requestDetails.tabId);
 
-	// web storage api optimization
-	const newRequestDetails = {
-		category: requestDetails.category,
-		documentUrl: requestDetails.documentUrl,
-		originUrl: requestDetails.originUrl,
-		initiator: requestDetails.initiator,
-		requestId: requestDetails.requestId,
-		tabId: requestDetails.tabId,
-		timeStamp: requestDetails.timeStamp,
-		type: requestDetails.type,
-		url: requestDetails.url,
-		headers: headers?.filter(
-			(h) =>
-				h.name.toLowerCase() === "user-agent" ||
-				h.name.toLowerCase() === "referer" ||
-				h.name.toLowerCase() === "cookie"
-		),
-		filename,
-		hostname,
-		tabData: {
-			title: tabData?.title,
-			url: tabData?.url,
-			incognito: tabData?.incognito
-		}
-	};
-	urlStorage.push(newRequestDetails);
-
-	badgeText = urlStorage.length;
-	chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
-	chrome.browserAction.setBadgeText({
-		text: badgeText.toString()
-	});
-
-	await setStorage({ urlStorage });
-
-	chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-	queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
-
 	if (
-		(await getStorage("notifDetectPref")) === false &&
-		(await getStorage("notifPref")) === false
+		requestDetails.category === "files" &&
+		downloadDirectPref &&
+		autoDownloadPref
 	) {
-		chrome.notifications.create("add", {
-			// id = only one notification of this type appears at a time
-			type: "basic",
-			iconUrl: "img/icon-dark-96.png",
-			title: _("notifTitle"),
-			message: _("notifText", requestDetails.type) + filename
+		const dlFilename = tabData
+			? (tabData.title + "/" + filename).replace(/[?%*:|"<>]/g, "_")
+			: (hostname + "/" + filename).replace(/[?%*:|"<>]/g, "_");
+
+		const dlHeaders = headers?.filter(
+			(h) => h.name.toLowerCase() === "referer"
+		);
+
+		const dlOptions = chrome.runtime
+			.getURL("")
+			.startsWith("chrome-extension://")
+			? {
+					filename: dlFilename,
+					url: requestDetails.url,
+					saveAs: false
+			  }
+			: {
+					filename: dlFilename,
+					headers: dlHeaders || [],
+					incognito: tabData?.incognito,
+					url: requestDetails.url,
+					saveAs: false
+			  };
+
+		chrome.downloads.download(dlOptions);
+	} else {
+		// web storage api optimization
+		const newRequestDetails = {
+			category: requestDetails.category,
+			documentUrl: requestDetails.documentUrl,
+			originUrl: requestDetails.originUrl,
+			initiator: requestDetails.initiator,
+			requestId: requestDetails.requestId,
+			tabId: requestDetails.tabId,
+			timeStamp: requestDetails.timeStamp,
+			type: requestDetails.type,
+			url: requestDetails.url,
+			headers: headers?.filter(
+				(h) =>
+					h.name.toLowerCase() === "user-agent" ||
+					h.name.toLowerCase() === "referer" ||
+					h.name.toLowerCase() === "cookie"
+			),
+			filename,
+			hostname,
+			tabData: {
+				title: tabData?.title,
+				url: tabData?.url,
+				incognito: tabData?.incognito
+			}
+		};
+		urlStorage.push(newRequestDetails);
+
+		badgeText = urlStorage.length;
+		chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
+		chrome.browserAction.setBadgeText({
+			text: badgeText.toString()
 		});
+
+		await setStorage({ urlStorage });
+
+		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+		queue = queue.filter((q) => q !== requestDetails.requestId); // processing finished - remove from queue
+
+		if (!notifDetectPref && !notifPref)
+			chrome.notifications.create("add", {
+				// id = only one notification of this type appears at a time
+				type: "basic",
+				iconUrl: "img/icon-dark-96.png",
+				title: _("notifTitle"),
+				message: _("notifText", requestDetails.type) + filename
+			});
 	}
 };
 

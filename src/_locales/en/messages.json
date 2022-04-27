@@ -162,7 +162,7 @@
 		"message": "Automatically download video/audio files"
 	},
 	"autoDownloadTip": {
-		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching."
+		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Does not add entries to the URL list or show notifications so as to not spam the user."
 	},
 	"manifestPref": {
 		"message": "Ignore streams"
