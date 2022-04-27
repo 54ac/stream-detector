@@ -28,7 +28,7 @@ const downloadURL = (file) => {
 		: {
 				headers:
 					file.headers?.filter((h) => h.name.toLowerCase() === "referer") || [],
-				incognito: file.incognito,
+				incognito: file.tabData?.incognito || false,
 				url: file.url
 		  };
 

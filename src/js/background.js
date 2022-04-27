@@ -183,7 +183,7 @@ const addURL = async (requestDetails) => {
 			: {
 					filename: dlFilename,
 					headers: dlHeaders || [],
-					incognito: tabData?.incognito,
+					incognito: tabData?.incognito || false,
 					url: requestDetails.url,
 					saveAs: false
 			  };
