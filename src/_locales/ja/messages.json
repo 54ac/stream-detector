@@ -20,6 +20,12 @@
 	"notifErrorText": {
 		"message": "URLをコピーできません:\n"
 	},
+	"notifDownErrorTitle": {
+		"message": "ダウンロードエラー!"
+	},
+	"notifDownErrorText": {
+		"message": "URLをダウンロードできません:\n"
+	},
 	"extText": {
 		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyoutube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLIのコマンドを組み立てます。"
 	},
@@ -84,7 +90,7 @@
 		"message": "全通知を無効にする"
 	},
 	"disablePref": {
-		"message": "The Stream Detector 無効"
+		"message": "検出停止"
 	},
 	"clearList": {
 		"message": "このURLリストを消去"
@@ -149,6 +155,15 @@
 	"filePref": {
 		"message": "video/audioファイルの直接リンクを無視する"
 	},
+	"downloadDirectPref": {
+		"message": "URLをコピーする代わりに、video/audioファイルをダウンロードする"
+	},
+	"autoDownloadPref": {
+		"message": "自動でvideo/audioファイルをダウンロードする"
+	},
+	"autoDownloadTip": {
+		"message": "標準のダウンロードフォルダにファイルを保存します。視聴中にストリーミングをダウンロードする場合などに便利です。URLリストへの追加や通知は行いませんので、スパムの心配はありません。不要なダウンロードを防ぐために、URLブラックリストを使用します。"
+	},
 	"manifestPref": {
 		"message": "ストリームを無視する"
 	},
@@ -162,7 +177,7 @@
 		"message": "検出したURLがありません"
 	},
 	"blacklistPref": {
-		"message": "ブラックリストURLを使う"
+		"message": "URLブラックリストを使う"
 	},
 	"blacklistTip": {
 		"message": "1行に1項目です。送信元と送信先のURLの両方が対象です。つまり、アドオンは効果的にこれらのフレーズを含むWebサイトを無効にするだけでなく、ストリームURLも無視します。"
