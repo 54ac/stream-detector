@@ -80,6 +80,12 @@
 	"userCommandTip": {
 		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
 	},
+	"regexCommandPref": {
+		"message": "Use regex in user-defined command"
+	},
+	"regexCommandTip": {
+		"message": "Performs replacement in final user command. Empty replacement field will remove the match."
+	},
 	"headersPref": {
 		"message": "Include additional headers"
 	},

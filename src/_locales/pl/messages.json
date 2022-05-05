@@ -80,6 +80,12 @@
 	"userCommandTip": {
 		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
 	},
+	"regexCommandPref": {
+		"message": "Użyj regex w komendzie własnej"
+	},
+	"regexCommandTip": {
+		"message": "Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
+	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki"
 	},
