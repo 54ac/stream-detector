@@ -11,6 +11,12 @@ const supported = [
 		type: "DASH",
 		category: "stream"
 	},
+	{
+		ext: ["mpd", "json?base64_init=1"],
+		ct: ["binary/octet-stream"],
+		type: "octet-stream",
+		category: "stream"
+	},
 	{ ext: ["f4m"], ct: ["application/f4m"], type: "HDS", category: "stream" },
 	{ ext: ["ism/manifest"], ct: [], type: "MSS", category: "stream" },
 	{ ext: ["vtt"], ct: ["text/vtt"], type: "VTT", category: "subtitles" },
