@@ -80,6 +80,12 @@
 	"userCommandTip": {
 		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
 	},
+	"regexCommandPref": {
+		"message": "Регулярное выражение в пользовательской команде"
+	},
+	"regexCommandTip": {
+		"message": "Поиск и замена в конечной пользовательской команде. Пустое поле замены удаляет найденное совпадение."
+	},
 	"headersPref": {
 		"message": "Включать дополнительные заголовки"
 	},
