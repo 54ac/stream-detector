@@ -91,10 +91,12 @@ const urlFilter = (requestDetails) => {
 		// go through the extensions and see if the url contains any
 		e =
 			customExtPref === true &&
-			customSupported.ext?.some((fe) => url.includes("." + fe)) &&
+			customSupported.ext?.some((fe) => url.toLowerCase().includes("." + fe)) &&
 			customSupported;
 		if (!e)
-			e = supported.find((f) => f.ext.some((fe) => url.includes("." + fe)));
+			e = supported.find((f) =>
+				f.ext.some((fe) => url.toLowerCase().includes("." + fe))
+			);
 	} else if (requestDetails.responseHeaders) {
 		const header = requestDetails.responseHeaders.find(
 			(h) => h.name.toLowerCase() === "content-type"
@@ -122,12 +124,15 @@ const urlFilter = (requestDetails) => {
 			(blacklistPref &&
 				blacklistEntries?.filter(
 					(entry) =>
-						requestDetails.url?.includes(entry) ||
+						requestDetails.url?.toLowerCase().includes(entry.toLowerCase()) ||
 						(
 							requestDetails.documentUrl ||
 							requestDetails.originUrl ||
 							requestDetails.initiator
-						)?.includes(entry)
+						)
+							?.toLowerCase()
+							.includes(entry.toLowerCase()) ||
+						e.type.toLowerCase().includes(entry.toLowerCase())
 				).length === 0))
 	) {
 		queue.push(requestDetails.requestId);

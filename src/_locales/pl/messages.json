@@ -84,7 +84,7 @@
 		"message": "Użyj regex w komendzie własnej"
 	},
 	"regexCommandTip": {
-		"message": "Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
+		"message": "Wpisz pełny wzór z opcjonalnymi flagami, np. /ab+c/i. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
 	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki"
@@ -186,7 +186,7 @@
 		"message": "Filtr linków"
 	},
 	"blacklistTip": {
-		"message": "Każdy wpis w nowej linii. Dotyczy linków źródłowych i docelowych - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki do streamów zawierające te frazy w adresie."
+		"message": "Każdy wpis w nowej linii, ignoruje wielkość liter. Dotyczy typów streamów/plików oraz linków - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje pliki/streamy określonego typu i linki zawierające te frazy w adresie."
 	},
 	"customExtPref": {
 		"message": "Wykrywaj dodatkowe rozszerzenia plików"

@@ -408,6 +408,27 @@ const copyURL = async (info) => {
 			}
 		}
 
+		// regex for user command
+		if (fileMethod === "user" && (await getStorage("regexCommandPref"))) {
+			const regexCommand = await getStorage("regexCommand");
+			const regexReplace = await getStorage("regexReplace");
+
+			if (
+				regexCommand &&
+				regexCommand.includes("/") &&
+				regexCommand.split("/").length < 4
+			) {
+				const regexPattern = regexCommand.split("/"); // 0 - empty, 1 - regex, 2 - flags
+				code = code.replace(
+					new RegExp(regexPattern[1], regexPattern[2] || ""),
+					regexReplace || ""
+				);
+			} else if (regexCommand) {
+				// parse as string instead of pattern
+				code = code.replace(new RegExp(regexCommand, ""), regexReplace || "");
+			}
+		}
+
 		// used to communicate with clipboard/notifications api
 		list.urls.push(code);
 		list.filenames.push(filename);

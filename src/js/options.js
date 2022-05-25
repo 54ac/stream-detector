@@ -22,6 +22,9 @@ const checkHeadersPref = () => {
 	document.getElementById("customCommandPref").disabled = false;
 	document.getElementById("customCommand").disabled = true;
 	document.getElementById("userCommand").disabled = true;
+	document.getElementById("regexCommandPref").disabled = true;
+	document.getElementById("regexCommand").disabled = true;
+	document.getElementById("regexReplace").disabled = true;
 	document.getElementById("customExtPref").disabled = false;
 	document.getElementById("customExtEntries").disabled = true;
 	document.getElementById("customCtPref").disabled = false;
@@ -79,6 +82,13 @@ const checkHeadersPref = () => {
 		"blacklistEntries"
 	).disabled = !document.getElementById("blacklistPref").checked;
 
+	document.getElementById("regexCommand").disabled = !document.getElementById(
+		"regexCommandPref"
+	).checked;
+	document.getElementById("regexReplace").disabled = !document.getElementById(
+		"regexCommandPref"
+	).checked;
+
 	if (
 		document.getElementById("copyMethod").value === "url" ||
 		document.getElementById("copyMethod").value === "tableForm"
@@ -118,6 +128,7 @@ const checkHeadersPref = () => {
 		document.getElementById("proxyCommand").disabled = true;
 		document.getElementById("customCommand").disabled = true;
 		document.getElementById("userCommand").disabled = false;
+		document.getElementById("regexCommandPref").disabled = false;
 	}
 };
 
