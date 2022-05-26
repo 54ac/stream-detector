@@ -238,7 +238,7 @@ const addURL = async (requestDetails) => {
 			await setStorage({ urlStorage });
 			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
 			allRequestDetails.map(d => d.requestId)
-								  .forEach(id => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
+				.forEach(id => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
 
 			if(!notifDetectPref && !notifPref) {
 				chrome.notifications.create("add", {
