@@ -1,12 +1,12 @@
 {
-	"name": "the-stream-detector",
+	"name": "stream-detector",
 	"author": {
 		"name": "rowrawer",
 		"email": "rowrawer@gmail.com",
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.10.5",
+	"version": "2.10.6",
 	"private": true,
 	"devDependencies": {
 		"@babel/cli": "^7.13.16",

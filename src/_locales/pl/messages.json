@@ -5,6 +5,12 @@
 	"notifText": {
 		"message": "Wykryto nowy stream $1:\n"
 	},
+	"notifManyTitle": {
+		"message": "Wykryto streamy!"
+	},
+	"notifManyText": {
+		"message": "Wykryto nowe streamy:\n"
+	},
 	"notifCopiedTitle": {
 		"message": "Skopiowano link(i)!"
 	},

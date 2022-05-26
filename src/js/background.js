@@ -6,12 +6,12 @@ import { getStorage, setStorage, clearStorage } from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage;
 
+const queue = [];
+const allRequestDetails = [];
 let urlStorage = [];
 let urlStorageRestore = [];
 let badgeText = 0;
-let queue = [];
 let requestTimeoutId = -1;
-let allRequestDetails = [];
 
 let subtitlePref;
 let filePref;
@@ -26,6 +26,8 @@ let notifDetectPref;
 let notifPref;
 let downloadDirectPref;
 let autoDownloadPref;
+let newline;
+
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
 
@@ -75,8 +77,8 @@ const init = async () => {
 
 	// newline shouldn't really be an issue but just in case
 	chrome.runtime.getPlatformInfo(async (info) => {
-		if (info.os === "win") setStorage({ newline: "\r\n" });
-		else setStorage({ newline: "\n" });
+		newline = info.os === "win" ? "\r\n" : "\n";
+		setStorage({ newline });
 	});
 
 	await updateVars();
@@ -232,24 +234,42 @@ const addURL = async (requestDetails) => {
 
 		// debounce lots of requests in a short period of time
 		clearTimeout(requestTimeoutId);
-		allRequestDetails.push(requestDetails);
+		allRequestDetails.push({
+			requestId: newRequestDetails.requestId,
+			filename: newRequestDetails.filename,
+			type: newRequestDetails.type
+		});
 
 		requestTimeoutId = setTimeout(async () => {
 			await setStorage({ urlStorage });
 			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-			allRequestDetails.map(d => d.requestId)
-				.forEach(id => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
+			allRequestDetails
+				.map((d) => d.requestId)
+				.forEach((id) => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
 
-			if(!notifDetectPref && !notifPref) {
-				chrome.notifications.create("add", {
-					// id = only one notification of this type appears at a time
-					type: "basic",
-					iconUrl: "img/icon-dark-96.png",
-					title: _("notifTitle"),
-					message: _("notifText", requestDetails.type) + filename
-				});
+			if (!notifDetectPref && !notifPref) {
+				if (allRequestDetails.length > 1)
+					// multiple files detected
+					chrome.notifications.create("add", {
+						// id = only one notification of this type appears at a time
+						type: "basic",
+						iconUrl: "img/icon-dark-96.png",
+						title: _("notifManyTitle"),
+						message:
+							_("notifManyText") +
+							allRequestDetails.map((d) => d.filename).join(newline)
+					});
+				else
+					chrome.notifications.create("add", {
+						type: "basic",
+						iconUrl: "img/icon-dark-96.png",
+						title: _("notifTitle"),
+						message: _("notifText", requestDetails.type) + filename
+					});
 			}
-		}, 100)
+
+			allRequestDetails.length = 0; // clear array for next batch
+		}, 100);
 	}
 };
 

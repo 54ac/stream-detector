@@ -5,6 +5,12 @@
 	"notifText": {
 		"message": "New $1 stream detected:\n"
 	},
+	"notifManyTitle": {
+		"message": "Multiple streams detected!"
+	},
+	"notifManyText": {
+		"message": "New streams detected:\n"
+	},
 	"notifCopiedTitle": {
 		"message": "URL(s) copied!"
 	},
