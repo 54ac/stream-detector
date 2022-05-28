@@ -3,7 +3,13 @@
 		"message": "ストリームを検出しました!"
 	},
 	"notifText": {
-		"message": "新たな $1 ストリームを検出しました:\n"
+		"message": "新たに $1 ストリームを検出しました:\n"
+	},
+	"notifManyTitle": {
+		"message": "複数のストリームを検出しました!"
+	},
+	"notifManyText": {
+		"message": "新たに複数のストリームを検出しました:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URLをコピーしました!"
@@ -79,6 +85,12 @@
 	},
 	"userCommandTip": {
 		"message": "利用可能な変数:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"regexCommandPref": {
+		"message": "ユーザ定義コマンドで正規表現を使う"
+	},
+	"regexCommandTip": {
+		"message": "完全な正規表現とオプションのフラグを使用します (例: /ab+c/i)。最終的なユーザーコマンドで置換を行います。置換フィールドが空だと、マッチパターンが削除されます。"
 	},
 	"headersPref": {
 		"message": "追加のヘッダを含める"
