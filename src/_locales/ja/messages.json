@@ -9,7 +9,7 @@
 		"message": "複数のストリームを検出しました!"
 	},
 	"notifManyText": {
-		"message": "新しいストリームを検出しました:\n"
+		"message": "新たに複数のストリームを検出しました:\n"
 	},
 	"notifCopiedTitle": {
 		"message": "URLをコピーしました!"
