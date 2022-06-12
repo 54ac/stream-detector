@@ -26,14 +26,10 @@
 		}
 	},
 	"options_ui": {
-		"browser_style": true,
-		"chrome_style": true,
-		"open_in_tab": false,
+		"open_in_tab": true,
 		"page": "options.html"
 	},
 	"browser_action": {
-		"browser_style": true,
-		"chrome_style": true,
 		"default_title": "The Stream Detector",
 		"default_popup": "popup.html",
 		"default_icon": {

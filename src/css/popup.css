@@ -8,9 +8,11 @@ body {
 }
 
 body {
+	display: flex;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+	font-size: 0.8em;
 	background: #fff;
 	color: #202023;
-	display: flex;
 }
 
 #container {
