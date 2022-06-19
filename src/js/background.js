@@ -30,6 +30,8 @@ let newline;
 
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
+const iconTheme = () =>
+	window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark";
 
 const updateVars = async () => {
 	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
@@ -275,7 +277,7 @@ const addURL = async (requestDetails) => {
 
 const deleteURL = async (message) => {
 	// url deletion
-	if (message.previous === false) {
+	if (message.previous !== true) {
 		urlStorage = urlStorage.filter(
 			(url) =>
 				!message.delete
@@ -295,7 +297,7 @@ const deleteURL = async (message) => {
 	await setStorage({ urlStorage });
 	await setStorage({ urlStorageRestore });
 	chrome.runtime.sendMessage({ urlStorage: true });
-	if (message.previous === false)
+	if (message.previous !== true)
 		chrome.browserAction.setBadgeText({
 			text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
 		});
@@ -322,7 +324,16 @@ const deleteURL = async (message) => {
 
 	await init();
 
-	if (disablePref === false) addListeners();
+	if (disablePref !== true) {
+		addListeners();
+		chrome.browserAction.setIcon({
+			path: {
+				16: `img/icon-${iconTheme()}-enabled-16.png`,
+				48: `img/icon-${iconTheme()}-enabled-48.png`,
+				96: `img/icon-${iconTheme()}-enabled-96.png`
+			}
+		});
+	}
 
 	urlStorage = await getStorage("urlStorage");
 	urlStorageRestore = await getStorage("urlStorageRestore");
@@ -357,12 +368,27 @@ const deleteURL = async (message) => {
 			) {
 				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
+				chrome.browserAction.setIcon({
+					path: {
+						16: `img/icon-${iconTheme()}-16.png`,
+						48: `img/icon-${iconTheme()}-48.png`,
+						96: `img/icon-${iconTheme()}-96.png`
+					}
+				});
 			} else if (
 				disablePref !== true &&
 				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
-			)
+			) {
 				addListeners();
+				chrome.browserAction.setIcon({
+					path: {
+						16: `img/icon-${iconTheme()}-enabled-16.png`,
+						48: `img/icon-${iconTheme()}-enabled-48.png`,
+						96: `img/icon-${iconTheme()}-enabled-96.png`
+					}
+				});
+			}
 		} else if (message.reset) {
 			await clearStorage();
 			await init();

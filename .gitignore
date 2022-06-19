@@ -5,4 +5,4 @@ chrome-pack.bat
 /node_modules
 dist.pem
 build.crx
-icon.png
+icon.svg
