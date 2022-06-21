@@ -12,6 +12,8 @@ let filenamePref;
 let timestampPref;
 let downloadDirectPref;
 let newline;
+let recentPref;
+let recentAmount;
 let urlList = [];
 
 const getTimestamp = (timestamp) => {
@@ -616,7 +618,7 @@ const createList = async () => {
 	const urlStorage = await getStorage("urlStorage");
 	const urlStorageRestore = await getStorage("urlStorageRestore");
 
-	if (urlStorage.length > 0 || urlStorageRestore.length > 0) {
+	if (urlStorage.length || urlStorageRestore.length) {
 		const urlStorageFilter = document
 			.getElementById("filterInput")
 			.value.toLowerCase();
@@ -637,9 +639,11 @@ const createList = async () => {
 				urlList = urlStorageRestore || [];
 			}
 
+			urlList = urlList.length && urlList.reverse(); // latest entries first
+
 			if (urlStorageFilter)
 				urlList =
-					urlList &&
+					urlList.length &&
 					urlList.filter(
 						(url) =>
 							url.filename.toLowerCase().includes(urlStorageFilter) ||
@@ -648,11 +652,14 @@ const createList = async () => {
 							url.hostname.toLowerCase().includes(urlStorageFilter)
 					);
 
+			if (recentPref && urlList.length > recentAmount)
+				urlList.length = recentAmount;
+
 			// clear list first just in case - quick and dirty
 			table.innerHTML = "";
 
 			urlList.length
-				? insertList(urlList.reverse()) // latest entries first
+				? insertList(urlList) // latest entries first
 				: insertPlaceholder();
 		});
 	} else {
@@ -676,6 +683,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 	timestampPref = await getStorage("timestampPref");
 	downloadDirectPref = await getStorage("downloadDirectPref");
 	newline = await getStorage("newline");
+	recentPref = await getStorage("recentPref");
+	recentAmount = await getStorage("recentAmount");
 
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {

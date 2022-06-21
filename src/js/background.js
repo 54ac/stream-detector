@@ -10,7 +10,6 @@ const queue = [];
 const allRequestDetails = [];
 let urlStorage = [];
 let urlStorageRestore = [];
-let badgeText = 0;
 let requestTimeoutId = -1;
 
 let subtitlePref;
@@ -228,12 +227,6 @@ const addURL = async (requestDetails) => {
 		};
 		urlStorage.push(newRequestDetails);
 
-		badgeText = urlStorage.length;
-		chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
-		chrome.browserAction.setBadgeText({
-			text: badgeText.toString()
-		});
-
 		// debounce lots of requests in a short period of time
 		clearTimeout(requestTimeoutId);
 		allRequestDetails.push({
@@ -245,6 +238,10 @@ const addURL = async (requestDetails) => {
 		requestTimeoutId = setTimeout(async () => {
 			await setStorage({ urlStorage });
 			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+			chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
+			chrome.browserAction.setBadgeText({
+				text: urlStorage.length.toString()
+			});
 			allRequestDetails
 				.map((d) => d.requestId)
 				.forEach((id) => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
@@ -284,7 +281,6 @@ const deleteURL = async (message) => {
 					.map((msgUrl) => msgUrl.requestId)
 					.includes(url.requestId)
 		);
-		badgeText = urlStorage.length;
 	} else {
 		urlStorageRestore = urlStorageRestore.filter(
 			(url) =>
@@ -299,7 +295,7 @@ const deleteURL = async (message) => {
 	chrome.runtime.sendMessage({ urlStorage: true });
 	if (message.previous !== true)
 		chrome.browserAction.setBadgeText({
-			text: badgeText === 0 ? "" : badgeText.toString() // only display at 1+
+			text: urlStorage.length === 0 ? "" : urlStorage.length.toString() // only display at 1+
 		});
 };
 
@@ -352,6 +348,9 @@ const deleteURL = async (message) => {
 		urlStorageRestore = urlStorageRestore.filter(
 			(url) => url.tabData?.incognito !== true
 		);
+
+		// urls from previous session were moved to urlStorageRestore
+		urlStorage = [];
 
 		await setStorage({ urlStorageRestore });
 		await setStorage({ urlStorage: [] });

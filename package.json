@@ -6,7 +6,7 @@
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.10.7",
+	"version": "2.10.8",
 	"private": true,
 	"devDependencies": {
 		"@babel/cli": "^7.13.16",

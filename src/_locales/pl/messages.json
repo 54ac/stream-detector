@@ -212,6 +212,9 @@
 	"cleanupTip": {
 		"message": "Wykonywane jedynie przy restarcie w celu uniknięcia wypadków."
 	},
+	"recentPref": {
+		"message": "Wyświetl jedynie określoną liczbę ostatnich wpisów"
+	},
 	"resetButtonLabel": {
 		"message": "Reset wszystkich ustawień (w przypadku awarii)"
 	},

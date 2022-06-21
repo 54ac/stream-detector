@@ -32,6 +32,8 @@ const checkHeadersPref = () => {
 	document.getElementById("blacklistPref").disabled = false;
 	document.getElementById("blacklistEntries").disabled = true;
 	document.getElementById("cleanupPref").disabled = false;
+	document.getElementById("recentPref").disabled = false;
+	document.getElementById("recentAmount").disabled = true;
 	document.getElementById("notifDetectPref").disabled = false;
 	document.getElementById("downloadDirectPref").disabled = false;
 	document.getElementById("autoDownloadPref").disabled = false;
@@ -87,6 +89,10 @@ const checkHeadersPref = () => {
 	).checked;
 	document.getElementById("regexReplace").disabled = !document.getElementById(
 		"regexCommandPref"
+	).checked;
+
+	document.getElementById("recentAmount").disabled = !document.getElementById(
+		"recentPref"
 	).checked;
 
 	if (
@@ -167,7 +173,7 @@ const restoreOptions = async () => {
 	checkHeadersPref();
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
 		if (option.type !== "button") option.onchange = (e) => saveOption(e);
@@ -178,11 +184,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		window.confirm(_("resetButtonConfirm")) &&
 		chrome.runtime.sendMessage({ reset: true });
 
+	await restoreOptions();
+
 	// i18n
 	const labels = document.getElementsByTagName("label");
-	for (const label of labels) {
-		label.textContent = _(label.htmlFor) + ":";
-	}
+	for (const label of labels) label.textContent = _(label.htmlFor) + ":";
+
 	const selectOptions = document.getElementsByTagName("option");
 	for (const selectOption of selectOptions) {
 		if (!selectOption.textContent)
@@ -197,8 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	for (const button of buttons) {
 		button.textContent = _(button.id);
 	}
-
-	restoreOptions();
 
 	// sync with popup changes
 	chrome.runtime.onMessage.addListener((message) => {

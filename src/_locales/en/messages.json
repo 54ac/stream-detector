@@ -212,6 +212,9 @@
 	"cleanupTip": {
 		"message": "Applied only on restart in case of accidents."
 	},
+	"recentPref": {
+		"message": "Only show certain number of latest entries"
+	},
 	"resetButtonLabel": {
 		"message": "Reset all settings (in case of emergency)"
 	},
