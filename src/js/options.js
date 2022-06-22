@@ -173,7 +173,7 @@ const restoreOptions = async () => {
 	checkHeadersPref();
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
 		if (option.type !== "button") option.onchange = (e) => saveOption(e);
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		window.confirm(_("resetButtonConfirm")) &&
 		chrome.runtime.sendMessage({ reset: true });
 
-	await restoreOptions();
+	restoreOptions();
 
 	// i18n
 	const labels = document.getElementsByTagName("label");
