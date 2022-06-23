@@ -5,6 +5,12 @@
 	"notifText": {
 		"message": "Найден новый $1-поток:\n"
 	},
+	"notifManyTitle": {
+		"message": "Найдено несколько потоков!"
+	},
+	"notifManyText": {
+		"message": "Найдены новые потоки:\n"
+	},
 	"notifCopiedTitle": {
 		"message": "Скопировано!"
 	},
@@ -205,6 +211,9 @@
 	},
 	"cleanupTip": {
 		"message": "Используется только при перезапуске в случае сбоев."
+	},
+	"recentPref": {
+		"message": "Показывать определённое количество последних записей"
 	},
 	"resetButtonLabel": {
 		"message": "Сброс всех настроек (в экстренном случае)"
