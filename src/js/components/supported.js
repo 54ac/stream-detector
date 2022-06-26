@@ -38,13 +38,26 @@ const supported = [
 		type: "MP4",
 		category: "files"
 	},
-	{ ext: ["m4a"], ct: ["audio/m4a"], type: "M4A", category: "files" },
-	{ ext: ["ts"], ct: ["video/mp2t"], type: "TS", category: "files" },
-	{ ext: ["aac"], ct: ["audio/aac"], type: "AAC", category: "files" },
+	{ ext: ["ts", "m2t"], ct: ["video/mp2t"], type: "TS", category: "files" },
+	{
+		ext: ["aac", "m4a"],
+		ct: ["audio/aac", "audio/m4a"],
+		type: "AAC",
+		category: "files"
+	},
 	{ ext: ["mp3"], ct: ["audio/mpeg"], type: "MP3", category: "files" },
-	{ ext: ["opus"], ct: ["audio/opus"], type: "OPUS", category: "files" },
-	{ ext: ["weba"], ct: ["audio/webm"], type: "WEBM", category: "files" },
-	{ ext: ["webm"], ct: ["video/webm"], type: "WEBM", category: "files" }
+	{
+		ext: ["ogg", "ogv", "oga", "opus"],
+		ct: ["video/ogg", "audio/ogg", "audio/opus"],
+		type: "OGG",
+		category: "files"
+	},
+	{
+		ext: ["weba", "webm"],
+		ct: ["audio/webm", "video/webm"],
+		type: "WEBM",
+		category: "files"
+	}
 ];
 
 export default supported;
