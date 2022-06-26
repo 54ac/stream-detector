@@ -170,7 +170,8 @@ const addURL = async (requestDetails) => {
 	const tabData = await getTabData(requestDetails.tabId);
 
 	if (
-		requestDetails.category === "files" &&
+		(requestDetails.category === "files" ||
+			requestDetails.category === "custom") &&
 		downloadDirectPref &&
 		autoDownloadPref
 	) {

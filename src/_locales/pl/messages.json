@@ -165,13 +165,13 @@
 		"message": "Nie wykrywaj napisów"
 	},
 	"filePref": {
-		"message": "Nie wykrywaj bezpośrednich linków do plików wideo/audio"
+		"message": "Nie wykrywaj bezpośrednich linków do multimediów"
 	},
 	"downloadDirectPref": {
-		"message": "Ściągnij pliki wideo/audio bezpośrednio zamiast kopiować ich linki"
+		"message": "Ściągaj pliki bezpośrednio zamiast kopiować ich linki (oprócz manifestów)"
 	},
 	"autoDownloadPref": {
-		"message": "Automatycznie ściągaj pliki wideo/audio"
+		"message": "Automatycznie ściągaj multimedia"
 	},
 	"autoDownloadTip": {
 		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Nie dodaje linków do listy ani nie pokazuje powiadomień, aby nie spamować użytkownika. Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."

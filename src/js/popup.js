@@ -474,7 +474,11 @@ const copyURL = async (info) => {
 };
 
 const handleURL = (url) => {
-	if (downloadDirectPref && url.category === "files") downloadURL(url);
+	if (
+		downloadDirectPref &&
+		(url.category === "files" || url.category === "custom")
+	)
+		downloadURL(url);
 	else copyURL([url]);
 };
 
@@ -526,7 +530,9 @@ const createList = async () => {
 
 			const extCell = document.createElement("td");
 			extCell.textContent =
-				requestDetails.category === "files" && downloadDirectPref
+				(requestDetails.category === "files" ||
+					requestDetails.category === "custom") &&
+				downloadDirectPref
 					? "🔽 " + requestDetails.type.toUpperCase()
 					: requestDetails.type.toUpperCase();
 

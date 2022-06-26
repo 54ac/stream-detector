@@ -165,13 +165,13 @@
 		"message": "Ignore subtitles"
 	},
 	"filePref": {
-		"message": "Ignore direct links to video/audio files"
+		"message": "Ignore direct links to media files"
 	},
 	"downloadDirectPref": {
-		"message": "Download video/audio files instead of copying their URLs"
+		"message": "Download non-manifest files instead of copying their URLs"
 	},
 	"autoDownloadPref": {
-		"message": "Automatically download video/audio files"
+		"message": "Automatically download non-manifest files"
 	},
 	"autoDownloadTip": {
 		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Does not add entries to the URL list or show notifications so as to not spam the user. Use URL blacklist to prevent unwanted downloads."
