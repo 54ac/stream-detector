@@ -165,13 +165,13 @@
 		"message": "字幕を無視する"
 	},
 	"filePref": {
-		"message": "video/audioファイルの直接リンクを無視する"
+		"message": "メディアファイルの直接リンクを無視する"
 	},
 	"downloadDirectPref": {
-		"message": "URLをコピーする代わりに、video/audioファイルをダウンロードする"
+		"message": "URLをコピーする代わりに、メディアファイルをダウンロードする"
 	},
 	"autoDownloadPref": {
-		"message": "自動でvideo/audioファイルをダウンロードする"
+		"message": "自動でメディアファイルをダウンロードする"
 	},
 	"autoDownloadTip": {
 		"message": "標準のダウンロードフォルダにファイルを保存します。視聴中にストリーミングをダウンロードする場合などに便利です。URLリストへの追加や通知は行いませんので、スパムの心配はありません。不要なダウンロードを防ぐために、URLブラックリストを使用します。"
@@ -211,6 +211,9 @@
 	},
 	"cleanupTip": {
 		"message": "障害発生による再起動時のみ適用されます。"
+	},
+	"recentPref": {
+		"message": "最新エントリーの表示数を限定する"
 	},
 	"resetButtonLabel": {
 		"message": "全設定をリセット(緊急用)"
