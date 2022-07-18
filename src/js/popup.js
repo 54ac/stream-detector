@@ -21,6 +21,15 @@ const getTimestamp = (timestamp) => {
 	return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };
 
+// https://stackoverflow.com/a/18650828
+const formatBytes = (bytes) => {
+	const sizes = ["B", "KB", "MB", "GB", "TB"];
+
+	const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+	return parseFloat((bytes / 1024 ** i).toFixed(2)) + " " + sizes[i];
+};
+
 const downloadURL = (file) => {
 	// only firefox supports replacing the referer header
 	const dlOptions = chrome.runtime.getURL("").startsWith("chrome-extension://")
@@ -191,7 +200,9 @@ const copyURL = async (info) => {
 					: (headerUserAgent = navigator.userAgent);
 
 				let headerCookie = e.headers.find(
-					(header) => header.name.toLowerCase() === "cookie"
+					(header) =>
+						header.name.toLowerCase() === "cookie" ||
+						header.name.toLowerCase() === "set-cookie"
 				);
 				if (headerCookie)
 					headerCookie = headerCookie.value.replace(new RegExp(`"`, "g"), `'`); // double quotation marks mess up the command
@@ -553,6 +564,20 @@ const createList = async () => {
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 
+			const sizeCell = document.createElement("td");
+			const sizeCellHeader = requestDetails.headers.find(
+				(header) => header.name.toLowerCase() === "content-length"
+			);
+			if (
+				(requestDetails.category === "files" ||
+					requestDetails.category === "custom") &&
+				sizeCellHeader &&
+				Number(sizeCellHeader.value) !== 0
+			) {
+				sizeCell.textContent = formatBytes(sizeCellHeader.value);
+				sizeCell.title = sizeCellHeader.value;
+			} else sizeCell.textContent = "-";
+
 			const sourceCell = document.createElement("td");
 			sourceCell.textContent =
 				titlePref &&
@@ -595,6 +620,7 @@ const createList = async () => {
 
 			row.appendChild(extCell);
 			row.appendChild(urlCell);
+			row.appendChild(sizeCell);
 			row.appendChild(sourceCell);
 			row.appendChild(timestampCell);
 			row.appendChild(deleteCell);

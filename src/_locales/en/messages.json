@@ -125,6 +125,9 @@
 	"popupFilename": {
 		"message": "Filename"
 	},
+	"popupSize": {
+		"message": "Size"
+	},
 	"popupSource": {
 		"message": "Source"
 	},
@@ -216,7 +219,7 @@
 		"message": "Only show certain number of latest entries"
 	},
 	"resetButtonLabel": {
-		"message": "Reset all settings (in case of emergency)"
+		"message": "Reset all addon data (in case of emergency)"
 	},
 	"resetButton": {
 		"message": "Reset settings"

@@ -125,6 +125,9 @@
 	"popupFilename": {
 		"message": "Nazwa pliku"
 	},
+	"popupSize": {
+		"message": "Rozmiar"
+	},
 	"popupSource": {
 		"message": "Źródło"
 	},
@@ -216,7 +219,7 @@
 		"message": "Wyświetl jedynie określoną liczbę ostatnich wpisów"
 	},
 	"resetButtonLabel": {
-		"message": "Reset wszystkich ustawień (w przypadku awarii)"
+		"message": "Reset wszystkich danych dodatku (w przypadku awarii)"
 	},
 	"resetButton": {
 		"message": "Reset ustawień"

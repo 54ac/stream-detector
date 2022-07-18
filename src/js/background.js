@@ -52,11 +52,6 @@ const updateVars = async () => {
 };
 
 const addListeners = () => {
-	chrome.webRequest.onBeforeSendHeaders.addListener(
-		urlFilter,
-		{ urls: ["<all_urls>"] },
-		isChrome ? ["requestHeaders", "extraHeaders"] : ["requestHeaders"]
-	);
 	chrome.webRequest.onHeadersReceived.addListener(
 		urlFilter,
 		{ urls: ["<all_urls>"] },
@@ -216,7 +211,9 @@ const addURL = async (requestDetails) => {
 				(h) =>
 					h.name.toLowerCase() === "user-agent" ||
 					h.name.toLowerCase() === "referer" ||
-					h.name.toLowerCase() === "cookie"
+					h.name.toLowerCase() === "cookie" ||
+					h.name.toLowerCase() === "set-cookie" ||
+					h.name.toLowerCase() === "content-length"
 			),
 			filename,
 			hostname,
@@ -363,10 +360,8 @@ const deleteURL = async (message) => {
 			await updateVars();
 			if (
 				disablePref === true &&
-				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
-				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
 				chrome.browserAction.setIcon({
 					path: {
@@ -377,7 +372,6 @@ const deleteURL = async (message) => {
 				});
 			} else if (
 				disablePref !== true &&
-				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
 				addListeners();
@@ -391,6 +385,9 @@ const deleteURL = async (message) => {
 			}
 		} else if (message.reset) {
 			await clearStorage();
+			chrome.browserAction.setBadgeText({ text: "" });
+			urlStorage = [];
+			urlStorageRestore = [];
 			await init();
 			chrome.runtime.sendMessage({ options: true });
 		}
