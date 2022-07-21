@@ -84,33 +84,34 @@ const getTabData = async (tab) =>
 	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
 
 const urlFilter = (requestDetails) => {
-	let e;
+	let ext;
+	let head;
 
-	if (requestDetails.requestHeaders) {
-		const url = new URL(requestDetails.url).pathname.toLowerCase();
-		// go through the extensions and see if the url contains any
-		e =
-			customExtPref === true &&
-			customSupported.ext?.some((fe) => url.toLowerCase().includes("." + fe)) &&
-			customSupported;
-		if (!e)
-			e = supported.find((f) =>
-				f.ext.some((fe) => url.toLowerCase().includes("." + fe))
-			);
-	} else if (requestDetails.responseHeaders) {
-		const header = requestDetails.responseHeaders.find(
-			(h) => h.name.toLowerCase() === "content-type"
+	const url = new URL(requestDetails.url).pathname.toLowerCase();
+	// check file extension and see if the url matches
+	ext =
+		customExtPref === true &&
+		customSupported.ext?.some((fe) => url.toLowerCase().includes("." + fe)) &&
+		customSupported;
+	if (!ext)
+		ext = supported.find((f) =>
+			f.ext.some((fe) => url.toLowerCase().includes("." + fe))
 		);
-		if (header?.value) {
-			// go through content types and see if the header matches
-			e =
-				customCtPref === true &&
-				customSupported?.ct?.includes(header.value.toLowerCase()) &&
-				customSupported;
-			if (!e)
-				e = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
-		}
+
+	const header = requestDetails.responseHeaders?.find(
+		(h) => h.name.toLowerCase() === "content-type"
+	);
+	if (header?.value) {
+		// check content type header and see if it matches
+		head =
+			customCtPref === true &&
+			customSupported?.ct?.includes(header.value.toLowerCase()) &&
+			customSupported;
+		if (!head)
+			head = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
 	}
+
+	const e = head || ext;
 
 	if (
 		e &&
@@ -159,8 +160,7 @@ const addURL = async (requestDetails) => {
 
 	const { hostname } = url;
 	// depends on which listener caught it
-	const headers =
-		requestDetails.requestHeaders || requestDetails.responseHeaders;
+	const headers = requestDetails.responseHeaders;
 
 	const tabData = await getTabData(requestDetails.tabId);
 
