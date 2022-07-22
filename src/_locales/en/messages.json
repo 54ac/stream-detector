@@ -192,10 +192,10 @@
 		"message": "No URLs available."
 	},
 	"blacklistPref": {
-		"message": "Use URL blacklist"
+		"message": "Use content blacklist"
 	},
 	"blacklistTip": {
-		"message": "One entry per line, case insensitive. Concerns stream/file types and URLs, i.e. the addon will be effectively disabled on any websites as well as ignore any URLs or stream/file types containing these phrases."
+		"message": "One entry per line, case insensitive. Concerns stream/file types, Content-Type headers, and URLs, i.e. the addon will be effectively ignore any URLs involving these phrases."
 	},
 	"customExtPref": {
 		"message": "Detect additional file extensions"

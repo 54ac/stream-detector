@@ -105,10 +105,12 @@ const urlFilter = (requestDetails) => {
 		// check content type header and see if it matches
 		head =
 			customCtPref === true &&
-			customSupported?.ct?.includes(header.value.toLowerCase()) &&
+			customSupported?.ct?.toLowerCase().includes(header.value.toLowerCase()) &&
 			customSupported;
 		if (!head)
-			head = supported.find((f) => f.ct.includes(header.value.toLowerCase()));
+			head = supported.find((f) =>
+				f.ct.toLowerCase().includes(header.value.toLowerCase())
+			);
 	}
 
 	const e = head || ext;
@@ -123,7 +125,7 @@ const urlFilter = (requestDetails) => {
 		(!manifestPref || (manifestPref && e.category !== "stream")) &&
 		(!blacklistPref ||
 			(blacklistPref &&
-				blacklistEntries?.filter(
+				!blacklistEntries?.some(
 					(entry) =>
 						requestDetails.url?.toLowerCase().includes(entry.toLowerCase()) ||
 						(
@@ -133,8 +135,9 @@ const urlFilter = (requestDetails) => {
 						)
 							?.toLowerCase()
 							.includes(entry.toLowerCase()) ||
+						header?.value?.toLowerCase().includes(entry.toLowerCase()) ||
 						e.type.toLowerCase().includes(entry.toLowerCase())
-				).length === 0))
+				)))
 	) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;

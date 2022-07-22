@@ -192,10 +192,10 @@
 		"message": "Brak dostępnych linków."
 	},
 	"blacklistPref": {
-		"message": "Filtr linków"
+		"message": "Filtr danych"
 	},
 	"blacklistTip": {
-		"message": "Każdy wpis w nowej linii, ignoruje wielkość liter. Dotyczy typów streamów/plików oraz linków - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje pliki/streamy określonego typu i linki zawierające te frazy w adresie."
+		"message": "Każdy wpis w nowej linii, ignoruje wielkość liter. Dotyczy typów streamów/plików, nagłówków Content-Type oraz linków - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki związane z danymi frazami."
 	},
 	"customExtPref": {
 		"message": "Wykrywaj dodatkowe rozszerzenia plików"
