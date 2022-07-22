@@ -95,7 +95,7 @@ const urlFilter = (requestDetails) => {
 		customSupported;
 	if (!ext)
 		ext = supported.find((f) =>
-			f.ext.some((fe) => url.toLowerCase().includes("." + fe))
+			f.ext?.some((fe) => url.toLowerCase().includes("." + fe))
 		);
 
 	const header = requestDetails.responseHeaders?.find(
@@ -105,11 +105,15 @@ const urlFilter = (requestDetails) => {
 		// check content type header and see if it matches
 		head =
 			customCtPref === true &&
-			customSupported?.ct?.toLowerCase().includes(header.value.toLowerCase()) &&
+			customSupported?.ct?.some((fe) =>
+				header.value.toLowerCase().includes(fe.toLowerCase())
+			) &&
 			customSupported;
 		if (!head)
 			head = supported.find((f) =>
-				f.ct.toLowerCase().includes(header.value.toLowerCase())
+				f.ct?.some((fe) =>
+					header.value.toLowerCase().includes(fe.toLowerCase())
+				)
 			);
 	}
 
