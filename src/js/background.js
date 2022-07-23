@@ -111,9 +111,7 @@ const urlFilter = (requestDetails) => {
 			customSupported;
 		if (!head)
 			head = supported.find((f) =>
-				f.ct?.some((fe) =>
-					header.value.toLowerCase().includes(fe.toLowerCase())
-				)
+				f.ct?.some((fe) => header.value.toLowerCase() === fe.toLowerCase())
 			);
 	}
 
