@@ -1,7 +1,11 @@
 const supported = [
 	{
 		ext: ["m3u8"],
-		ct: ["application/x-mpegurl", "application/vnd.apple.mpegurl"],
+		ct: [
+			"application/x-mpegurl",
+			"application/vnd.apple.mpegurl",
+			"audio/vnd.apple.mpegurl"
+		],
 		type: "HLS",
 		category: "stream"
 	},
