@@ -37,6 +37,8 @@ const checkHeadersPref = () => {
 	document.getElementById("notifDetectPref").disabled = false;
 	document.getElementById("downloadDirectPref").disabled = false;
 	document.getElementById("autoDownloadPref").disabled = false;
+	document.getElementById("fileSizePref").disabled = true;
+	document.getElementById("fileSizeAmount").disabled = true;
 
 	document.getElementById("subtitlePref").disabled = document.getElementById(
 		"disablePref"
@@ -93,6 +95,13 @@ const checkHeadersPref = () => {
 
 	document.getElementById("recentAmount").disabled = !document.getElementById(
 		"recentPref"
+	).checked;
+
+	document.getElementById("fileSizePref").disabled = document.getElementById(
+		"filePref"
+	).checked;
+	document.getElementById("fileSizeAmount").disabled = !document.getElementById(
+		"fileSizePref"
 	).checked;
 
 	if (

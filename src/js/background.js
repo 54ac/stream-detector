@@ -14,6 +14,8 @@ let requestTimeoutId = -1;
 
 let subtitlePref;
 let filePref;
+let fileSizePref;
+let fileSizeAmount;
 let manifestPref;
 let blacklistPref;
 let blacklistEntries;
@@ -36,6 +38,8 @@ const updateVars = async () => {
 	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
 	subtitlePref = await getStorage("subtitlePref");
 	filePref = await getStorage("filePref");
+	fileSizePref = await getStorage("fileSizePref");
+	fileSizeAmount = await getStorage("fileSizeAmount");
 	manifestPref = await getStorage("manifestPref");
 	blacklistPref = await getStorage("blacklistPref");
 	blacklistEntries = await getStorage("blacklistEntries");
@@ -98,22 +102,26 @@ const urlFilter = (requestDetails) => {
 			f.ext?.some((fe) => url.toLowerCase().includes("." + fe))
 		);
 
-	const header = requestDetails.responseHeaders?.find(
+	const headerCt = requestDetails.responseHeaders?.find(
 		(h) => h.name.toLowerCase() === "content-type"
 	);
-	if (header?.value) {
+	if (headerCt?.value) {
 		// check content type header and see if it matches
 		head =
 			customCtPref === true &&
 			customSupported?.ct?.some((fe) =>
-				header.value.toLowerCase().includes(fe.toLowerCase())
+				headerCt.value.toLowerCase().includes(fe.toLowerCase())
 			) &&
 			customSupported;
 		if (!head)
 			head = supported.find((f) =>
-				f.ct?.some((fe) => header.value.toLowerCase() === fe.toLowerCase())
+				f.ct?.some((fe) => headerCt.value.toLowerCase() === fe.toLowerCase())
 			);
 	}
+
+	const headerSize = requestDetails.responseHeaders?.find(
+		(h) => h.name.toLowerCase() === "content-length"
+	);
 
 	const e = head || ext;
 
@@ -124,6 +132,13 @@ const urlFilter = (requestDetails) => {
 		requestDetails.tabId !== -1 &&
 		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
 		(!filePref || (filePref && e.category !== "files")) &&
+		(!fileSizePref ||
+			(fileSizePref &&
+				fileSizeAmount &&
+				e.category !== "stream" &&
+				// hardcoded MB for size limits for now
+				headerSize?.value &&
+				Math.floor(headerSize.value / 1024 / 1024) >= fileSizeAmount)) &&
 		(!manifestPref || (manifestPref && e.category !== "stream")) &&
 		(!blacklistPref ||
 			(blacklistPref &&
@@ -137,7 +152,7 @@ const urlFilter = (requestDetails) => {
 						)
 							?.toLowerCase()
 							.includes(entry.toLowerCase()) ||
-						header?.value?.toLowerCase().includes(entry.toLowerCase()) ||
+						headerCt?.value?.toLowerCase().includes(entry.toLowerCase()) ||
 						e.type.toLowerCase().includes(entry.toLowerCase())
 				)))
 	) {

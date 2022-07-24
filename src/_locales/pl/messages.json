@@ -170,6 +170,9 @@
 	"filePref": {
 		"message": "Nie wykrywaj bezpośrednich linków do multimediów"
 	},
+	"fileSizePref": {
+		"message": "Ignoruj pliki multimedialne o wielkości poniżej"
+	},
 	"downloadDirectPref": {
 		"message": "Ściągaj pliki bezpośrednio zamiast kopiować ich linki (oprócz manifestów)"
 	},

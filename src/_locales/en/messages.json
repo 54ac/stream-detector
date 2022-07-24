@@ -170,6 +170,9 @@
 	"filePref": {
 		"message": "Ignore direct links to media files"
 	},
+	"fileSizePref": {
+		"message": "Ignore media files smaller than"
+	},
 	"downloadDirectPref": {
 		"message": "Download non-manifest files instead of copying their URLs"
 	},

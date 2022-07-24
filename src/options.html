@@ -52,6 +52,23 @@
 				</tr>
 				<tr>
 					<td>
+						<label for="fileSizePref"></label>
+					</td>
+					<td>
+						<input class="option" id="fileSizePref" type="checkbox" />
+						<div style="display: inline">
+							<input
+								class="option"
+								id="fileSizeAmount"
+								type="number"
+								min="1"
+								value="1"
+							/>&nbsp;MB
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<label for="manifestPref"></label>
 					</td>
 					<td>
@@ -288,21 +305,27 @@
 				</tr>
 				<tr>
 					<td>
-						<label for="notifDetectPref"></label>
-					</td>
-					<td>
-						<input class="option" id="notifDetectPref" type="checkbox" />
-					</td>
-				</tr>
-				<tr>
-					<td>
 						<label for="recentPref"></label>
 					</td>
 					<td>
 						<input class="option" id="recentPref" type="checkbox" />
 						<div style="display: inline">
-							<input class="option" id="recentAmount" type="number" value="5" />
+							<input
+								class="option"
+								id="recentAmount"
+								type="number"
+								min="1"
+								value="5"
+							/>
 						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="notifDetectPref"></label>
+					</td>
+					<td>
+						<input class="option" id="notifDetectPref" type="checkbox" />
 					</td>
 				</tr>
 				<tr>
