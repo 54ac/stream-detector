@@ -328,6 +328,11 @@ const deleteURL = async (message) => {
 	// clear everything and/or set up
 	chrome.browserAction.setBadgeText({ text: "" });
 
+	chrome.browserAction.onClicked.addListener(
+		(tab, OnClickData) =>
+			OnClickData?.button === 1 && chrome.tabs.create({ url: "/popup.html" })
+	);
+
 	// cleanup for major updates
 	/*
 	const manifestVersion = chrome.runtime.getManifest().version;

@@ -1,7 +1,7 @@
 html,
 body {
 	padding: 0;
-	margin: 0;
+	margin: 0 auto;
 	width: max-content;
 	max-width: 800px;
 	max-height: 600px;
@@ -9,7 +9,17 @@ body {
 
 body {
 	display: flex;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+	font-family:
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		Oxygen-Sans,
+		Ubuntu,
+		Cantarell,
+		"Helvetica Neue",
+		Arial,
+		sans-serif;
 	font-size: 0.8em;
 	background: #fff;
 	color: #202023;
