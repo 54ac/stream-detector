@@ -112,7 +112,7 @@ const copyURL = async (info) => {
 					code = "streamlink";
 					break;
 				case "youtubedl":
-					code = "youtube-dl --no-part --restrict-filenames";
+					code = "youtube-dl --no-part --restrict-filenames -N 4";
 					// use external downloader
 					if (
 						(await getStorage("downloaderPref")) &&
@@ -124,7 +124,7 @@ const copyURL = async (info) => {
 					break;
 				// this could be implemented better - maybe someday
 				case "ytdlp":
-					code = "yt-dlp --no-part --restrict-filenames";
+					code = "yt-dlp --no-part --restrict-filenames -N 4";
 					if (
 						(await getStorage("downloaderPref")) &&
 						(await getStorage("downloaderCommand"))

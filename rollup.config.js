@@ -24,11 +24,7 @@ export default {
 		resolve(),
 		commonjs(),
 		postcss({ plugins: [env()] }),
-		babel({
-			exclude: "node_modules/**",
-			babelHelpers: "bundled",
-			presets: [["@babel/preset-env", { bugfixes: true }]]
-		}),
+		babel({ exclude: "node_modules/**", babelHelpers: "bundled" }),
 		copy({
 			watch: !production && "src/**",
 			targets: [

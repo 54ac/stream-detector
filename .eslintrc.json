@@ -1,0 +1,57 @@
+{
+	"root": true,
+	"extends": [
+		"eslint:recommended",
+		"prettier"
+	],
+	"parser": "@babel/eslint-parser",
+	"plugins": [
+		"prettier"
+	],
+	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+				"useTabs": true,
+				"resolveGlobalModules": true,
+				"singleQuote": false,
+				"trailingComma": "none"
+			}
+		],
+		"arrow-body-style": "off",
+		"prefer-arrow-callback": "off",
+		"no-unused-vars": 1,
+		"no-console": 1,
+		"quotes": [
+			0,
+			"double"
+		],
+		"react/prop-types": 0,
+		"no-plusplus": [
+			2,
+			{
+				"allowForLoopAfterthoughts": true
+			}
+		],
+		"eqeqeq": [
+			1,
+			"smart"
+		],
+		"strict": [
+			0,
+			"global"
+		],
+		"no-unused-expressions": [
+			2,
+			{
+				"allowTernary": true
+			}
+		]
+	},
+	"env": {
+		"browser": true,
+		"node": true,
+		"webextensions": true,
+		"es6": true
+	}
+}
