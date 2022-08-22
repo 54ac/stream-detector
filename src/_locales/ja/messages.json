@@ -125,6 +125,9 @@
 	"popupFilename": {
 		"message": "ファイル名"
 	},
+	"popupSize": {
+		"message": "サイズ"
+	},
 	"popupSource": {
 		"message": "検出ソース"
 	},
@@ -168,10 +171,10 @@
 		"message": "メディアファイルの直接リンクを無視する"
 	},
 	"downloadDirectPref": {
-		"message": "URLをコピーする代わりに、メディアファイルをダウンロードする"
+		"message": "URLをコピーする代わりに、non-manifestファイルをダウンロードする"
 	},
 	"autoDownloadPref": {
-		"message": "自動でメディアファイルをダウンロードする"
+		"message": "自動でnon-manifestファイルをダウンロードする"
 	},
 	"autoDownloadTip": {
 		"message": "標準のダウンロードフォルダにファイルを保存します。視聴中にストリーミングをダウンロードする場合などに便利です。URLリストへの追加や通知は行いませんので、スパムの心配はありません。不要なダウンロードを防ぐために、URLブラックリストを使用します。"
@@ -195,13 +198,13 @@
 		"message": "1行に1項目です。送信元と送信先のURLの両方が対象です。つまり、アドオンは効果的にこれらのフレーズを含むWebサイトを無効にするだけでなく、ストリームURLも無視します。"
 	},
 	"customExtPref": {
-		"message": "検出ファイル拡張子追加"
+		"message": "追加のファイル拡張子を検出"
 	},
 	"customExtTip": {
 		"message": "1行に1項目です。"
 	},
 	"customCtPref": {
-		"message": "検出Content-Typeヘッダ追加"
+		"message": "追加のContent-Typeヘッダを検出"
 	},
 	"customCtTip": {
 		"message": "1行に1項目です。大文字・小文字を区別しません。"
@@ -216,7 +219,7 @@
 		"message": "最新エントリーの表示数を限定する"
 	},
 	"resetButtonLabel": {
-		"message": "全設定をリセット(緊急用)"
+		"message": "全アドオンデータをリセット(緊急用)"
 	},
 	"resetButton": {
 		"message": "全設定のリセット"
