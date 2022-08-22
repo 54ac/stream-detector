@@ -56,6 +56,11 @@ const updateVars = async () => {
 };
 
 const addListeners = () => {
+	chrome.webRequest.onBeforeSendHeaders.addListener(
+		urlFilter,
+		{ urls: ["<all_urls>"] },
+		isChrome ? ["requestHeaders", "extraHeaders"] : ["requestHeaders"]
+	);
 	chrome.webRequest.onHeadersReceived.addListener(
 		urlFilter,
 		{ urls: ["<all_urls>"] },
@@ -102,7 +107,11 @@ const urlFilter = (requestDetails) => {
 			f.ext?.some((fe) => url.toLowerCase().includes("." + fe))
 		);
 
-	const headerCt = requestDetails.responseHeaders?.find(
+	// depends which listener caught it
+	requestDetails.headers =
+		requestDetails.requestHeaders || requestDetails.responseHeaders;
+
+	const headerCt = requestDetails.headers?.find(
 		(h) => h.name.toLowerCase() === "content-type"
 	);
 	if (headerCt?.value) {
@@ -119,7 +128,7 @@ const urlFilter = (requestDetails) => {
 			);
 	}
 
-	const headerSize = requestDetails.responseHeaders?.find(
+	const headerSize = requestDetails.headers?.find(
 		(h) => h.name.toLowerCase() === "content-length"
 	);
 
@@ -179,8 +188,6 @@ const addURL = async (requestDetails) => {
 		: urlPath;
 
 	const { hostname } = url;
-	// depends on which listener caught it
-	const headers = requestDetails.responseHeaders;
 
 	const tabData = await getTabData(requestDetails.tabId);
 
@@ -194,7 +201,7 @@ const addURL = async (requestDetails) => {
 			? (tabData.title + "/" + filename).replace(/[?%*:|"<>]/g, "_")
 			: (hostname + "/" + filename).replace(/[?%*:|"<>]/g, "_");
 
-		const dlHeaders = headers?.filter(
+		const dlHeaders = requestDetails.headers?.filter(
 			(h) => h.name.toLowerCase() === "referer"
 		);
 
@@ -227,7 +234,7 @@ const addURL = async (requestDetails) => {
 			timeStamp: requestDetails.timeStamp,
 			type: requestDetails.type,
 			url: requestDetails.url,
-			headers: headers?.filter(
+			headers: requestDetails.headers?.filter(
 				(h) =>
 					h.name.toLowerCase() === "user-agent" ||
 					h.name.toLowerCase() === "referer" ||
@@ -380,8 +387,10 @@ const deleteURL = async (message) => {
 			await updateVars();
 			if (
 				disablePref === true &&
+				chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
+				chrome.webRequest.onBeforeSendHeaders.removeListener(urlFilter);
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
 				chrome.browserAction.setIcon({
 					path: {
@@ -392,6 +401,7 @@ const deleteURL = async (message) => {
 				});
 			} else if (
 				disablePref !== true &&
+				!chrome.webRequest.onBeforeSendHeaders.hasListener(urlFilter) &&
 				!chrome.webRequest.onHeadersReceived.hasListener(urlFilter)
 			) {
 				addListeners();
