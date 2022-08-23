@@ -31,8 +31,8 @@ export const saveOptionStorage = async (e, options) => {
 
 	if (e.target.id === "customCommand")
 		await setStorage({
-			[e.target.id +
-			document.getElementById("copyMethod").value]: e.target.value?.trim()
+			[e.target.id + document.getElementById("copyMethod").value]:
+				e.target.value?.trim()
 		});
 	else if (e.target.tagName.toLowerCase() === "textarea")
 		await setStorage({

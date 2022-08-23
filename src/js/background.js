@@ -149,6 +149,7 @@ const urlFilter = (requestDetails) => {
 		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
 		(!filePref || (filePref && e.category !== "files")) &&
 		(!fileSizePref ||
+			(fileSizePref && isNaN(fileSizeAmount)) ||
 			(fileSizePref &&
 				fileSizeAmount &&
 				e.category !== "stream" &&

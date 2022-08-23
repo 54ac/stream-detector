@@ -40,69 +40,53 @@ const checkHeadersPref = () => {
 	document.getElementById("fileSizePref").disabled = true;
 	document.getElementById("fileSizeAmount").disabled = true;
 
-	document.getElementById("subtitlePref").disabled = document.getElementById(
-		"disablePref"
-	).checked;
+	document.getElementById("subtitlePref").disabled =
+		document.getElementById("disablePref").checked;
 
-	document.getElementById("filePref").disabled = document.getElementById(
-		"disablePref"
-	).checked;
+	document.getElementById("filePref").disabled =
+		document.getElementById("disablePref").checked;
 
-	document.getElementById(
-		"downloadDirectPref"
-	).disabled = document.getElementById("filePref").checked;
+	document.getElementById("downloadDirectPref").disabled =
+		document.getElementById("filePref").checked;
 
 	document.getElementById("autoDownloadPref").disabled =
 		!document.getElementById("downloadDirectPref").checked ||
 		document.getElementById("filePref").checked;
 
-	document.getElementById("manifestPref").disabled = document.getElementById(
-		"disablePref"
-	).checked;
+	document.getElementById("manifestPref").disabled =
+		document.getElementById("disablePref").checked;
 
-	document.getElementById("notifDetectPref").disabled = document.getElementById(
-		"notifPref"
-	).checked;
+	document.getElementById("notifDetectPref").disabled =
+		document.getElementById("notifPref").checked;
 
-	document.getElementById(
-		"downloaderCommand"
-	).disabled = !document.getElementById("downloaderPref").checked;
+	document.getElementById("downloaderCommand").disabled =
+		!document.getElementById("downloaderPref").checked;
 
-	document.getElementById("proxyCommand").disabled = !document.getElementById(
-		"proxyPref"
-	).checked;
+	document.getElementById("proxyCommand").disabled =
+		!document.getElementById("proxyPref").checked;
 
-	document.getElementById("customCommand").disabled = !document.getElementById(
-		"customCommandPref"
-	).checked;
+	document.getElementById("customCommand").disabled =
+		!document.getElementById("customCommandPref").checked;
 
-	document.getElementById(
-		"customExtEntries"
-	).disabled = !document.getElementById("customExtPref").checked;
-	document.getElementById(
-		"customCtEntries"
-	).disabled = !document.getElementById("customCtPref").checked;
-	document.getElementById(
-		"blacklistEntries"
-	).disabled = !document.getElementById("blacklistPref").checked;
+	document.getElementById("customExtEntries").disabled =
+		!document.getElementById("customExtPref").checked;
+	document.getElementById("customCtEntries").disabled =
+		!document.getElementById("customCtPref").checked;
+	document.getElementById("blacklistEntries").disabled =
+		!document.getElementById("blacklistPref").checked;
 
-	document.getElementById("regexCommand").disabled = !document.getElementById(
-		"regexCommandPref"
-	).checked;
-	document.getElementById("regexReplace").disabled = !document.getElementById(
-		"regexCommandPref"
-	).checked;
+	document.getElementById("regexCommand").disabled =
+		!document.getElementById("regexCommandPref").checked;
+	document.getElementById("regexReplace").disabled =
+		!document.getElementById("regexCommandPref").checked;
 
-	document.getElementById("recentAmount").disabled = !document.getElementById(
-		"recentPref"
-	).checked;
+	document.getElementById("recentAmount").disabled =
+		!document.getElementById("recentPref").checked;
 
-	document.getElementById("fileSizePref").disabled = document.getElementById(
-		"filePref"
-	).checked;
-	document.getElementById("fileSizeAmount").disabled = !document.getElementById(
-		"fileSizePref"
-	).checked;
+	document.getElementById("fileSizePref").disabled =
+		document.getElementById("filePref").checked;
+	document.getElementById("fileSizeAmount").disabled =
+		!document.getElementById("fileSizePref").checked;
 
 	if (
 		document.getElementById("copyMethod").value === "url" ||
