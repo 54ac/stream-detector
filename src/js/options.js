@@ -108,10 +108,7 @@ const checkHeadersPref = () => {
 		document.getElementById("customCommand").disabled = true;
 	} else if (document.getElementById("copyMethod").value === "streamlink") {
 		document.getElementById("streamlinkOutput").disabled = false;
-	} else if (
-		document.getElementById("copyMethod").value === "youtubedl" ||
-		document.getElementById("copyMethod").value === "ytdlp"
-	) {
+	} else if (document.getElementById("copyMethod").value === "ytdlp") {
 		document.getElementById("downloaderPref").disabled = false;
 	} else if (
 		document.getElementById("copyMethod").value === "ffmpeg" ||

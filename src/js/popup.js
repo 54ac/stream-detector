@@ -70,10 +70,7 @@ const copyURL = async (info) => {
 
 		if (
 			(type === "HDS" && fileMethod === "ffmpeg") ||
-			(type === "MSS" &&
-				fileMethod !== "youtubedl" &&
-				fileMethod !== "ytdlp" &&
-				fileMethod !== "user") ||
+			(type === "MSS" && fileMethod !== "ytdlp" && fileMethod !== "user") ||
 			(category === "subtitles" &&
 				fileMethod !== "url" &&
 				fileMethod !== "user") ||
@@ -111,18 +108,6 @@ const copyURL = async (info) => {
 				case "streamlink":
 					code = "streamlink";
 					break;
-				case "youtubedl":
-					code = "youtube-dl --no-part --restrict-filenames -N 4";
-					// use external downloader
-					if (
-						(await getStorage("downloaderPref")) &&
-						(await getStorage("downloaderCommand"))
-					)
-						code += ` --external-downloader "${await getStorage(
-							"downloaderCommand"
-						)}"`;
-					break;
-				// this could be implemented better - maybe someday
 				case "ytdlp":
 					code = "yt-dlp --no-part --restrict-filenames -N 4";
 					if (
@@ -166,9 +151,6 @@ const copyURL = async (info) => {
 						break;
 					case "streamlink":
 						code += ` --http-proxy "${await getStorage("proxyCommand")}"`;
-						break;
-					case "youtubedl":
-						code += ` --proxy "${await getStorage("proxyCommand")}"`;
 						break;
 					case "ytdlp":
 						code += ` --proxy "${await getStorage("proxyCommand")}"`;
@@ -230,9 +212,6 @@ const copyURL = async (info) => {
 						case "streamlink":
 							code += ` --http-header "User-Agent=${headerUserAgent}"`;
 							break;
-						case "youtubedl":
-							code += ` --user-agent "${headerUserAgent}"`;
-							break;
 						case "ytdlp":
 							code += ` --user-agent "${headerUserAgent}"`;
 							break;
@@ -270,9 +249,6 @@ const copyURL = async (info) => {
 						case "streamlink":
 							code += ` --http-header "Cookie=${headerCookie}"`;
 							break;
-						case "youtubedl":
-							code += ` --add-header "Cookie:${headerCookie}"`;
-							break;
 						case "ytdlp":
 							code += ` --add-header "Cookie:${headerCookie}"`;
 							break;
@@ -306,9 +282,6 @@ const copyURL = async (info) => {
 							break;
 						case "streamlink":
 							code += ` --http-header "Referer=${headerReferer}"`;
-							break;
-						case "youtubedl":
-							code += ` --referer "${headerReferer}"`;
 							break;
 						case "ytdlp":
 							code += ` --referer "${headerReferer}"`;
@@ -384,14 +357,6 @@ const copyURL = async (info) => {
 						code += `.${outExtension}"`;
 					}
 					code += ` "${streamURL}" best`;
-					break;
-				case "youtubedl":
-					if ((filenamePref && e.tabData?.title) || timestampPref) {
-						code += ` --output "${outFilename}`;
-						if (timestampPref) code += ` %(epoch)s`;
-						code += `.%(ext)s"`;
-					}
-					code += ` "${streamURL}"`;
 					break;
 				case "ytdlp":
 					if ((filenamePref && e.tabData?.title) || timestampPref) {

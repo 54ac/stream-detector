@@ -336,19 +336,9 @@ const deleteURL = async (message) => {
 	// clear everything and/or set up
 
 	// cleanup for major updates
-	/*
 	const manifestVersion = chrome.runtime.getManifest().version;
 	const addonVersion = await getStorage("version");
-	if (
-		(addonVersion &&
-			(addonVersion.split(".")[0] < manifestVersion.split(".")[0] ||
-				(addonVersion.split(".")[0] === manifestVersion.split(".")[0] &&
-					addonVersion.split(".")[1] < manifestVersion.split(".")[1]))) ||
-		!addonVersion
-	) {
-		await clearStorage();
-	}
-	*/
+	if (addonVersion && addonVersion !== manifestVersion) await clearStorage();
 
 	await init();
 
