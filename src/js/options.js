@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const settingsReader = new FileReader();
 			const [file] = settingsFile.files;
 
-			settingsReader.addEventListener("load", () => {
+			settingsReader.onload = () => {
 				try {
 					JSON.parse(settingsReader.result);
 				} catch {
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				restoreOptions();
 				chrome.runtime.sendMessage({ options: true });
 				settingsFile.remove();
-			});
+			};
 			if (file) settingsReader.readAsText(file);
 		};
 		settingsFile.click();
