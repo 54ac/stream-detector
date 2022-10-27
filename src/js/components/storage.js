@@ -6,6 +6,14 @@ export const getStorage = async (key) =>
 		})
 	);
 
+export const getAllStorage = async () =>
+	new Promise((resolve) =>
+		chrome.storage.local.get(null, (res) => {
+			if (Object.keys(res)?.length > 0) resolve(res);
+			else resolve(null);
+		})
+	);
+
 export const setStorage = async (obj) =>
 	new Promise((resolve) => chrome.storage.local.set(obj, () => resolve()));
 

@@ -1,7 +1,12 @@
 "use strict";
 
 import "../css/options.css";
-import { saveOptionStorage, getStorage } from "./components/storage.js";
+import {
+	saveOptionStorage,
+	getStorage,
+	getAllStorage,
+	setStorage
+} from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage; // i18n
 
@@ -169,7 +174,49 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (option.type !== "button") option.onchange = (e) => saveOption(e);
 	}
 
-	// reset button
+	// buttons
+	document.getElementById("exportButton").onclick = async () => {
+		const allStorage = await getAllStorage();
+		delete allStorage.urlStorage;
+		delete allStorage.urlStorageRestore;
+		delete allStorage.version;
+		delete allStorage.newline;
+
+		const settingsBlob = new Blob([JSON.stringify(allStorage)], {
+			type: "application/json"
+		});
+		const settingsFile = document.createElement("a");
+		settingsFile.href = URL.createObjectURL(settingsBlob);
+		settingsFile.download = `stream-detector-settings-${Date.now()}.json`;
+		settingsFile.click();
+		URL.revokeObjectURL(settingsBlob);
+		settingsFile.remove();
+	};
+	document.getElementById("importButton").onclick = () => {
+		const settingsFile = document.createElement("input");
+		settingsFile.type = "file";
+		settingsFile.accept = ".json";
+
+		settingsFile.onchange = () => {
+			const settingsReader = new FileReader();
+			const [file] = settingsFile.files;
+
+			settingsReader.addEventListener("load", () => {
+				try {
+					JSON.parse(settingsReader.result);
+				} catch {
+					return;
+				}
+				setStorage(JSON.parse(settingsReader.result));
+				restoreOptions();
+				chrome.runtime.sendMessage({ options: true });
+				settingsFile.remove();
+			});
+			if (file) settingsReader.readAsText(file);
+		};
+		settingsFile.click();
+	};
+
 	document.getElementById("resetButton").onclick = () =>
 		window.confirm(_("resetButtonConfirm")) &&
 		chrome.runtime.sendMessage({ reset: true });

@@ -229,5 +229,14 @@
 	},
 	"resetButtonConfirm": {
 		"message": "Are you sure you wish to reset all settings?"
+	},
+	"exportSettings": {
+		"message": "Export/import settings to/from JSON file"
+	},
+	"exportButton": {
+		"message": "Export"
+	},
+	"importButton": {
+		"message": "Import"
 	}
 }
