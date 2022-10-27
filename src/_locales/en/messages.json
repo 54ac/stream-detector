@@ -238,5 +238,8 @@
 	},
 	"importButton": {
 		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Could not import settings."
 	}
 }

@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				try {
 					JSON.parse(settingsReader.result);
 				} catch {
-					return;
+					window.alert(_("importButtonFailure"));
 				}
 				setStorage(JSON.parse(settingsReader.result));
 				restoreOptions();
