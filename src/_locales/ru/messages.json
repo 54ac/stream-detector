@@ -229,5 +229,17 @@
 	},
 	"resetButtonConfirm": {
 		"message": "Сбросить все настройки на значения по умолчанию?"
+	},
+	"exportSettings": {
+		"message": "Экспорт/импорт настроек через JSON-файл"
+	},
+	"exportButton": {
+		"message": "Экспорт"
+	},
+	"importButton": {
+		"message": "Импорт"
+	},
+	"importButtonFailure": {
+		"message": "Невозможно импортировать настройки."
 	}
 }
