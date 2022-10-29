@@ -92,6 +92,9 @@
 	"regexCommandTip": {
 		"message": "Enter as string, e.g. ab+c. Performs replacement in final user command. Empty replacement field will remove the match."
 	},
+	"regexWarning": {
+		"message": "Incorrect regular expression."
+	},
 	"headersPref": {
 		"message": "Include additional headers"
 	},

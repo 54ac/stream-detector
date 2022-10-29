@@ -92,6 +92,9 @@
 	"regexCommandTip": {
 		"message": "Wpisz jako ciąg znaków, np. ab+c. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
 	},
+	"regexWarning": {
+		"message": "Nieprawidłowe wyrażenie regularne."
+	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki"
 	},

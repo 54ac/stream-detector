@@ -37,7 +37,9 @@ export const saveOptionStorage = async (e, options) => {
 				(await getStorage(prefName)) || "";
 	}
 
-	if (e.target.id === "customCommand")
+	if (e.target.id === "regexCommand")
+		await setStorage({ [e.target.id]: e.target.value });
+	else if (e.target.id === "customCommand")
 		await setStorage({
 			[e.target.id + document.getElementById("copyMethod").value]:
 				e.target.value?.trim()

@@ -391,7 +391,7 @@ const copyURL = async (info) => {
 			const regexCommand = await getStorage("regexCommand");
 			const regexReplace = await getStorage("regexReplace");
 
-			code = code.replace(new RegExp(regexCommand, ""), regexReplace || "");
+			code = code.replace(new RegExp(regexCommand, "g"), regexReplace || "");
 		}
 
 		// used to communicate with clipboard/notifications api

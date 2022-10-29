@@ -25,9 +25,15 @@ table {
 	cursor: help;
 }
 
-.tip {
+.tip,
+.warning {
 	font-weight: bold;
 	margin: auto 1vw;
+}
+
+.warning {
+	color: #f00;
+	display: none;
 }
 
 @media (prefers-color-scheme: dark) {

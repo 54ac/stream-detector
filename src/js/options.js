@@ -17,6 +17,11 @@ const restoreOptions = async () => {
 			const prefName = option.id + document.getElementById("copyMethod").value;
 			document.getElementById(option.id).value =
 				(await getStorage(prefName)) || "";
+		} else if (option.id === "regexCommand") {
+			document.getElementById("regexCommand").value = await getStorage(
+				"regexCommand"
+			);
+			regexValidator();
 		} else if (option.tagName.toLowerCase() === "textarea") {
 			if (await getStorage(option.id)) {
 				const textareaValue = await getStorage(option.id);
@@ -38,9 +43,19 @@ const restoreOptions = async () => {
 	}
 };
 
+const regexValidator = () => {
+	try {
+		new RegExp(document.getElementById("regexCommand").value);
+		document.getElementById("regexWarning").style.display = "none";
+	} catch {
+		document.getElementById("regexWarning").style.display = "unset";
+	}
+};
+
 document.addEventListener("DOMContentLoaded", () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
+		if (option.id === "regexCommand") option.oninput = () => regexValidator();
 		if (option.type !== "button") option.onchange = (e) => saveOptionStorage(e);
 	}
 
