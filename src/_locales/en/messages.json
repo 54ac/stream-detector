@@ -90,7 +90,7 @@
 		"message": "Use regex in user-defined command"
 	},
 	"regexCommandTip": {
-		"message": "Use full regex pattern with optional flags, e.g. /ab+c/i. Performs replacement in final user command. Empty replacement field will remove the match."
+		"message": "Enter as string, e.g. ab+c. Performs replacement in final user command. Empty replacement field will remove the match."
 	},
 	"headersPref": {
 		"message": "Include additional headers"

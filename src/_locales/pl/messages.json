@@ -90,7 +90,7 @@
 		"message": "Użyj regex w komendzie własnej"
 	},
 	"regexCommandTip": {
-		"message": "Wpisz pełny wzór z opcjonalnymi flagami, np. /ab+c/i. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
+		"message": "Wpisz jako ciąg znaków, np. ab+c. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
 	},
 	"headersPref": {
 		"message": "Dołącz dodatkowe nagłówki"

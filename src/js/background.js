@@ -6,6 +6,8 @@ import { getStorage, setStorage, clearStorage } from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage;
 
+const CLEAR_STORAGE = false;
+
 const queue = [];
 const allRequestDetails = [];
 let urlStorage = [];
@@ -338,7 +340,8 @@ const deleteURL = async (message) => {
 	// cleanup for major updates
 	const manifestVersion = chrome.runtime.getManifest().version;
 	const addonVersion = await getStorage("version");
-	if (addonVersion && addonVersion !== manifestVersion) await clearStorage();
+	if (CLEAR_STORAGE && addonVersion && addonVersion !== manifestVersion)
+		await clearStorage();
 
 	await init();
 
