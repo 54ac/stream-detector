@@ -215,11 +215,8 @@
 	"customCtTip": {
 		"message": "One entry per line. Case insensitive."
 	},
-	"cleanupPref": {
-		"message": "Remove entries older than 1 week"
-	},
-	"cleanupTip": {
-		"message": "Applied only on restart in case of accidents."
+	"noRestorePref": {
+		"message": "Ignore previous sessions on launch"
 	},
 	"recentPref": {
 		"message": "Only show certain number of latest entries"

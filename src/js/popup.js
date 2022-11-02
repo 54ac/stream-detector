@@ -14,6 +14,7 @@ let downloadDirectPref;
 let newline;
 let recentPref;
 let recentAmount;
+let noRestorePref;
 let urlList = [];
 
 const getTimestamp = (timestamp) => {
@@ -669,6 +670,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	newline = await getStorage("newline");
 	recentPref = await getStorage("recentPref");
 	recentAmount = await getStorage("recentAmount");
+	noRestorePref = await getStorage("noRestorePref");
 
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
@@ -737,6 +739,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 		createList();
 		document.getElementById("clearFilterInput").style.cursor = "default";
 	};
+
+	if (noRestorePref)
+		document.getElementById("tabPrevious").parentElement.style.display = "none";
 
 	createList();
 

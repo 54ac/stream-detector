@@ -215,11 +215,8 @@
 	"customCtTip": {
 		"message": "Każdy wpis w nowej linii. Wielkość liter nieistotna."
 	},
-	"cleanupPref": {
-		"message": "Usuń wpisy starsze niż tydzień"
-	},
-	"cleanupTip": {
-		"message": "Wykonywane jedynie przy restarcie w celu uniknięcia wypadków."
+	"noRestorePref": {
+		"message": "Nie przywracaj wpisów przy starcie"
 	},
 	"recentPref": {
 		"message": "Wyświetl jedynie określoną liczbę ostatnich wpisów"

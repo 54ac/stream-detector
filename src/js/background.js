@@ -23,7 +23,7 @@ let blacklistPref;
 let blacklistEntries;
 let customExtPref;
 let customCtPref;
-let cleanupPref;
+let noRestorePref;
 let disablePref;
 let notifDetectPref;
 let notifPref;
@@ -49,7 +49,7 @@ const updateVars = async () => {
 	customSupported.ext = await getStorage("customExtEntries");
 	customCtPref = await getStorage("customCtPref");
 	customSupported.ct = await getStorage("customCtEntries");
-	cleanupPref = await getStorage("cleanupPref");
+	noRestorePref = await getStorage("noRestorePref");
 	disablePref = await getStorage("disablePref");
 	notifDetectPref = await getStorage("notifDetectPref");
 	notifPref = await getStorage("notifPref");
@@ -101,6 +101,41 @@ const init = async () => {
 const getTabData = async (tab) =>
 	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
 
+const urlPrefValidator = (e, requestDetails, headerSize, headerCt) => {
+	if (subtitlePref && e.category === "subtitles") return false;
+
+	if (filePref && e.category === "files") return false;
+
+	if (
+		fileSizePref &&
+		e.category !== "stream" &&
+		Math.floor(headerSize.value / 1024 / 1024) < Number(fileSizeAmount)
+	)
+		return false;
+
+	if (manifestPref && e.category === "stream") return false;
+
+	if (
+		blacklistPref &&
+		blacklistEntries?.some(
+			(entry) =>
+				requestDetails.url.toLowerCase().includes(entry.toLowerCase()) ||
+				(
+					requestDetails.documentUrl ||
+					requestDetails.originUrl ||
+					requestDetails.initiator
+				)
+					?.toLowerCase()
+					.includes(entry.toLowerCase()) ||
+				headerCt?.value?.toLowerCase().includes(entry.toLowerCase()) ||
+				e.type.toLowerCase().includes(entry.toLowerCase())
+		)
+	)
+		return false;
+
+	return true;
+};
+
 const urlFilter = (requestDetails) => {
 	let ext;
 	let head;
@@ -108,7 +143,7 @@ const urlFilter = (requestDetails) => {
 	const url = new URL(requestDetails.url).pathname.toLowerCase();
 	// check file extension and see if the url matches
 	ext =
-		customExtPref === true &&
+		customExtPref &&
 		customSupported.ext?.some((fe) => url.toLowerCase().includes("." + fe)) &&
 		customSupported;
 	if (!ext)
@@ -126,7 +161,7 @@ const urlFilter = (requestDetails) => {
 	if (headerCt?.value) {
 		// check content type header and see if it matches
 		head =
-			customCtPref === true &&
+			customCtPref &&
 			customSupported?.ct?.some((fe) =>
 				headerCt.value.toLowerCase().includes(fe.toLowerCase())
 			) &&
@@ -148,32 +183,7 @@ const urlFilter = (requestDetails) => {
 		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
 		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
 		requestDetails.tabId !== -1 &&
-		(!subtitlePref || (subtitlePref && e.category !== "subtitles")) &&
-		(!filePref || (filePref && e.category !== "files")) &&
-		(!fileSizePref ||
-			(fileSizePref && isNaN(fileSizeAmount)) ||
-			(fileSizePref &&
-				fileSizeAmount &&
-				e.category !== "stream" &&
-				// hardcoded MB for size limits for now
-				headerSize?.value &&
-				Math.floor(headerSize.value / 1024 / 1024) >= fileSizeAmount)) &&
-		(!manifestPref || (manifestPref && e.category !== "stream")) &&
-		(!blacklistPref ||
-			(blacklistPref &&
-				!blacklistEntries?.some(
-					(entry) =>
-						requestDetails.url?.toLowerCase().includes(entry.toLowerCase()) ||
-						(
-							requestDetails.documentUrl ||
-							requestDetails.originUrl ||
-							requestDetails.initiator
-						)
-							?.toLowerCase()
-							.includes(entry.toLowerCase()) ||
-						headerCt?.value?.toLowerCase().includes(entry.toLowerCase()) ||
-						e.type.toLowerCase().includes(entry.toLowerCase())
-				)))
+		urlPrefValidator(e, requestDetails, headerSize, headerCt)
 	) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
@@ -190,7 +200,6 @@ const addURL = async (requestDetails) => {
 		? url.pathname.slice(0, url.pathname.lastIndexOf("/"))
 		: url.pathname;
 
-	// eslint-disable-next-line no-nested-ternary
 	const filename = +urlPath.lastIndexOf("/")
 		? urlPath.slice(urlPath.lastIndexOf("/") + 1)
 		: urlPath[0] === "/"
@@ -360,15 +369,10 @@ const deleteURL = async (message) => {
 	urlStorageRestore = await getStorage("urlStorageRestore");
 
 	// restore urls on startup
-	if (urlStorage && urlStorage.length > 0)
+	if (urlStorage && urlStorage.length > 0 && !noRestorePref)
 		urlStorageRestore = [...urlStorageRestore, ...urlStorage];
 
 	if (urlStorageRestore && urlStorageRestore.length > 0) {
-		if (cleanupPref)
-			urlStorageRestore = urlStorageRestore.filter(
-				(url) => new Date().getTime() - url.timeStamp < 604800000
-			);
-
 		// remove all entries previously detected in private windows
 		urlStorageRestore = urlStorageRestore.filter(
 			(url) => url.tabData?.incognito !== true
