@@ -36,6 +36,14 @@ table {
 	display: none;
 }
 
+label[for="versionTag"] {
+	line-height: 3em;
+}
+
+#exportButton {
+	margin-right: 0.5em;
+}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		background: #202023;

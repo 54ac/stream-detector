@@ -108,7 +108,8 @@ const urlPrefValidator = (e, requestDetails, headerSize, headerCt) => {
 
 	if (
 		fileSizePref &&
-		e.category !== "stream" &&
+		(e.category === "files" || e.category === "custom") &&
+		headerSize &&
 		Math.floor(headerSize.value / 1024 / 1024) < Number(fileSizeAmount)
 	)
 		return false;

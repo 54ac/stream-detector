@@ -52,7 +52,7 @@ const regexValidator = () => {
 	}
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	const options = document.getElementsByClassName("option");
 	for (const option of options) {
 		if (option.id === "regexCommand") option.oninput = () => regexValidator();
@@ -110,8 +110,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// i18n
 	const labels = document.getElementsByTagName("label");
-	for (const label of labels) label.textContent = _(label.htmlFor) + ":";
-
+	for (const label of labels) {
+		if (label.htmlFor === "versionTag")
+			label.textContent = "v" + (await getStorage("version"));
+		else label.textContent = _(label.htmlFor) + ":";
+	}
 	const selectOptions = document.getElementsByTagName("option");
 	for (const selectOption of selectOptions) {
 		if (!selectOption.textContent)
