@@ -92,6 +92,9 @@
 	"regexCommandTip": {
 		"message": "完全な正規表現とオプションのフラグを使用します (例: /ab+c/i)。最終的なユーザーコマンドで置換を行います。置換フィールドが空だと、マッチパターンが削除されます。"
 	},
+	"regexWarning": {
+		"message": "正規表現が正しくありません。"
+	},
 	"headersPref": {
 		"message": "追加のヘッダを含める"
 	},
@@ -170,6 +173,9 @@
 	"filePref": {
 		"message": "メディアファイルの直接リンクを無視する"
 	},
+	"fileSizePref": {
+		"message": "これよりも小さいサイズのメディアファイルを無視する"
+	},
 	"downloadDirectPref": {
 		"message": "URLをコピーする代わりに、non-manifestファイルをダウンロードする"
 	},
@@ -209,14 +215,11 @@
 	"customCtTip": {
 		"message": "1行に1項目です。大文字・小文字を区別しません。"
 	},
-	"cleanupPref": {
-		"message": "1週間以上前のエントリを削除する"
-	},
-	"cleanupTip": {
-		"message": "障害発生による再起動時のみ適用されます。"
+	"noRestorePref": {
+		"message": "起動時に以前のセッションを無視する"
 	},
 	"recentPref": {
-		"message": "最新エントリーの表示数を限定する"
+		"message": "限定する最新エントリーの表示数"
 	},
 	"resetButtonLabel": {
 		"message": "全アドオンデータをリセット(緊急用)"
@@ -226,5 +229,17 @@
 	},
 	"resetButtonConfirm": {
 		"message": "本当にすべての設定をリセットしますか?"
+	},
+	"exportSettings": {
+		"message": "JSONファイルへ/から設定をエクスポート/インポートする"
+	},
+	"exportButton": {
+		"message": "エクスポート"
+	},
+	"importButton": {
+		"message": "インポート"
+	},
+	"importButtonFailure": {
+		"message": "設定をインポートできません。"
 	}
 }
