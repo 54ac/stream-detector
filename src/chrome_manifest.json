@@ -1,61 +1,58 @@
-    {
-        "name": "The Stream Detector",
-        "description": "__MSG_extText__",
-        "manifest_version": 2,
-        "default_locale": "en",
-        "permissions": [
-            "<all_urls>",
-            "clipboardWrite",
-            "downloads",
-            "notifications",
-            "storage",
-            "tabs",
-            "webRequest"
-        ],
-        "background": {
-            "page": "background.html"
-        },
+{
+	"name": "The Stream Detector",
+	"description": "__MSG_extText__",
+	"manifest_version": 2,
+	"default_locale": "en",
+	"permissions": [
+		"<all_urls>",
+		"clipboardWrite",
+		"downloads",
+		"notifications",
+		"storage",
+		"tabs",
+		"webRequest"
+	],
+	"background": {
+		"page": "background.html"
+	},
 	"update_url": "https://raw.githubusercontent.com/rowrawer/stream-detector/master/updates.xml",
-        "icons": {
-            "16": "img/icon-dark-16.png",
-            "48": "img/icon-dark-48.png",
-            "96": "img/icon-dark-96.png"
-        },
-        "commands": {
-            "open-popup": {
-                "description": "__MSG_openPopup__"
-            }
-        },
-        "options_ui": {
-            "open_in_tab": true,
-            "page": "options.html"
-        },
-        "browser_action": {
-            "default_title": "The Stream Detector",
-            "default_popup": "popup.html",
-            "default_icon": {
-                "16": "img/icon-dark-16.png",
-                "48": "img/icon-dark-48.png"
-            },
-            "theme_icons": [
-                {
-                    "dark": "img/icon-dark-96.png",
-                    "light": "img/icon-light-96.png",
-                    "size": 96
-                },
-                {
-                    "dark": "img/icon-dark-48.png",
-                    "light": "img/icon-light-48.png",
-                    "size": 48
-                },
-                {
-                    "dark": "img/icon-dark-16.png",
-                    "light": "img/icon-light-16.png",
-                    "size": 16
-                }
-            ]
-        },
-        "version": "2.10.17"
-    }
-
-Source code and support at https://github.com/Rob--W/crxviewer, provided by Rob Wu.
+	"icons": {
+		"16": "img/icon-dark-16.png",
+		"48": "img/icon-dark-48.png",
+		"96": "img/icon-dark-96.png"
+	},
+	"commands": {
+		"open-popup": {
+			"description": "__MSG_openPopup__"
+		}
+	},
+	"options_ui": {
+		"open_in_tab": true,
+		"page": "options.html"
+	},
+	"browser_action": {
+		"default_title": "The Stream Detector",
+		"default_popup": "popup.html",
+		"default_icon": {
+			"16": "img/icon-dark-16.png",
+			"48": "img/icon-dark-48.png"
+		},
+		"theme_icons": [
+			{
+				"dark": "img/icon-dark-96.png",
+				"light": "img/icon-light-96.png",
+				"size": 96
+			},
+			{
+				"dark": "img/icon-dark-48.png",
+				"light": "img/icon-light-48.png",
+				"size": 48
+			},
+			{
+				"dark": "img/icon-dark-16.png",
+				"light": "img/icon-light-16.png",
+				"size": 16
+			}
+		]
+	}
+}
