@@ -117,7 +117,7 @@
 		"message": "Use HTTP proxy server"
 	},
 	"downloaderPref": {
-		"message": "Use external downloader"
+		"message": "Use external downloader for yt-dlp"
 	},
 	"buttonClick": {
 		"message": "Browser action button functionality"

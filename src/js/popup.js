@@ -1,7 +1,11 @@
 "use strict";
 
 import "../css/popup.css";
-import { saveOptionStorage, getStorage } from "./components/storage.js";
+import {
+	saveOptionStorage,
+	getStorage,
+	setStorage
+} from "./components/storage.js";
 
 const _ = chrome.i18n.getMessage; // i18n
 
@@ -655,8 +659,7 @@ const createList = async () => {
 
 const saveOption = (e) => {
 	if (e.target.type === "radio") createList();
-	const options = document.getElementsByClassName("option");
-	saveOptionStorage(e, options);
+	saveOptionStorage(e, document.getElementsByClassName("option"));
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -736,6 +739,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	document.getElementById("clearFilterInput").onclick = () => {
 		document.getElementById("filterInput").value = "";
+		setStorage({ filterInput: "" });
 		createList();
 		document.getElementById("clearFilterInput").style.cursor = "default";
 	};
