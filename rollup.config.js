@@ -20,7 +20,7 @@ export default {
 		cleaner({
 			targets: ["build"]
 		}),
-		multiInput(),
+		multiInput.default(),
 		resolve(),
 		commonjs(),
 		postcss({ plugins: [env()] }),

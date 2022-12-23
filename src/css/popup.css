@@ -75,6 +75,13 @@ th * {
 	border-bottom-width: 0;
 }
 
+.urlCell {
+	white-space: initial;
+	word-break: break-all;
+	cursor: pointer;
+	text-overflow: initial;
+}
+
 input,
 select {
 	margin: auto 0.25em;

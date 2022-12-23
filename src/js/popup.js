@@ -114,7 +114,14 @@ const copyURL = async (info) => {
 					code = "streamlink";
 					break;
 				case "ytdlp":
-					code = "yt-dlp --no-part --restrict-filenames -N 4";
+					code = "yt-dlp --no-part --restrict-filenames";
+
+					if (
+						(await getStorage("multithreadPref")) &&
+						(await getStorage("multithreadAmount"))
+					)
+						code += ` -N ${await getStorage("multithreadAmount")}`;
+
 					if (
 						(await getStorage("downloaderPref")) &&
 						(await getStorage("downloaderCommand"))
@@ -122,6 +129,7 @@ const copyURL = async (info) => {
 						code += ` --external-downloader "${await getStorage(
 							"downloaderCommand"
 						)}"`;
+
 					break;
 				case "hlsdl":
 					code = "hlsdl -b -c";
@@ -505,6 +513,7 @@ const createList = async () => {
 					: requestDetails.type.toUpperCase();
 
 			const urlCell = document.createElement("td");
+			urlCell.className = "urlCell";
 			const urlHref = document.createElement("a");
 			urlHref.textContent = requestDetails.filename;
 			urlHref.href = requestDetails.url;
@@ -517,7 +526,6 @@ const createList = async () => {
 				e.stopPropagation();
 				handleURL(requestDetails);
 			};
-			urlCell.style.cursor = "pointer";
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
 

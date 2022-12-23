@@ -119,6 +119,9 @@
 	"downloaderPref": {
 		"message": "Use external downloader for yt-dlp"
 	},
+	"multithreadPref": {
+		"message": "Download multiple concurrent fragments in yt-dlp"
+	},
 	"buttonClick": {
 		"message": "Browser action button functionality"
 	},
