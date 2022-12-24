@@ -119,6 +119,9 @@
 	"downloaderPref": {
 		"message": "Использовать внешний загрузчик"
 	},
+	"multithreadPref": {
+		"message": "Загружать несколько фрагментов параллельно в yt-dlp"
+	},
 	"buttonClick": {
 		"message": "Функция кнопки действия браузера"
 	},
