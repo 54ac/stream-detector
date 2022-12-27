@@ -33,7 +33,7 @@
 		"message": "URLをダウンロードできません:\n"
 	},
 	"extText": {
-		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyoutube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLIのコマンドを組み立てます。"
+		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-REのコマンドを組み立てます。"
 	},
 	"copyMethod": {
 		"message": "ストリームURLのコピー形式"
@@ -46,9 +46,6 @@
 	},
 	"tableForm": {
 		"message": "テーブルエントリ"
-	},
-	"youtubedl": {
-		"message": "youtube-dl コマンド"
 	},
 	"ytdlp": {
 		"message": "yt-dlp コマンド"
@@ -63,7 +60,7 @@
 		"message": "hlsdl コマンド"
 	},
 	"nm3u8dl": {
-		"message": "N_m3u8DL-CLI コマンド"
+		"message": "N_m3u8DL-RE コマンド"
 	},
 	"user": {
 		"message": "ユーザ定義コマンド"

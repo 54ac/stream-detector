@@ -76,8 +76,24 @@
 							<option value="streamlink"></option>
 							<option value="hlsdl"></option>
 							<option value="nm3u8dl"></option>
-							<option value="user"></option>
+							<option value="user1"></option>
+							<option value="user2"></option>
+							<option value="user3"></option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="customCommandPref" /></td>
+					<td>
+						<input class="option" id="customCommandPref" type="checkbox" />
+						<div style="display: inline">
+							<input
+								class="option"
+								id="customCommand"
+								type="text"
+								placeholder="--verbose"
+							/>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -85,13 +101,35 @@
 					<td>
 						<input
 							class="option"
-							id="userCommand"
+							id="userCommand1"
 							type="text"
 							placeholder="usercmd.py %url%"
 						/>
 						<div class="tipContainer">
 							<span class="tip" id="userCommandTip">?</span>
 						</div>
+					</td>
+				</tr>
+				<tr>
+					<td />
+					<td>
+						<input
+							class="option"
+							id="userCommand2"
+							type="text"
+							placeholder="usercmd.py %url%"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td />
+					<td>
+						<input
+							class="option"
+							id="userCommand3"
+							type="text"
+							placeholder="usercmd.py %url%"
+						/>
 					</td>
 				</tr>
 				<tr>
@@ -233,20 +271,6 @@
 								id="proxyCommand"
 								type="text"
 								placeholder="http://127.0.0.1:1337"
-							/>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td><label for="customCommandPref" /></td>
-					<td>
-						<input class="option" id="customCommandPref" type="checkbox" />
-						<div style="display: inline">
-							<input
-								class="option"
-								id="customCommand"
-								type="text"
-								placeholder="--verbose"
 							/>
 						</div>
 					</td>

@@ -33,7 +33,7 @@
 		"message": "Nepodarilo sa stiahnuť adresu URL:\n"
 	},
 	"extText": {
-		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS rovnako ako aj vlastné prípony súborov a hlavičky Content-Type. Zostaví hotové príkazy pre youtube-dl/FFmpeg/Streamlink/N_m3u8DL-CLI."
+		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS rovnako ako aj vlastné prípony súborov a hlavičky Content-Type. Zostaví hotové príkazy pre yt-dlp/FFmpeg/Streamlink/N_m3u8DL-RE."
 	},
 	"copyMethod": {
 		"message": "Kopírovať adresu streamu ako"
@@ -46,9 +46,6 @@
 	},
 	"tableForm": {
 		"message": "položku tabuľky"
-	},
-	"youtubedl": {
-		"message": "príkaz youtube-dl"
 	},
 	"ytdlp": {
 		"message": "príkaz yt-dlp"
@@ -63,7 +60,7 @@
 		"message": "príkaz hlsdl"
 	},
 	"nm3u8dl": {
-		"message": "príkaz N_m3u8DL-CLI"
+		"message": "príkaz N_m3u8DL-RE"
 	},
 	"user": {
 		"message": "používateľom definovaný príkaz"

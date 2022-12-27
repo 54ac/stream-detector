@@ -74,333 +74,252 @@ const copyURL = async (info) => {
 		fileMethod = (await getStorage("copyMethod")) || "url"; // default to url - just in case
 
 		if (
-			(type === "HDS" && fileMethod === "ffmpeg") ||
-			(type === "MSS" && fileMethod !== "ytdlp" && fileMethod !== "user") ||
 			(category === "subtitles" &&
 				fileMethod !== "url" &&
-				fileMethod !== "user") ||
-			(type !== "HLS" && fileMethod === "hlsdl") ||
-			(type !== "HLS" && fileMethod === "nm3u8dl") ||
-			(type === "CUSTOM" && fileMethod !== "url" && fileMethod !== "user")
+				!fileMethod.startsWith("user")) ||
+			(type === "CUSTOM" &&
+				fileMethod !== "url" &&
+				!fileMethod.startsWith("user"))
 		) {
 			fileMethod = "url";
 			methodIncomp = true;
 		}
 
 		// don't use user-defined command if empty
-		if (fileMethod === "user" && (await getStorage("userCommand")) === null) {
+		if (
+			fileMethod.startsWith("user") &&
+			(await getStorage("userCommand" + fileMethod.at(-1))) === null
+		) {
 			fileMethod = "url";
 			methodIncomp = true;
 		}
 
-		if (fileMethod === "url") {
-			code = streamURL;
-		} else if (fileMethod === "tableForm") {
+		if (fileMethod === "url") code = streamURL;
+		else if (fileMethod === "tableForm")
 			code = `${streamURL} | ${
 				titlePref && e.tabData?.title && !streamURL.includes(e.tabData.title)
 					? e.tabData.title
 					: e.hostname
 			} | ${getTimestamp(e.timeStamp)}`;
-		} else {
-			// the switchboard of doom begins
-			switch (fileMethod) {
-				case "kodiUrl":
-					code = streamURL;
-					break;
-				case "ffmpeg":
-					code = "ffmpeg";
-					break;
-				case "streamlink":
-					code = "streamlink";
-					break;
-				case "ytdlp":
-					code = "yt-dlp --no-part --restrict-filenames";
+		else if (fileMethod === "kodiUrl") code = streamURL;
+		else if (fileMethod === "ffmpeg") code = "ffmpeg";
+		else if (fileMethod === "streamlink") code = "streamlink";
+		else if (fileMethod === "ytdlp") {
+			code = "yt-dlp --no-part --restrict-filenames";
 
-					if (
-						(await getStorage("multithreadPref")) &&
-						(await getStorage("multithreadAmount"))
-					)
-						code += ` -N ${await getStorage("multithreadAmount")}`;
-
-					if (
-						(await getStorage("downloaderPref")) &&
-						(await getStorage("downloaderCommand"))
-					)
-						code += ` --external-downloader "${await getStorage(
-							"downloaderCommand"
-						)}"`;
-
-					break;
-				case "hlsdl":
-					code = "hlsdl -b -c";
-					break;
-				case "nm3u8dl":
-					code = `N_m3u8DL-CLI "${streamURL}" --enableMuxFastStart --enableDelAfterDone`;
-					break;
-				case "user":
-					code = await getStorage("userCommand");
-					break;
-				default:
-					break;
-			}
-
-			// custom command line
-			const prefName = `customCommand${fileMethod}`;
 			if (
-				(await getStorage("customCommandPref")) &&
-				(await getStorage(prefName))
-			) {
-				code += ` ${await getStorage(prefName)}`;
-			}
+				(await getStorage("multithreadPref")) &&
+				(await getStorage("multithreadAmount"))
+			)
+				code += ` -N ${await getStorage("multithreadAmount")}`;
 
-			// http proxy
 			if (
-				(await getStorage("proxyPref")) &&
-				(await getStorage("proxyCommand"))
-			) {
-				switch (fileMethod) {
-					case "ffmpeg":
-						code += ` -http_proxy "${await getStorage("proxyCommand")}"`;
-						break;
-					case "streamlink":
-						code += ` --http-proxy "${await getStorage("proxyCommand")}"`;
-						break;
-					case "ytdlp":
-						code += ` --proxy "${await getStorage("proxyCommand")}"`;
-						break;
-					case "hlsdl":
-						code += ` -p "${await getStorage("proxyCommand")}"`;
-						break;
-					case "nm3u8dl":
-						code += ` --proxyAddress "${await getStorage("proxyCommand")}"`;
-						break;
-					case "user":
-						code = code.replace(
-							new RegExp("%proxy%", "g"),
-							await getStorage("proxyCommand")
-						);
-						break;
-					default:
-						break;
-				}
-			}
+				(await getStorage("downloaderPref")) &&
+				(await getStorage("downloaderCommand"))
+			)
+				code += ` --external-downloader "${await getStorage(
+					"downloaderCommand"
+				)}"`;
+		} else if (fileMethod === "hlsdl") code = "hlsdl -b -c";
+		else if (fileMethod === "nm3u8dl") code = `N_m3u8DL-RE "${streamURL}"`;
+		else if (fileMethod.startsWith("user"))
+			code = await getStorage("userCommand" + fileMethod.at(-1));
 
-			// additional headers
-			if (await getStorage("headersPref")) {
-				let headerUserAgent = e.headers.find(
-					(header) => header.name.toLowerCase() === "user-agent"
+		// custom command line
+		const prefName = `customCommand${fileMethod}`;
+		if ((await getStorage("customCommandPref")) && (await getStorage(prefName)))
+			code += ` ${await getStorage(prefName)}`;
+
+		// http proxy
+		if ((await getStorage("proxyPref")) && (await getStorage("proxyCommand"))) {
+			if (fileMethod === "ffmpeg")
+				code += ` -http_proxy "${await getStorage("proxyCommand")}"`;
+			else if (fileMethod === "streamlink")
+				code += ` --http-proxy "${await getStorage("proxyCommand")}"`;
+			else if (fileMethod === "ytdlp")
+				code += ` --proxy "${await getStorage("proxyCommand")}"`;
+			else if (fileMethod === "hlsdl")
+				code += ` -p "${await getStorage("proxyCommand")}"`;
+			else if (fileMethod === "nm3u8dl")
+				code += ` --custom-proxy "${await getStorage("proxyCommand")}"`;
+			else if (fileMethod.startsWith("user"))
+				code = code.replace(
+					new RegExp("%proxy%", "g"),
+					await getStorage("proxyCommand")
 				);
-				headerUserAgent
-					? (headerUserAgent = headerUserAgent.value)
-					: (headerUserAgent = navigator.userAgent);
+		}
 
-				let headerCookie = e.headers.find(
-					(header) =>
-						header.name.toLowerCase() === "cookie" ||
-						header.name.toLowerCase() === "set-cookie"
-				);
-				if (headerCookie)
-					headerCookie = headerCookie.value.replace(new RegExp(`"`, "g"), `'`); // double quotation marks mess up the command
-
-				let headerReferer = e.headers.find(
-					(header) => header.name.toLowerCase() === "referer"
-				);
-				headerReferer = headerReferer
-					? headerReferer.value
-					: e.originUrl || e.documentUrl || e.initiator || e.tabData?.url;
-				if (
-					headerReferer?.startsWith("about:") ||
-					headerReferer?.startsWith("chrome:")
-				)
-					headerReferer = undefined;
-
-				if (headerUserAgent) {
-					switch (fileMethod) {
-						case "kodiUrl":
-							code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
-							break;
-						case "ffmpeg":
-							code += ` -user_agent "${headerUserAgent}"`;
-							break;
-						case "streamlink":
-							code += ` --http-header "User-Agent=${headerUserAgent}"`;
-							break;
-						case "ytdlp":
-							code += ` --user-agent "${headerUserAgent}"`;
-							break;
-						case "hlsdl":
-							code += ` -u "${headerUserAgent}"`;
-							break;
-						case "nm3u8dl":
-							code += ` --header "User-Agent:${encodeURIComponent(
-								headerUserAgent
-							)}`;
-							if (!headerCookie && !headerReferer) code += `"`;
-							break;
-						case "user":
-							code = code.replace(
-								new RegExp("%useragent%", "g"),
-								headerUserAgent
-							);
-							break;
-						default:
-							break;
-					}
-				} else if (fileMethod === "user")
-					code = code.replace(new RegExp("%useragent%", "g"), "");
-
-				if (headerCookie) {
-					switch (fileMethod) {
-						case "kodiUrl":
-							if (headerUserAgent) code += "&";
-							else code += "|";
-							code += `Cookie=${encodeURIComponent(headerCookie)}`;
-							break;
-						case "ffmpeg":
-							code += ` -headers "Cookie: ${headerCookie}"`;
-							break;
-						case "streamlink":
-							code += ` --http-header "Cookie=${headerCookie}"`;
-							break;
-						case "ytdlp":
-							code += ` --add-header "Cookie:${headerCookie}"`;
-							break;
-						case "hlsdl":
-							code += ` -h "Cookie:${headerCookie}"`;
-							break;
-						case "nm3u8dl":
-							if (!headerUserAgent) code += ` --header "`;
-							else code += `|`;
-							code += `Cookie:${encodeURIComponent(headerCookie)}`;
-							if (!headerReferer) code += `"`;
-							break;
-						case "user":
-							code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
-							break;
-						default:
-							break;
-					}
-				} else if (fileMethod === "user")
-					code = code.replace(new RegExp("%cookie%", "g"), "");
-
-				if (headerReferer) {
-					switch (fileMethod) {
-						case "kodiUrl":
-							if (headerUserAgent || headerCookie) code += "&";
-							else code += "|";
-							code += `Referer=${encodeURIComponent(headerReferer)}`;
-							break;
-						case "ffmpeg":
-							code += ` -referer "${headerReferer}"`;
-							break;
-						case "streamlink":
-							code += ` --http-header "Referer=${headerReferer}"`;
-							break;
-						case "ytdlp":
-							code += ` --referer "${headerReferer}"`;
-							break;
-						case "hlsdl":
-							code += ` -h "Referer:${headerReferer}"`;
-							break;
-						case "nm3u8dl":
-							if (!headerUserAgent && !headerCookie) code += ` --header "`;
-							else code += `|`;
-							code += `Referer:${encodeURIComponent(headerReferer)}"`;
-							break;
-						case "user":
-							code = code.replace(new RegExp("%referer%", "g"), headerReferer);
-							break;
-						default:
-							break;
-					}
-				} else if (fileMethod === "user")
-					code = code.replace(new RegExp("%referer%", "g"), "");
-
-				if (
-					fileMethod === "user" &&
-					(e.documentUrl || e.originUrl || e.initiator || e.tabData?.url)
-				)
-					code = code.replace(
-						new RegExp("%origin%", "g"),
-						e.documentUrl || e.originUrl || e.initiator || e.tabData?.url
-					);
-				else if (fileMethod === "user")
-					code = code.replace(new RegExp("%origin%", "g"), "");
-
-				if (fileMethod === "user" && e.tabData?.title)
-					code = code.replace(
-						new RegExp("%tabtitle%", "g"),
-						e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
-					);
-				else if (fileMethod === "user")
-					code = code.replace(new RegExp("%tabtitle%", "g"), "");
-			}
-
-			let outFilename;
-			if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
-			else {
-				outFilename = filename;
-				if (outFilename.indexOf(".")) {
-					// filename without extension
-					outFilename = outFilename.split(".");
-					outFilename.pop();
-					outFilename = outFilename.join(".");
-				}
-			}
-
-			// sanitize tab title and timestamp
-			outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
-			const outExtension = (await getStorage("fileExtension")) || "ts";
-			const outTimestamp = getTimestamp(e.timeStamp).replace(
-				/[/\\?%*:|"<>]/g,
-				"_"
+		// additional headers
+		if (await getStorage("headersPref")) {
+			let headerUserAgent = e.headers.find(
+				(header) => header.name.toLowerCase() === "user-agent"
 			);
+			headerUserAgent
+				? (headerUserAgent = headerUserAgent.value)
+				: (headerUserAgent = navigator.userAgent);
 
-			// final part of command
-			switch (fileMethod) {
-				case "ffmpeg":
-					code += ` -i "${streamURL}" -c copy "${outFilename}`;
-					if (timestampPref) code += ` ${outTimestamp}`;
-					code += `.${outExtension}"`;
-					break;
-				case "streamlink":
-					if ((await getStorage("streamlinkOutput")) === "file") {
-						code += ` -o "${outFilename}`;
-						if (timestampPref) code += ` ${outTimestamp}`;
-						code += `.${outExtension}"`;
-					}
-					code += ` "${streamURL}" best`;
-					break;
-				case "ytdlp":
-					if ((filenamePref && e.tabData?.title) || timestampPref) {
-						code += ` --output "${outFilename}`;
-						if (timestampPref) code += ` %(epoch)s`;
-						code += `.%(ext)s"`;
-					}
-					code += ` "${streamURL}"`;
-					break;
-				case "hlsdl":
-					code += ` -o "${outFilename}`;
-					if (timestampPref) code += ` ${outTimestamp}`;
-					code += `.${outExtension}" "${streamURL}"`;
-					break;
-				case "nm3u8dl":
-					code += ` --saveName "${outFilename}`;
-					if (timestampPref) code += ` ${outTimestamp}`;
-					code += `"`;
-					break;
-				case "user":
-					code = code.replace(new RegExp("%url%", "g"), streamURL);
-					code = code.replace(new RegExp("%filename%", "g"), filename);
-					code = code.replace(new RegExp("%timestamp%", "g"), outTimestamp);
-					break;
-				default:
-					break;
+			let headerCookie = e.headers.find(
+				(header) =>
+					header.name.toLowerCase() === "cookie" ||
+					header.name.toLowerCase() === "set-cookie"
+			);
+			if (headerCookie)
+				headerCookie = headerCookie.value.replace(new RegExp(`"`, "g"), `'`); // double quotation marks mess up the command
+
+			let headerReferer = e.headers.find(
+				(header) => header.name.toLowerCase() === "referer"
+			);
+			headerReferer = headerReferer
+				? headerReferer.value
+				: e.originUrl || e.documentUrl || e.initiator || e.tabData?.url;
+			if (
+				headerReferer?.startsWith("about:") ||
+				headerReferer?.startsWith("chrome:")
+			)
+				headerReferer = undefined;
+
+			if (headerUserAgent) {
+				if (fileMethod === "kodiUrl")
+					code += `|User-Agent=${encodeURIComponent(headerUserAgent)}`;
+				else if (fileMethod === "ffmpeg")
+					code += ` -user_agent "${headerUserAgent}"`;
+				else if (fileMethod === "streamlink")
+					code += ` --http-header "User-Agent=${headerUserAgent}"`;
+				else if (fileMethod === "ytdlp")
+					code += ` --user-agent "${headerUserAgent}"`;
+				else if (fileMethod === "hlsdl") code += ` -u "${headerUserAgent}"`;
+				else if (fileMethod === "nm3u8dl") {
+					code += ` --header "User-Agent:${encodeURIComponent(
+						headerUserAgent
+					)}`;
+					if (!headerCookie && !headerReferer) code += `"`;
+				} else if (fileMethod.startsWith("user"))
+					code = code.replace(new RegExp("%useragent%", "g"), headerUserAgent);
+			} else if (fileMethod.startsWith("user"))
+				code = code.replace(new RegExp("%useragent%", "g"), "");
+
+			if (headerCookie) {
+				if (fileMethod === "kodiUrl") {
+					if (headerUserAgent) code += "&";
+					else code += "|";
+					code += `Cookie=${encodeURIComponent(headerCookie)}`;
+				} else if (fileMethod === "ffmpeg")
+					code += ` -headers "Cookie: ${headerCookie}"`;
+				else if (fileMethod === "streamlink")
+					code += ` --http-header "Cookie=${headerCookie}"`;
+				else if (fileMethod === "ytdlp")
+					code += ` --add-header "Cookie:${headerCookie}"`;
+				else if (fileMethod === "hlsdl") code += ` -h "Cookie:${headerCookie}"`;
+				else if (fileMethod === "nm3u8dl") {
+					if (!headerUserAgent) code += ` --header "`;
+					else code += `|`;
+					code += `Cookie:${encodeURIComponent(headerCookie)}`;
+					if (!headerReferer) code += `"`;
+				} else if (fileMethod.startsWith("user"))
+					code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
+			} else if (fileMethod.startsWith("user"))
+				code = code.replace(new RegExp("%cookie%", "g"), "");
+
+			if (headerReferer) {
+				if (fileMethod === "kodiUrl") {
+					if (headerUserAgent || headerCookie) code += "&";
+					else code += "|";
+					code += `Referer=${encodeURIComponent(headerReferer)}`;
+				} else if (fileMethod === "ffmpeg")
+					code += ` -referer "${headerReferer}"`;
+				else if (fileMethod === "streamlink")
+					code += ` --http-header "Referer=${headerReferer}"`;
+				else if (fileMethod === "ytdlp")
+					code += ` --referer "${headerReferer}"`;
+				else if (fileMethod === "hlsdl")
+					code += ` -h "Referer:${headerReferer}"`;
+				else if (fileMethod === "nm3u8dl") {
+					if (!headerUserAgent && !headerCookie) code += ` --header "`;
+					else code += `|`;
+					code += `Referer:${encodeURIComponent(headerReferer)}"`;
+				} else if (fileMethod.startsWith("user"))
+					code = code.replace(new RegExp("%referer%", "g"), headerReferer);
+			} else if (fileMethod.startsWith("user"))
+				code = code.replace(new RegExp("%referer%", "g"), "");
+
+			if (
+				fileMethod.startsWith("user") &&
+				(e.documentUrl || e.originUrl || e.initiator || e.tabData?.url)
+			)
+				code = code.replace(
+					new RegExp("%origin%", "g"),
+					e.documentUrl || e.originUrl || e.initiator || e.tabData?.url
+				);
+			else if (fileMethod.startsWith("user"))
+				code = code.replace(new RegExp("%origin%", "g"), "");
+
+			if (fileMethod.startsWith("user") && e.tabData?.title)
+				code = code.replace(
+					new RegExp("%tabtitle%", "g"),
+					e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
+				);
+			else if (fileMethod.startsWith("user"))
+				code = code.replace(new RegExp("%tabtitle%", "g"), "");
+		}
+
+		let outFilename;
+		if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
+		else {
+			outFilename = filename;
+			if (outFilename.indexOf(".")) {
+				// filename without extension
+				outFilename = outFilename.split(".");
+				outFilename.pop();
+				outFilename = outFilename.join(".");
 			}
 		}
 
+		// sanitize tab title and timestamp
+		outFilename = outFilename.replace(/[/\\?%*:|"<>]/g, "_");
+		const outExtension = (await getStorage("fileExtension")) || "ts";
+		const outTimestamp = getTimestamp(e.timeStamp).replace(
+			/[/\\?%*:|"<>]/g,
+			"_"
+		);
+
+		// final part of command
+		if (fileMethod === "ffmpeg") {
+			code += ` -i "${streamURL}" -c copy "${outFilename}`;
+			if (timestampPref) code += ` ${outTimestamp}`;
+			code += `.${outExtension}"`;
+		} else if (fileMethod === "streamlink") {
+			if ((await getStorage("streamlinkOutput")) === "file") {
+				code += ` -o "${outFilename}`;
+				if (timestampPref) code += ` ${outTimestamp}`;
+				code += `.${outExtension}"`;
+			}
+			code += ` "${streamURL}" best`;
+		} else if (fileMethod === "ytdlp") {
+			if ((filenamePref && e.tabData?.title) || timestampPref) {
+				code += ` --output "${outFilename}`;
+				if (timestampPref) code += ` %(epoch)s`;
+				code += `.%(ext)s"`;
+			}
+			code += ` "${streamURL}"`;
+		} else if (fileMethod === "hlsdl") {
+			code += ` -o "${outFilename}`;
+			if (timestampPref) code += ` ${outTimestamp}`;
+			code += `.${outExtension}" "${streamURL}"`;
+		} else if (fileMethod === "nm3u8dl") {
+			code += ` --save-name "${outFilename}`;
+			if (timestampPref) code += ` ${outTimestamp}`;
+			code += `"`;
+		} else if (fileMethod.startsWith("user")) {
+			code = code.replace(new RegExp("%url%", "g"), streamURL);
+			code = code.replace(new RegExp("%filename%", "g"), filename);
+			code = code.replace(new RegExp("%timestamp%", "g"), outTimestamp);
+		}
+
 		// regex for user command
-		if (fileMethod === "user" && (await getStorage("regexCommandPref"))) {
+		if (
+			fileMethod.startsWith("user") &&
+			(await getStorage("regexCommandPref"))
+		) {
 			const regexCommand = await getStorage("regexCommand");
 			const regexReplace = await getStorage("regexReplace");
 

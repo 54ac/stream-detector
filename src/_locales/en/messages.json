@@ -33,7 +33,7 @@
 		"message": "Unable to download URL:\n"
 	},
 	"extText": {
-		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI commands."
+		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE commands."
 	},
 	"copyMethod": {
 		"message": "Copy stream URL as"
@@ -46,9 +46,6 @@
 	},
 	"tableForm": {
 		"message": "Table entry"
-	},
-	"youtubedl": {
-		"message": "youtube-dl command"
 	},
 	"ytdlp": {
 		"message": "yt-dlp command"
@@ -63,10 +60,16 @@
 		"message": "hlsdl command"
 	},
 	"nm3u8dl": {
-		"message": "N_m3u8DL-CLI command"
+		"message": "N_m3u8DL-RE command"
 	},
-	"user": {
-		"message": "User-defined command"
+	"user1": {
+		"message": "User-defined command 1"
+	},
+	"user2": {
+		"message": "User-defined command 2"
+	},
+	"user3": {
+		"message": "User-defined command 3"
 	},
 	"streamlinkOutput": {
 		"message": "Output Streamlink to"
@@ -81,7 +84,7 @@
 		"message": "Additional command line parameters"
 	},
 	"userCommand": {
-		"message": "User-defined command"
+		"message": "User-defined commands"
 	},
 	"userCommandTip": {
 		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"

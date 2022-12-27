@@ -21,7 +21,7 @@
 		"message": "Não foi possível copiar a(s) URL(s):\n"
 	},
 	"extText": {
-		"message": "Detecta listas de reprodução e legendas usadas por HLS/DASH/HDS/MSS streams, assim como extensões de arquivos personalizados e cabeçalhos tipo Content-Type. Cria comandos prontos para youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
+		"message": "Detecta listas de reprodução e legendas usadas por HLS/DASH/HDS/MSS streams, assim como extensões de arquivos personalizados e cabeçalhos tipo Content-Type. Cria comandos prontos para yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
 	},
 	"copyMethod": {
 		"message": "Copiar a URL do stream como"
@@ -34,9 +34,6 @@
 	},
 	"tableForm": {
 		"message": "Entrada de tabela"
-	},
-	"youtubedl": {
-		"message": "comando youtube-dl"
 	},
 	"ytdlp": {
 		"message": "comando yt-dlp"
@@ -51,7 +48,7 @@
 		"message": "comando hlsdl"
 	},
 	"nm3u8dl": {
-		"message": "comando N_m3u8DL-CLI"
+		"message": "comando N_m3u8DL-RE"
 	},
 	"user": {
 		"message": "Comando definido por usuário"

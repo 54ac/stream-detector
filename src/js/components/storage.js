@@ -28,7 +28,8 @@ export const saveOptionStorage = async (e, options) => {
 		e.target.id === "copyMethod" &&
 		e.target.value !== "url" &&
 		e.target.value !== "tableForm" &&
-		e.target.value !== "kodiUrl"
+		e.target.value !== "kodiUrl" &&
+		!e.target.value.startsWith("user")
 	) {
 		const prefName = "customCommand" + e.target.value;
 

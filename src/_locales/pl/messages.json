@@ -33,7 +33,7 @@
 		"message": "Nie udało się ściągnąć pliku:\n"
 	},
 	"extText": {
-		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów youtube-dl/FFmpeg/Streamlink/hlsdl/N_m3u8DL-CLI."
+		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
 	},
 	"copyMethod": {
 		"message": "Skopiuj link do streamu jako"
@@ -46,9 +46,6 @@
 	},
 	"tableForm": {
 		"message": "Wpis tabeli"
-	},
-	"youtubedl": {
-		"message": "Komendę youtube-dl"
 	},
 	"ytdlp": {
 		"message": "Komendę yt-dlp"
@@ -63,10 +60,16 @@
 		"message": "Komendę hlsdl"
 	},
 	"nm3u8dl": {
-		"message": "Komendę N_m3u8DL-CLI"
+		"message": "Komendę N_m3u8DL-RE"
 	},
-	"user": {
-		"message": "Komendę własną"
+	"user1": {
+		"message": "Komendę własną 1"
+	},
+	"user2": {
+		"message": "Komendę własną 2"
+	},
+	"user3": {
+		"message": "Komendę własną 3"
 	},
 	"streamlinkOutput": {
 		"message": "Przesyłaj strumień wyjściowy Streamlink do"
@@ -81,7 +84,7 @@
 		"message": "Dodatkowe argumenty linii poleceń"
 	},
 	"userCommand": {
-		"message": "Komenda własna"
+		"message": "Komendy własne"
 	},
 	"userCommandTip": {
 		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"

@@ -21,16 +21,13 @@
 		"message": "Kann URL(s) nicht kopieren:\n"
 	},
 	"extText": {
-		"message": "Erkennen von Playlists und Untertiteln in HLS, DASH, HDS und MSS Streams. Generiert youtube-dl, FFmpeg, Streamlink, hlsdl und weitere (benutzerdefinierte) Kommandos."
+		"message": "Erkennen von Playlists und Untertiteln in HLS, DASH, HDS und MSS Streams. Generiert yt-dlp, FFmpeg, Streamlink, hlsdl und weitere (benutzerdefinierte) Kommandos."
 	},
 	"copyMethod": {
 		"message": "Kopiere Stream URL als"
 	},
 	"url": {
 		"message": "nur die URL"
-	},
-	"youtubedl": {
-		"message": "youtube-dl Kommando"
 	},
 	"ytdlp": {
 		"message": "yt-dlp Kommando"

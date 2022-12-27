@@ -13,6 +13,7 @@ body {
 	font-size: 0.8em;
 	background: #fff;
 	color: #202023;
+	user-select: none;
 }
 
 table {

@@ -6,7 +6,7 @@
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.10.18",
+	"version": "2.10.19",
 	"type": "module",
 	"private": true,
 	"devDependencies": {
