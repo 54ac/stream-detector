@@ -189,7 +189,7 @@ const copyURL = async (info) => {
 					code += ` --user-agent "${headerUserAgent}"`;
 				else if (fileMethod === "hlsdl") code += ` -u "${headerUserAgent}"`;
 				else if (fileMethod === "nm3u8dl") {
-					code += ` --header "User-Agent:${encodeURIComponent(
+					code += ` --header "User-Agent: ${encodeURIComponent(
 						headerUserAgent
 					)}`;
 					if (!headerCookie && !headerReferer) code += `"`;
@@ -213,7 +213,7 @@ const copyURL = async (info) => {
 				else if (fileMethod === "nm3u8dl") {
 					if (!headerUserAgent) code += ` --header "`;
 					else code += `|`;
-					code += `Cookie:${encodeURIComponent(headerCookie)}`;
+					code += `Cookie: ${encodeURIComponent(headerCookie)}`;
 					if (!headerReferer) code += `"`;
 				} else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
@@ -236,7 +236,7 @@ const copyURL = async (info) => {
 				else if (fileMethod === "nm3u8dl") {
 					if (!headerUserAgent && !headerCookie) code += ` --header "`;
 					else code += `|`;
-					code += `Referer:${encodeURIComponent(headerReferer)}"`;
+					code += `Referer: ${encodeURIComponent(headerReferer)}"`;
 				} else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%referer%", "g"), headerReferer);
 			} else if (fileMethod.startsWith("user"))
