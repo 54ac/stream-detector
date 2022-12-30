@@ -62,8 +62,14 @@
 	"nm3u8dl": {
 		"message": "Команда для N_m3u8DL-RE"
 	},
-	"user": {
-		"message": "Пользовательская команда"
+	"user1": {
+		"message": "Пользовательская команда 1"
+	},
+	"user2": {
+		"message": "Пользовательская команда 2"
+	},
+	"user3": {
+		"message": "Пользовательская команда 3"
 	},
 	"streamlinkOutput": {
 		"message": "Вывод Streamlink в"
@@ -78,7 +84,7 @@
 		"message": "Дополнительные параметры командной строки"
 	},
 	"userCommand": {
-		"message": "Пользовательская команда"
+		"message": "Пользовательские команды"
 	},
 	"userCommandTip": {
 		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
