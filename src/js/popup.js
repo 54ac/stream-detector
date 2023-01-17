@@ -590,8 +590,11 @@ const saveOption = (e) => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-	// change badge text background when clicked
+	// hide badge when clicked
 	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
+	chrome.browserAction.setBadgeText({ text: "" });
+	// workaround to detect popup close
+	chrome.runtime.connect({ name: "popup" });
 
 	titlePref = await getStorage("titlePref");
 	filenamePref = await getStorage("filenamePref");

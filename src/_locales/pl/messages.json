@@ -147,10 +147,10 @@
 		"message": "Kliknij, aby usunąć link."
 	},
 	"tabThis": {
-		"message": "Ta karta"
+		"message": "Obecna karta"
 	},
 	"tabAll": {
-		"message": "Wszystkie karty"
+		"message": "Obecna sesja"
 	},
 	"tabPrevious": {
 		"message": "Poprzednie sesje"

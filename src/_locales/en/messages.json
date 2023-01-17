@@ -147,10 +147,10 @@
 		"message": "Click to delete URL."
 	},
 	"tabThis": {
-		"message": "This tab"
+		"message": "Current tab"
 	},
 	"tabAll": {
-		"message": "All tabs"
+		"message": "Current session"
 	},
 	"tabPrevious": {
 		"message": "Previous sessions"

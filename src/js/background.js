@@ -63,6 +63,7 @@ const addListeners = () => {
 		{ urls: ["<all_urls>"] },
 		isChrome ? ["requestHeaders", "extraHeaders"] : ["requestHeaders"]
 	);
+
 	chrome.webRequest.onHeadersReceived.addListener(
 		urlFilter,
 		{ urls: ["<all_urls>"] },
@@ -88,6 +89,7 @@ const init = async () => {
 		setStorage({ newline });
 	});
 
+	chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
 	chrome.browserAction.setBadgeText({ text: "" });
 
 	chrome.browserAction.onClicked.addListener(
@@ -101,7 +103,19 @@ const init = async () => {
 const getTabData = async (tab) =>
 	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
 
-const urlPrefValidator = (e, requestDetails, headerSize, headerCt) => {
+const urlValidator = (e, requestDetails, headerSize, headerCt) => {
+	if (!e) return false;
+
+	if (requestDetails.tabId === -1) return false;
+
+	const isExistingUrl = urlStorage.find((u) => u.url === requestDetails.url);
+	if (
+		isExistingUrl &&
+		(isExistingUrl.requestId !== requestDetails.requestId ||
+			!queue.includes(requestDetails.requestId))
+	)
+		return false;
+
 	if (subtitlePref && e.category === "subtitles") return false;
 
 	if (filePref && e.category === "files") return false;
@@ -179,13 +193,7 @@ const urlFilter = (requestDetails) => {
 
 	const e = head || ext;
 
-	if (
-		e &&
-		!urlStorage.find((u) => u.url === requestDetails.url) && // urlStorage because promises are too slow sometimes
-		!queue.includes(requestDetails.requestId) && // queue in case urlStorage is also too slow
-		requestDetails.tabId !== -1 &&
-		urlPrefValidator(e, requestDetails, headerSize, headerCt)
-	) {
+	if (urlValidator(e, requestDetails, headerSize, headerCt)) {
 		queue.push(requestDetails.requestId);
 		requestDetails.type = e.type;
 		requestDetails.category = e.category;
@@ -270,7 +278,27 @@ const addURL = async (requestDetails) => {
 				incognito: tabData?.incognito
 			}
 		};
-		urlStorage.push(newRequestDetails);
+
+		const isExistingRequest = urlStorage.find(
+			(u) => u.requestId === requestDetails.requestId
+		);
+		if (!isExistingRequest) {
+			urlStorage.push(newRequestDetails);
+			chrome.browserAction.getBadgeText({}, (badgeText) =>
+				chrome.browserAction.setBadgeText({
+					text: (Number(badgeText) + 1).toString()
+				})
+			);
+		} else {
+			const mergedHeaders = [
+				...isExistingRequest.headers,
+				...newRequestDetails.headers
+			];
+
+			urlStorage[
+				urlStorage.findIndex((u) => u.requestId === requestDetails.requestId)
+			].headers = mergedHeaders;
+		}
 
 		// debounce lots of requests in a short period of time
 		clearTimeout(requestTimeoutId);
@@ -283,10 +311,7 @@ const addURL = async (requestDetails) => {
 		requestTimeoutId = setTimeout(async () => {
 			await setStorage({ urlStorage });
 			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-			chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
-			chrome.browserAction.setBadgeText({
-				text: urlStorage.length.toString()
-			});
+
 			allRequestDetails
 				.map((d) => d.requestId)
 				.forEach((id) => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
@@ -338,10 +363,6 @@ const deleteURL = async (message) => {
 	await setStorage({ urlStorage });
 	await setStorage({ urlStorageRestore });
 	chrome.runtime.sendMessage({ urlStorage: true });
-	if (message.previous !== true)
-		chrome.browserAction.setBadgeText({
-			text: urlStorage.length === 0 ? "" : urlStorage.length.toString() // only display at 1+
-		});
 };
 
 (async () => {
@@ -429,5 +450,14 @@ const deleteURL = async (message) => {
 
 	chrome.commands.onCommand.addListener((cmd) => {
 		if (cmd === "open-popup") chrome.browserAction.openPopup();
+	});
+
+	// workaround to detect popup close and manage badge text
+	chrome.runtime.onConnect.addListener((port) => {
+		if (port.name === "popup")
+			port.onDisconnect.addListener(() => {
+				chrome.browserAction.setBadgeBackgroundColor({ color: "green" });
+				chrome.browserAction.setBadgeText({ text: "" });
+			});
 	});
 })();

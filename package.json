@@ -6,7 +6,7 @@
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.10.19",
+	"version": "2.11.0",
 	"type": "module",
 	"private": true,
 	"devDependencies": {
@@ -31,11 +31,10 @@
 		"rollup-plugin-postcss": "^4.0.0",
 		"stylelint": "^14.11.0",
 		"stylelint-config-recommended": "^9.0.0",
-		"stylelint-config-standard": "^29.0.0",
-		"web-ext": "^7.0.0"
+		"stylelint-config-standard": "^29.0.0"
 	},
 	"scripts": {
-		"build": "rollup -c && web-ext build --no-config-discovery --overwrite-dest --source-dir=build",
+		"build": "rollup -c",
 		"start": "rollup -c -w"
 	},
 	"browserslist": "firefox 89"
