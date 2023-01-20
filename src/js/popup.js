@@ -1,6 +1,5 @@
 "use strict";
 
-import "../css/popup.css";
 import {
 	saveOptionStorage,
 	getStorage,
@@ -590,7 +589,7 @@ const saveOption = (e) => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-	// hide badge when clicked
+	// reset badge when clicked
 	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
 	chrome.browserAction.setBadgeText({ text: "" });
 	// workaround to detect popup close

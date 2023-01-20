@@ -53,5 +53,13 @@
 				"size": 16
 			}
 		]
+	},
+	"sidebar_action": {
+		"default_title": "The Stream Detector",
+		"default_panel": "sidebar.html",
+		"default_icon": {
+			"16": "img/icon-dark-16.png",
+			"48": "img/icon-dark-48.png"
+		}
 	}
 }

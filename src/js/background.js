@@ -193,12 +193,11 @@ const urlFilter = (requestDetails) => {
 
 	const e = head || ext;
 
-	if (urlValidator(e, requestDetails, headerSize, headerCt)) {
-		queue.push(requestDetails.requestId);
-		requestDetails.type = e.type;
-		requestDetails.category = e.category;
-		addURL(requestDetails);
-	}
+	if (!urlValidator(e, requestDetails, headerSize, headerCt)) return;
+	queue.push(requestDetails.requestId);
+	requestDetails.type = e.type;
+	requestDetails.category = e.category;
+	addURL(requestDetails);
 };
 
 const addURL = async (requestDetails) => {

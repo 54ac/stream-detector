@@ -1,6 +1,5 @@
 "use strict";
 
-import "../css/options.css";
 import {
 	saveOptionStorage,
 	getStorage,
