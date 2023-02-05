@@ -1,12 +1,4 @@
-html,
 body {
-	padding: 0;
-	margin: 0 auto;
-	width: 100vw;
-}
-
-body {
-	display: flex;
 	font-family:
 		-apple-system,
 		BlinkMacSystemFont,
@@ -21,12 +13,8 @@ body {
 	background: #fff;
 	color: #202023;
 	user-select: none;
-}
-
-#container {
-	display: flex;
-	flex-direction: row;
-	min-height: 0;
+	margin: 0;
+	padding: 0.5em;
 }
 
 #urlList {
@@ -43,7 +31,7 @@ table {
 table,
 th,
 td {
-	padding: 0.75em;
+	padding: 0.33em 0;
 	text-align: center;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -57,6 +45,10 @@ div {
 td *,
 th * {
 	margin: auto 0;
+}
+
+td {
+	display: block;
 }
 
 .urlEntry,
@@ -79,6 +71,10 @@ th * {
 	word-break: break-all;
 	cursor: pointer;
 	text-overflow: initial;
+}
+
+.urlEntry > td {
+	display: table-cell;
 }
 
 input,

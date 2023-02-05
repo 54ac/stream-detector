@@ -116,9 +116,7 @@ const copyURL = async (info) => {
 				(await getStorage("downloaderPref")) &&
 				(await getStorage("downloaderCommand"))
 			)
-				code += ` --external-downloader "${await getStorage(
-					"downloaderCommand"
-				)}"`;
+				code += ` --downloader "${await getStorage("downloaderCommand")}"`;
 		} else if (fileMethod === "hlsdl") code = "hlsdl -b -c";
 		else if (fileMethod === "nm3u8dl") code = `N_m3u8DL-RE "${streamURL}"`;
 		else if (fileMethod.startsWith("user"))
@@ -187,12 +185,11 @@ const copyURL = async (info) => {
 				else if (fileMethod === "ytdlp")
 					code += ` --user-agent "${headerUserAgent}"`;
 				else if (fileMethod === "hlsdl") code += ` -u "${headerUserAgent}"`;
-				else if (fileMethod === "nm3u8dl") {
+				else if (fileMethod === "nm3u8dl")
 					code += ` --header "User-Agent: ${encodeURIComponent(
 						headerUserAgent
-					)}`;
-					if (!headerCookie && !headerReferer) code += `"`;
-				} else if (fileMethod.startsWith("user"))
+					)}"`;
+				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%useragent%", "g"), headerUserAgent);
 			} else if (fileMethod.startsWith("user"))
 				code = code.replace(new RegExp("%useragent%", "g"), "");
@@ -209,12 +206,9 @@ const copyURL = async (info) => {
 				else if (fileMethod === "ytdlp")
 					code += ` --add-header "Cookie:${headerCookie}"`;
 				else if (fileMethod === "hlsdl") code += ` -h "Cookie:${headerCookie}"`;
-				else if (fileMethod === "nm3u8dl") {
-					if (!headerUserAgent) code += ` --header "`;
-					else code += `|`;
-					code += `Cookie: ${encodeURIComponent(headerCookie)}`;
-					if (!headerReferer) code += `"`;
-				} else if (fileMethod.startsWith("user"))
+				else if (fileMethod === "nm3u8dl")
+					code += ` --header "Cookie: ${encodeURIComponent(headerCookie)}"`;
+				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
 			} else if (fileMethod.startsWith("user"))
 				code = code.replace(new RegExp("%cookie%", "g"), "");
@@ -232,11 +226,9 @@ const copyURL = async (info) => {
 					code += ` --referer "${headerReferer}"`;
 				else if (fileMethod === "hlsdl")
 					code += ` -h "Referer:${headerReferer}"`;
-				else if (fileMethod === "nm3u8dl") {
-					if (!headerUserAgent && !headerCookie) code += ` --header "`;
-					else code += `|`;
-					code += `Referer: ${encodeURIComponent(headerReferer)}"`;
-				} else if (fileMethod.startsWith("user"))
+				else if (fileMethod === "nm3u8dl")
+					code += ` --header "Referer: ${encodeURIComponent(headerReferer)}"`;
+				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%referer%", "g"), headerReferer);
 			} else if (fileMethod.startsWith("user"))
 				code = code.replace(new RegExp("%referer%", "g"), "");
@@ -422,13 +414,16 @@ const createList = async () => {
 			row.id = requestDetails.requestId;
 			row.className = "urlEntry";
 
-			const extCell = document.createElement("td");
-			extCell.textContent =
-				(requestDetails.category === "files" ||
-					requestDetails.category === "custom") &&
-				downloadDirectPref
-					? "🔽 " + requestDetails.type.toUpperCase()
-					: requestDetails.type.toUpperCase();
+			if (document.body.id === "popup") {
+				const extCell = document.createElement("td");
+				extCell.textContent =
+					(requestDetails.category === "files" ||
+						requestDetails.category === "custom") &&
+					downloadDirectPref
+						? "🔽 " + requestDetails.type.toUpperCase()
+						: requestDetails.type.toUpperCase();
+				row.appendChild(extCell);
+			}
 
 			const urlCell = document.createElement("td");
 			urlCell.className = "urlCell";
@@ -446,37 +441,43 @@ const createList = async () => {
 			};
 			urlHref.title = requestDetails.url;
 			urlCell.appendChild(urlHref);
+			row.appendChild(urlCell);
 
-			const sizeCell = document.createElement("td");
-			const sizeCellHeader = requestDetails.headers.find(
-				(header) => header.name.toLowerCase() === "content-length"
-			);
-			if (
-				(requestDetails.category === "files" ||
-					requestDetails.category === "custom") &&
-				sizeCellHeader &&
-				Number(sizeCellHeader.value) !== 0
-			) {
-				sizeCell.textContent = formatBytes(sizeCellHeader.value);
-				sizeCell.title = sizeCellHeader.value;
-			} else sizeCell.textContent = "-";
+			if (document.body.id === "popup") {
+				const sizeCell = document.createElement("td");
+				const sizeCellHeader = requestDetails.headers.find(
+					(header) => header.name.toLowerCase() === "content-length"
+				);
+				if (
+					(requestDetails.category === "files" ||
+						requestDetails.category === "custom") &&
+					sizeCellHeader &&
+					Number(sizeCellHeader.value) !== 0
+				) {
+					sizeCell.textContent = formatBytes(sizeCellHeader.value);
+					sizeCell.title = sizeCellHeader.value;
+				} else sizeCell.textContent = "-";
+				row.appendChild(sizeCell);
 
-			const sourceCell = document.createElement("td");
-			sourceCell.textContent =
-				titlePref &&
-				requestDetails.tabData?.title &&
-				// tabData.title falls back to url
-				!requestDetails.url.includes(requestDetails.tabData.title)
-					? requestDetails.tabData.title
-					: requestDetails.hostname;
-			sourceCell.title =
-				requestDetails.documentUrl ||
-				requestDetails.originUrl ||
-				requestDetails.initiator ||
-				requestDetails.tabData.url;
+				const sourceCell = document.createElement("td");
+				sourceCell.textContent =
+					titlePref &&
+					requestDetails.tabData?.title &&
+					// tabData.title falls back to url
+					!requestDetails.url.includes(requestDetails.tabData.title)
+						? requestDetails.tabData.title
+						: requestDetails.hostname;
+				sourceCell.title =
+					requestDetails.documentUrl ||
+					requestDetails.originUrl ||
+					requestDetails.initiator ||
+					requestDetails.tabData.url;
+				row.appendChild(sourceCell);
 
-			const timestampCell = document.createElement("td");
-			timestampCell.textContent = getTimestamp(requestDetails.timeStamp);
+				const timestampCell = document.createElement("td");
+				timestampCell.textContent = getTimestamp(requestDetails.timeStamp);
+				row.appendChild(timestampCell);
+			}
 
 			const deleteCell = document.createElement("td");
 			const deleteX = document.createElement("a");
@@ -500,12 +501,6 @@ const createList = async () => {
 			deleteCell.style.cursor = "pointer";
 			deleteCell.title = _("deleteTooltip");
 			deleteCell.appendChild(deleteX);
-
-			row.appendChild(extCell);
-			row.appendChild(urlCell);
-			row.appendChild(sizeCell);
-			row.appendChild(sourceCell);
-			row.appendChild(timestampCell);
 			row.appendChild(deleteCell);
 
 			table.appendChild(row);
@@ -588,13 +583,7 @@ const saveOption = (e) => {
 	saveOptionStorage(e, document.getElementsByClassName("option"));
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-	// reset badge when clicked
-	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
-	chrome.browserAction.setBadgeText({ text: "" });
-	// workaround to detect popup close
-	chrome.runtime.connect({ name: "popup" });
-
+const restoreOptions = async () => {
 	titlePref = await getStorage("titlePref");
 	filenamePref = await getStorage("filenamePref");
 	timestampPref = await getStorage("timestampPref");
@@ -619,6 +608,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 				document.getElementById(option.id).value = await getStorage(option.id);
 		}
 	}
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+	// reset badge when clicked
+	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
+	chrome.browserAction.setBadgeText({ text: "" });
+	// workaround to detect popup close
+	chrome.runtime.connect({ name: "popup" });
+
+	restoreOptions();
 
 	// i18n
 	const labels = document.getElementsByTagName("label");
@@ -680,5 +679,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	chrome.runtime.onMessage.addListener((message) => {
 		if (message.urlStorage) createList();
+		if (document.body.id === "sidebar" && message.options) restoreOptions();
 	});
 });

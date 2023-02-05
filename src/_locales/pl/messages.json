@@ -200,6 +200,9 @@
 	"openPopup": {
 		"message": "Otwórz główne okno"
 	},
+	"openSidebar": {
+		"message": "Otwórz panel boczny"
+	},
 	"placeholderCell": {
 		"message": "Brak dostępnych linków."
 	},

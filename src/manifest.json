@@ -23,6 +23,9 @@
 	"commands": {
 		"open-popup": {
 			"description": "__MSG_openPopup__"
+		},
+		"open-sidebar": {
+			"description": "__MSG_openSidebar__"
 		}
 	},
 	"options_ui": {
@@ -60,6 +63,7 @@
 		"default_icon": {
 			"16": "img/icon-dark-16.png",
 			"48": "img/icon-dark-48.png"
-		}
+		},
+		"open_at_install": false
 	}
 }

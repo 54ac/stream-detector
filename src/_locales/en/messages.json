@@ -200,6 +200,9 @@
 	"openPopup": {
 		"message": "Open addon popup"
 	},
+	"openSidebar": {
+		"message": "Open addon sidebar"
+	},
 	"placeholderCell": {
 		"message": "No URLs available."
 	},

@@ -5,7 +5,7 @@
 		<title>The Stream Detector</title>
 		<link rel="stylesheet" href="css/sidebar.css" />
 	</head>
-	<body>
+	<body id="sidebar">
 		<div id="container">
 			<table>
 				<tbody>
@@ -35,6 +35,8 @@
 						</td>
 						<td>
 							<label for="copyMethod"></label>
+						</td>
+						<td>
 							<select class="option" id="copyMethod">
 								<option value="url"></option>
 								<option value="kodiUrl"></option>
@@ -55,20 +57,12 @@
 			<div id="urlList">
 				<table>
 					<colgroup>
-						<col style="width: 9%" />
-						<col style="width: 29%" />
-						<col style="width: 12%" />
-						<col style="width: 25%" />
-						<col style="width: 20%" />
+						<col style="width: 95%" />
 						<col style="width: 5%" />
 					</colgroup>
 					<thead id="headers">
 						<tr>
-							<th><label for="popupType" /></th>
 							<th><label for="popupFilename" /></th>
-							<th><label for="popupSize" /></th>
-							<th><label for="popupSource" /></th>
-							<th><label for="popupTimestamp" /></th>
 							<th>✖</th>
 						</tr>
 					</thead>

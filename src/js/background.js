@@ -449,6 +449,7 @@ const deleteURL = async (message) => {
 
 	chrome.commands.onCommand.addListener((cmd) => {
 		if (cmd === "open-popup") chrome.browserAction.openPopup();
+		if (cmd === "open-sidebar") chrome.sidebarAction.open();
 	});
 
 	// workaround to detect popup close and manage badge text
