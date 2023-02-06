@@ -147,10 +147,10 @@
 		"message": "Нажмите, чтобы удалить ссылку"
 	},
 	"tabThis": {
-		"message": "Эта вкладка"
+		"message": "Текущая вкладка"
 	},
 	"tabAll": {
-		"message": "Все вкладки"
+		"message": "Текущая сессия"
 	},
 	"tabPrevious": {
 		"message": "Предыдущие сессии"
@@ -199,6 +199,9 @@
 	},
 	"openPopup": {
 		"message": "Открыть панель расширения"
+	},
+	"openSidebar": {
+		"message": "Открыть боковую панель"
 	},
 	"placeholderCell": {
 		"message": "Ссылки не найдены."
