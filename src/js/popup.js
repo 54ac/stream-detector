@@ -610,14 +610,16 @@ const restoreOptions = async () => {
 	}
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	// reset badge when clicked
-	chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
-	chrome.browserAction.setBadgeText({ text: "" });
-	// workaround to detect popup close
-	chrome.runtime.connect({ name: "popup" });
+	if (document.body.id === "popup") {
+		chrome.browserAction.setBadgeBackgroundColor({ color: "silver" });
+		chrome.browserAction.setBadgeText({ text: "" });
+		// workaround to detect popup close
+		chrome.runtime.connect({ name: "popup" });
+	}
 
-	restoreOptions();
+	await restoreOptions();
 
 	// i18n
 	const labels = document.getElementsByTagName("label");

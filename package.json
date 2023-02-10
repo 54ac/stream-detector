@@ -6,7 +6,7 @@
 		"url": "https://github.com/rowrawer"
 	},
 	"repository": "github:rowrawer/stream-detector",
-	"version": "2.11.0",
+	"version": "2.11.1",
 	"type": "module",
 	"private": true,
 	"devDependencies": {
@@ -29,9 +29,9 @@
 		"rollup-plugin-copy-watch": "^0.0.1",
 		"rollup-plugin-multi-input": "^1.3.1",
 		"rollup-plugin-postcss": "^4.0.0",
-		"stylelint": "^14.11.0",
-		"stylelint-config-recommended": "^9.0.0",
-		"stylelint-config-standard": "^29.0.0"
+		"stylelint": "^15.0.0",
+		"stylelint-config-recommended": "^10.0.1",
+		"stylelint-config-standard": "^30.0.1"
 	},
 	"scripts": {
 		"build": "rollup -c",
