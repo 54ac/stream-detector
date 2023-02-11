@@ -4,6 +4,14 @@ import defaults from "./components/defaults.js";
 import supported from "./components/supported.js";
 import { getStorage, setStorage, clearStorage } from "./components/storage.js";
 
+import iconLightEnabled16 from "../img/icon-light-enabled-16.png";
+import iconLightEnabled48 from "../img/icon-light-enabled-48.png";
+import iconLightEnabled96 from "../img/icon-light-enabled-96.png";
+import iconDarkEnabled16 from "../img/icon-dark-enabled-16.png";
+import iconDarkEnabled48 from "../img/icon-dark-enabled-48.png";
+import iconDarkEnabled96 from "../img/icon-dark-enabled-96.png";
+import notifIcon from "../img/icon-dark-96.png";
+
 const _ = chrome.i18n.getMessage;
 
 const CLEAR_STORAGE = false;
@@ -33,8 +41,8 @@ let newline;
 
 const customSupported = { ext: [], ct: [], type: "CUSTOM", category: "custom" };
 const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
-const iconTheme = () =>
-	window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark";
+const isDarkMode = () =>
+	window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 const updateVars = async () => {
 	// the web storage api crashes the entire browser sometimes so I have to resort to this nonsense
@@ -321,7 +329,7 @@ const addURL = async (requestDetails) => {
 					chrome.notifications.create("add", {
 						// id = only one notification of this type appears at a time
 						type: "basic",
-						iconUrl: "img/icon-dark-96.png",
+						iconUrl: notifIcon,
 						title: _("notifManyTitle"),
 						message:
 							_("notifManyText") +
@@ -330,7 +338,7 @@ const addURL = async (requestDetails) => {
 				else
 					chrome.notifications.create("add", {
 						type: "basic",
-						iconUrl: "img/icon-dark-96.png",
+						iconUrl: notifIcon,
 						title: _("notifTitle"),
 						message: _("notifText", requestDetails.type) + filename
 					});
@@ -375,13 +383,14 @@ const deleteURL = async (message) => {
 
 	await init();
 
+	// FIXME
 	if (disablePref !== true) {
 		addListeners();
 		chrome.browserAction.setIcon({
 			path: {
-				16: `img/icon-${iconTheme()}-enabled-16.png`,
-				48: `img/icon-${iconTheme()}-enabled-48.png`,
-				96: `img/icon-${iconTheme()}-enabled-96.png`
+				16: isDarkMode ? iconDarkEnabled16 : iconLightEnabled16,
+				48: isDarkMode ? iconDarkEnabled48 : iconLightEnabled48,
+				96: isDarkMode ? iconDarkEnabled96 : iconLightEnabled96
 			}
 		});
 	}
@@ -419,9 +428,9 @@ const deleteURL = async (message) => {
 				chrome.webRequest.onHeadersReceived.removeListener(urlFilter);
 				chrome.browserAction.setIcon({
 					path: {
-						16: `img/icon-${iconTheme()}-16.png`,
-						48: `img/icon-${iconTheme()}-48.png`,
-						96: `img/icon-${iconTheme()}-96.png`
+						16: isDarkMode ? iconDarkEnabled16 : iconLightEnabled16,
+						48: isDarkMode ? iconDarkEnabled48 : iconLightEnabled48,
+						96: isDarkMode ? iconDarkEnabled96 : iconLightEnabled96
 					}
 				});
 			} else if (
@@ -432,9 +441,9 @@ const deleteURL = async (message) => {
 				addListeners();
 				chrome.browserAction.setIcon({
 					path: {
-						16: `img/icon-${iconTheme()}-enabled-16.png`,
-						48: `img/icon-${iconTheme()}-enabled-48.png`,
-						96: `img/icon-${iconTheme()}-enabled-96.png`
+						16: isDarkMode ? iconDarkEnabled16 : iconLightEnabled16,
+						48: isDarkMode ? iconDarkEnabled48 : iconLightEnabled48,
+						96: isDarkMode ? iconDarkEnabled96 : iconLightEnabled96
 					}
 				});
 			}

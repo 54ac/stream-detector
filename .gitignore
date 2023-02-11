@@ -1,8 +1,8 @@
-.firefox.exe.lnk
-chrome-pack.bat
-/web-ext-artifacts
-/build
+/dist
 /node_modules
-dist.pem
+/.parcel-cache
 build.crx
+chrome-pack.bat
+dist.pem
+.firefox.exe.lnk
 icon.svg
