@@ -225,7 +225,7 @@
 		"message": "One entry per line. Case insensitive."
 	},
 	"noRestorePref": {
-		"message": "Ignore previous sessions on launch"
+		"message": "Disable previous session functionality (clear entries on launch)"
 	},
 	"recentPref": {
 		"message": "Only show certain number of latest entries"

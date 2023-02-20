@@ -225,7 +225,7 @@
 		"message": "Każdy wpis w nowej linii. Wielkość liter nieistotna."
 	},
 	"noRestorePref": {
-		"message": "Nie przywracaj wpisów przy starcie"
+		"message": "Wyłącz obsługę poprzednich sesji (usuń wpisy przy starcie)"
 	},
 	"recentPref": {
 		"message": "Wyświetl jedynie określoną liczbę ostatnich wpisów"

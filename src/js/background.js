@@ -176,7 +176,7 @@ const urlFilter = (requestDetails) => {
 
 	// depends which listener caught it
 	requestDetails.headers =
-		requestDetails.requestHeaders || requestDetails.responseHeaders;
+		requestDetails.responseHeaders || requestDetails.requestHeaders;
 
 	const headerCt = requestDetails.headers?.find(
 		(h) => h.name.toLowerCase() === "content-type"
@@ -380,10 +380,16 @@ const deleteURL = async (message) => {
 	const addonVersion = await getStorage("version");
 	if (CLEAR_STORAGE && addonVersion && addonVersion !== manifestVersion)
 		await clearStorage();
+	//specifically for v2.11.2
+	if (
+		addonVersion &&
+		addonVersion !== manifestVersion &&
+		(await getStorage("noRestorePref"))
+	)
+		await setStorage({ noRestorePref: false });
 
 	await init();
 
-	// FIXME
 	if (disablePref !== true) {
 		addListeners();
 		chrome.browserAction.setIcon({
@@ -399,21 +405,19 @@ const deleteURL = async (message) => {
 	urlStorageRestore = await getStorage("urlStorageRestore");
 
 	// restore urls on startup
-	if (urlStorage && urlStorage.length > 0 && !noRestorePref)
+	if (urlStorage && urlStorage.length > 0 && !noRestorePref) {
 		urlStorageRestore = [...urlStorageRestore, ...urlStorage];
 
-	if (urlStorageRestore && urlStorageRestore.length > 0) {
 		// remove all entries previously detected in private windows
 		urlStorageRestore = urlStorageRestore.filter(
 			(url) => url.tabData?.incognito !== true
 		);
 
-		// urls from previous session were moved to urlStorageRestore
-		urlStorage = [];
-
 		await setStorage({ urlStorageRestore });
-		await setStorage({ urlStorage: [] });
 	}
+	// urls from previous session were moved to urlStorageRestore
+	urlStorage = [];
+	await setStorage({ urlStorage });
 
 	chrome.runtime.onMessage.addListener(async (message) => {
 		if (message.delete) deleteURL(message);

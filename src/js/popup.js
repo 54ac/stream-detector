@@ -71,20 +71,8 @@ const copyURL = async (info) => {
 		let fileMethod;
 
 		const streamURL = e.url;
-		const { filename, type, category } = e;
+		const { filename } = e;
 		fileMethod = (await getStorage("copyMethod")) || "url"; // default to url - just in case
-
-		if (
-			(category === "subtitles" &&
-				fileMethod !== "url" &&
-				!fileMethod.startsWith("user")) ||
-			(type === "CUSTOM" &&
-				fileMethod !== "url" &&
-				!fileMethod.startsWith("user"))
-		) {
-			fileMethod = "url";
-			methodIncomp = true;
-		}
 
 		// don't use user-defined command if empty
 		if (
@@ -188,9 +176,7 @@ const copyURL = async (info) => {
 					code += ` --user-agent "${headerUserAgent}"`;
 				else if (fileMethod === "hlsdl") code += ` -u "${headerUserAgent}"`;
 				else if (fileMethod === "nm3u8dl")
-					code += ` --header "User-Agent: ${encodeURIComponent(
-						headerUserAgent
-					)}"`;
+					code += ` --header "User-Agent: ${headerUserAgent}"`;
 				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%useragent%", "g"), headerUserAgent);
 			} else if (fileMethod.startsWith("user"))
@@ -209,7 +195,7 @@ const copyURL = async (info) => {
 					code += ` --add-header "Cookie:${headerCookie}"`;
 				else if (fileMethod === "hlsdl") code += ` -h "Cookie:${headerCookie}"`;
 				else if (fileMethod === "nm3u8dl")
-					code += ` --header "Cookie: ${encodeURIComponent(headerCookie)}"`;
+					code += ` --header "Cookie: ${headerCookie}"`;
 				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
 			} else if (fileMethod.startsWith("user"))
@@ -229,31 +215,31 @@ const copyURL = async (info) => {
 				else if (fileMethod === "hlsdl")
 					code += ` -h "Referer:${headerReferer}"`;
 				else if (fileMethod === "nm3u8dl")
-					code += ` --header "Referer: ${encodeURIComponent(headerReferer)}"`;
+					code += ` --header "Referer: ${headerReferer}"`;
 				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%referer%", "g"), headerReferer);
 			} else if (fileMethod.startsWith("user"))
 				code = code.replace(new RegExp("%referer%", "g"), "");
-
-			if (
-				fileMethod.startsWith("user") &&
-				(e.documentUrl || e.originUrl || e.initiator || e.tabData?.url)
-			)
-				code = code.replace(
-					new RegExp("%origin%", "g"),
-					e.documentUrl || e.originUrl || e.initiator || e.tabData?.url
-				);
-			else if (fileMethod.startsWith("user"))
-				code = code.replace(new RegExp("%origin%", "g"), "");
-
-			if (fileMethod.startsWith("user") && e.tabData?.title)
-				code = code.replace(
-					new RegExp("%tabtitle%", "g"),
-					e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
-				);
-			else if (fileMethod.startsWith("user"))
-				code = code.replace(new RegExp("%tabtitle%", "g"), "");
 		}
+
+		if (
+			fileMethod.startsWith("user") &&
+			(e.documentUrl || e.originUrl || e.initiator || e.tabData?.url)
+		)
+			code = code.replace(
+				new RegExp("%origin%", "g"),
+				e.documentUrl || e.originUrl || e.initiator || e.tabData?.url
+			);
+		else if (fileMethod.startsWith("user"))
+			code = code.replace(new RegExp("%origin%", "g"), "");
+
+		if (fileMethod.startsWith("user") && e.tabData?.title)
+			code = code.replace(
+				new RegExp("%tabtitle%", "g"),
+				e.tabData.title.replace(/[/\\?%*:|"<>]/g, "_")
+			);
+		else if (fileMethod.startsWith("user"))
+			code = code.replace(new RegExp("%tabtitle%", "g"), "");
 
 		let outFilename;
 		if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
