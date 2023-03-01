@@ -662,9 +662,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.getElementById("clearFilterInput").style.cursor = "default";
 	};
 
-	if (noRestorePref)
+	if (noRestorePref) {
+		if (document.getElementById("tabPrevious").checked)
+			document.getElementById("tabAll").checked = true;
 		document.getElementById("tabPrevious").parentElement.style.display = "none";
-
+	}
 	createList();
 
 	chrome.runtime.onMessage.addListener((message) => {

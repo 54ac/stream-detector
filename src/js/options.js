@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const labels = document.getElementsByTagName("label");
 	for (const label of labels) {
 		if (label.htmlFor === "versionTag")
-			label.textContent = "v" + (await getStorage("version"));
+			label.textContent = `v${await getStorage("version")}. ${_("tipHint")}`;
 		else label.textContent = _(label.htmlFor) + ":";
 	}
 	const selectOptions = document.getElementsByTagName("option");

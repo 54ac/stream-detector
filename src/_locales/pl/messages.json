@@ -189,7 +189,7 @@
 		"message": "Automatycznie ściągaj multimedia"
 	},
 	"autoDownloadTip": {
-		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Nie dodaje linków do listy ani nie pokazuje powiadomień, aby nie spamować użytkownika. Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."
+		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Działa jedynie, gdy opcja 'Nie wykrywaj bezpośrednich linków do multimediów' jest wyłączona. Nie pokazuje powiadomień, aby nie spamować użytkownika.Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."
 	},
 	"manifestPref": {
 		"message": "Nie wykrywaj streamów"
@@ -250,5 +250,8 @@
 	},
 	"importButtonFailure": {
 		"message": "Nie udało się zaimportować ustawień."
+	},
+	"tipHint": {
+		"message": "Najedź myszką na znaki zapytania, aby dowiedzieć się więcej o poszczególnych opcjach."
 	}
 }

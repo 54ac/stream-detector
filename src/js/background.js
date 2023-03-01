@@ -226,126 +226,126 @@ const addURL = async (requestDetails) => {
 
 	const tabData = await getTabData(requestDetails.tabId);
 
+	// web storage api optimization
+	const newRequestDetails = {
+		category: requestDetails.category,
+		documentUrl: requestDetails.documentUrl,
+		originUrl: requestDetails.originUrl,
+		initiator: requestDetails.initiator,
+		requestId: requestDetails.requestId,
+		tabId: requestDetails.tabId,
+		timeStamp: requestDetails.timeStamp,
+		type: requestDetails.type,
+		url: requestDetails.url,
+		headers: requestDetails.headers?.filter(
+			(h) =>
+				h.name.toLowerCase() === "user-agent" ||
+				h.name.toLowerCase() === "referer" ||
+				h.name.toLowerCase() === "cookie" ||
+				h.name.toLowerCase() === "set-cookie" ||
+				h.name.toLowerCase() === "content-length"
+		),
+		filename,
+		hostname,
+		tabData: {
+			title: tabData?.title,
+			url: tabData?.url,
+			incognito: tabData?.incognito
+		}
+	};
+
+	const isExistingRequest = urlStorage.find(
+		(u) => u.requestId === requestDetails.requestId
+	);
+	if (!isExistingRequest) {
+		urlStorage.push(newRequestDetails);
+		chrome.browserAction.getBadgeText({}, (badgeText) =>
+			chrome.browserAction.setBadgeText({
+				text: (Number(badgeText) + 1).toString()
+			})
+		);
+	} else {
+		const mergedHeaders = [
+			...isExistingRequest.headers,
+			...newRequestDetails.headers
+		];
+
+		urlStorage[
+			urlStorage.findIndex((u) => u.requestId === requestDetails.requestId)
+		].headers = mergedHeaders;
+	}
+
+	// debounce lots of requests in a short period of time
+	clearTimeout(requestTimeoutId);
+	allRequestDetails.push({
+		requestId: newRequestDetails.requestId,
+		filename: newRequestDetails.filename,
+		type: newRequestDetails.type
+	});
+
+	requestTimeoutId = setTimeout(async () => {
+		await setStorage({ urlStorage });
+		chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
+
+		allRequestDetails
+			.map((d) => d.requestId)
+			.forEach((id) => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
+
+		if (
+			!notifDetectPref &&
+			!notifPref &&
+			(!autoDownloadPref || (autoDownloadPref && filePref))
+		) {
+			if (allRequestDetails.length > 1)
+				// multiple files detected
+				chrome.notifications.create("add", {
+					// id = only one notification of this type appears at a time
+					type: "basic",
+					iconUrl: notifIcon,
+					title: _("notifManyTitle"),
+					message:
+						_("notifManyText") +
+						allRequestDetails.map((d) => d.filename).join(newline)
+				});
+			else
+				chrome.notifications.create("add", {
+					type: "basic",
+					iconUrl: notifIcon,
+					title: _("notifTitle"),
+					message: _("notifText", requestDetails.type) + filename
+				});
+		}
+
+		allRequestDetails.length = 0; // clear array for next batch
+	}, 100);
+
+	// auto download file
 	if (
-		(requestDetails.category === "files" ||
-			requestDetails.category === "custom") &&
+		(newRequestDetails.category === "files" ||
+			newRequestDetails.category === "custom") &&
 		downloadDirectPref &&
 		autoDownloadPref
 	) {
-		const dlFilename = tabData
-			? (tabData.title + "/" + filename).replace(/[?%*:|"<>]/g, "_")
-			: (hostname + "/" + filename).replace(/[?%*:|"<>]/g, "_");
-
-		const dlHeaders = requestDetails.headers?.filter(
-			(h) => h.name.toLowerCase() === "referer"
-		);
-
 		const dlOptions = chrome.runtime
 			.getURL("")
 			.startsWith("chrome-extension://")
 			? {
-					filename: dlFilename,
-					url: requestDetails.url,
+					filename: newRequestDetails.filename,
+					url: newRequestDetails.url,
 					saveAs: false
 			  }
 			: {
-					filename: dlFilename,
-					headers: dlHeaders || [],
-					incognito: tabData?.incognito || false,
-					url: requestDetails.url,
+					filename: newRequestDetails.filename,
+					headers:
+						newRequestDetails.headers?.filter(
+							(h) => h.name.toLowerCase() === "referer"
+						) || [],
+					incognito: newRequestDetails.tabData?.incognito || false,
+					url: newRequestDetails.url,
 					saveAs: false
 			  };
 
 		chrome.downloads.download(dlOptions);
-	} else {
-		// web storage api optimization
-		const newRequestDetails = {
-			category: requestDetails.category,
-			documentUrl: requestDetails.documentUrl,
-			originUrl: requestDetails.originUrl,
-			initiator: requestDetails.initiator,
-			requestId: requestDetails.requestId,
-			tabId: requestDetails.tabId,
-			timeStamp: requestDetails.timeStamp,
-			type: requestDetails.type,
-			url: requestDetails.url,
-			headers: requestDetails.headers?.filter(
-				(h) =>
-					h.name.toLowerCase() === "user-agent" ||
-					h.name.toLowerCase() === "referer" ||
-					h.name.toLowerCase() === "cookie" ||
-					h.name.toLowerCase() === "set-cookie" ||
-					h.name.toLowerCase() === "content-length"
-			),
-			filename,
-			hostname,
-			tabData: {
-				title: tabData?.title,
-				url: tabData?.url,
-				incognito: tabData?.incognito
-			}
-		};
-
-		const isExistingRequest = urlStorage.find(
-			(u) => u.requestId === requestDetails.requestId
-		);
-		if (!isExistingRequest) {
-			urlStorage.push(newRequestDetails);
-			chrome.browserAction.getBadgeText({}, (badgeText) =>
-				chrome.browserAction.setBadgeText({
-					text: (Number(badgeText) + 1).toString()
-				})
-			);
-		} else {
-			const mergedHeaders = [
-				...isExistingRequest.headers,
-				...newRequestDetails.headers
-			];
-
-			urlStorage[
-				urlStorage.findIndex((u) => u.requestId === requestDetails.requestId)
-			].headers = mergedHeaders;
-		}
-
-		// debounce lots of requests in a short period of time
-		clearTimeout(requestTimeoutId);
-		allRequestDetails.push({
-			requestId: newRequestDetails.requestId,
-			filename: newRequestDetails.filename,
-			type: newRequestDetails.type
-		});
-
-		requestTimeoutId = setTimeout(async () => {
-			await setStorage({ urlStorage });
-			chrome.runtime.sendMessage({ urlStorage: true }); // update popup if opened
-
-			allRequestDetails
-				.map((d) => d.requestId)
-				.forEach((id) => queue.splice(queue.indexOf(id, 1))); // remove all batched requests from queue
-
-			if (!notifDetectPref && !notifPref) {
-				if (allRequestDetails.length > 1)
-					// multiple files detected
-					chrome.notifications.create("add", {
-						// id = only one notification of this type appears at a time
-						type: "basic",
-						iconUrl: notifIcon,
-						title: _("notifManyTitle"),
-						message:
-							_("notifManyText") +
-							allRequestDetails.map((d) => d.filename).join(newline)
-					});
-				else
-					chrome.notifications.create("add", {
-						type: "basic",
-						iconUrl: notifIcon,
-						title: _("notifTitle"),
-						message: _("notifText", requestDetails.type) + filename
-					});
-			}
-
-			allRequestDetails.length = 0; // clear array for next batch
-		}, 100);
 	}
 };
 
@@ -413,6 +413,9 @@ const deleteURL = async (message) => {
 			(url) => url.tabData?.incognito !== true
 		);
 
+		await setStorage({ urlStorageRestore });
+	} else {
+		urlStorageRestore = [];
 		await setStorage({ urlStorageRestore });
 	}
 	// urls from previous session were moved to urlStorageRestore

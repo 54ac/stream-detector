@@ -189,7 +189,7 @@
 		"message": "Automatically download non-manifest files"
 	},
 	"autoDownloadTip": {
-		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Does not add entries to the URL list or show notifications so as to not spam the user. Use URL blacklist to prevent unwanted downloads."
+		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Works only when 'Ignore direct links to media files' is unchecked. Does not show notifications so as to not spam the user. Use URL blacklist to prevent unwanted downloads."
 	},
 	"manifestPref": {
 		"message": "Ignore streams"
@@ -250,5 +250,8 @@
 	},
 	"importButtonFailure": {
 		"message": "Could not import settings."
+	},
+	"tipHint": {
+		"message": "Hover over question marks to learn more about particular options."
 	}
 }
