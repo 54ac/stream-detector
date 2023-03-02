@@ -62,17 +62,23 @@
 	"nm3u8dl": {
 		"message": "príkaz N_m3u8DL-RE"
 	},
-	"user": {
-		"message": "používateľom definovaný príkaz"
+	"user1": {
+		"message": "používateľom definovaný príkaz 1"
+	},
+	"user2": {
+		"message": "používateľom definovaný príkaz 2"
+	},
+	"user3": {
+		"message": "používateľom definovaný príkaz 3"
 	},
 	"streamlinkOutput": {
-		"message": "výstup Streamlinku na/do"
+		"message": "poslať Streamlink do"
 	},
 	"file": {
-		"message": "Súbor"
+		"message": "Súboru"
 	},
 	"player": {
-		"message": "Predvolený prehrávač"
+		"message": "Predvoleného prehrávača"
 	},
 	"customCommandPref": {
 		"message": "Dodatočné parametre príkazu"
@@ -87,7 +93,10 @@
 		"message": "Použiť reg. výraz v používateľom definovanom príkaze"
 	},
 	"regexCommandTip": {
-		"message": "Použiť regulárny výraz s voliteľnými prepínačmi, napr. /ab+c/i. Vykoná nahradenie vo výslednom príkaze. Prázdne pole nahradzovania odstráni zodpovedajúci text."
+		"message": "Zadajte ako reťazec, napr. ab+c. Vykoná nahradenie vo výslednom príkaze. Prázdne pole nahradzovania odstráni zodpovedajúci text."
+	},
+	"regexWarning": {
+		"message": "Neplatný regulárny výraz."
 	},
 	"headersPref": {
 		"message": "Pridať dodatočné hlavičky"
@@ -111,7 +120,10 @@
 		"message": "Použiť HTTP server proxy"
 	},
 	"downloaderPref": {
-		"message": "Použiť externý sťahovač"
+		"message": "Použiť externý sťahovač pre yt-dlp"
+	},
+	"multithreadPref": {
+		"message": "Sťahovať súčasne viaceré fragmenty pomocou yt-dlp"
 	},
 	"buttonClick": {
 		"message": "Funkcia akčného tlačidla prehliadača"
@@ -121,6 +133,9 @@
 	},
 	"popupFilename": {
 		"message": "Názov súboru"
+	},
+	"popupSize": {
+		"message": "Veľkosť"
 	},
 	"popupSource": {
 		"message": "Zdroj"
@@ -164,6 +179,9 @@
 	"filePref": {
 		"message": "Ignorovať priame odkazy na multimediálne súbory"
 	},
+	"fileSizePref": {
+		"message": "Ignorovať multimediálne súbory menšie ako"
+	},
 	"downloadDirectPref": {
 		"message": "Sťahovať súbory mimo manifestu miesto kopírovania ich adries URL"
 	},
@@ -181,6 +199,9 @@
 	},
 	"openPopup": {
 		"message": "Otvoriť okno doplnku"
+	},
+	"openSidebar": {
+		"message": "Otvoriť postrannú lištu doplnku"
 	},
 	"placeholderCell": {
 		"message": "Nie sú dostupné žiadne adresy URL."
@@ -203,11 +224,8 @@
 	"customCtTip": {
 		"message": "Jedna položka na riadok. Na veľkosti písmen nezáleží."
 	},
-	"cleanupPref": {
-		"message": "Odstrániť položky staršie ako týždeň"
-	},
-	"cleanupTip": {
-		"message": "Použije sa iba počas reštartu pri haváriach."
+	"noRestorePref": {
+		"message": "Vypne funkciu zapamätania predchádzajúcich sedení (vyčistí položky pri spustení)"
 	},
 	"recentPref": {
 		"message": "Zobraziť iba určitý počet posledných položiek"
@@ -220,5 +238,20 @@
 	},
 	"resetButtonConfirm": {
 		"message": "Naozaj chcete nastaviť všetky nastavenia na predvolené hodnoty?"
+	},
+	"exportSettings": {
+		"message": "Exportovať/importovať nastavenia do/zo súboru JSON"
+	},
+	"exportButton": {
+		"message": "Export"
+	},
+	"importButton": {
+		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Nepodarilo sa importovať nastavenia."
+	},
+	"tipHint": {
+		"message": "Podržte kurzor myši nad otáznikom a o konkrétnej funkcii tak zistíte viac."
 	}
 }
