@@ -1,108 +1,18 @@
 {
-	"notifTitle": {
-		"message": "ストリームを検出しました!"
+	"autoDownloadPref": {
+		"message": "自動でnon-manifestファイルをダウンロードする"
 	},
-	"notifText": {
-		"message": "新たに $1 ストリームを検出しました:\n"
+	"autoDownloadTip": {
+		"message": "標準のダウンロードフォルダにファイルを保存します。視聴中にストリーミングをダウンロードする場合などに便利です。URLリストへの追加や通知は行いませんので、スパムの心配はありません。不要なダウンロードを防ぐために、URLブラックリストを使用します。"
 	},
-	"notifManyTitle": {
-		"message": "複数のストリームを検出しました!"
+	"blacklistPref": {
+		"message": "URLブラックリストを使う"
 	},
-	"notifManyText": {
-		"message": "新たに複数のストリームを検出しました:\n"
+	"blacklistTip": {
+		"message": "1行に1項目です。送信元と送信先のURLの両方が対象です。つまり、アドオンは効果的にこれらのフレーズを含むWebサイトを無効にするだけでなく、ストリームURLも無視します。"
 	},
-	"notifCopiedTitle": {
-		"message": "URLをコピーしました!"
-	},
-	"notifCopiedText": {
-		"message": "次のURLのコピーに成功しました:\n"
-	},
-	"notifIncompCopiedText": {
-		"message": "選択したツールとの互換性がないため、ストリームのURLは通常どおりコピーします:\n"
-	},
-	"notifErrorTitle": {
-		"message": "コピーエラー!"
-	},
-	"notifErrorText": {
-		"message": "URLをコピーできません:\n"
-	},
-	"notifDownErrorTitle": {
-		"message": "ダウンロードエラー!"
-	},
-	"notifDownErrorText": {
-		"message": "URLをダウンロードできません:\n"
-	},
-	"extText": {
-		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-REのコマンドを組み立てます。"
-	},
-	"copyMethod": {
-		"message": "ストリームURLのコピー形式"
-	},
-	"url": {
-		"message": "通常のURL"
-	},
-	"kodiUrl": {
-		"message": "Kodi URL"
-	},
-	"tableForm": {
-		"message": "テーブルエントリ"
-	},
-	"ytdlp": {
-		"message": "yt-dlp コマンド"
-	},
-	"ffmpeg": {
-		"message": "FFmpeg コマンド"
-	},
-	"streamlink": {
-		"message": "Streamlink コマンド"
-	},
-	"hlsdl": {
-		"message": "hlsdl コマンド"
-	},
-	"nm3u8dl": {
-		"message": "N_m3u8DL-RE コマンド"
-	},
-	"user": {
-		"message": "ユーザ定義コマンド"
-	},
-	"streamlinkOutput": {
-		"message": "Streamlinkの出力先"
-	},
-	"file": {
-		"message": "ファイルに保存"
-	},
-	"player": {
-		"message": "デフォルトプレーヤで再生"
-	},
-	"customCommandPref": {
-		"message": "CLIパラメータを追加する"
-	},
-	"userCommand": {
-		"message": "ユーザ定義コマンド"
-	},
-	"userCommandTip": {
-		"message": "利用可能な変数:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"regexCommandPref": {
-		"message": "ユーザ定義コマンドで正規表現を使う"
-	},
-	"regexCommandTip": {
-		"message": "完全な正規表現とオプションのフラグを使用します (例: /ab+c/i)。最終的なユーザーコマンドで置換を行います。置換フィールドが空だと、マッチパターンが削除されます。"
-	},
-	"regexWarning": {
-		"message": "正規表現が正しくありません。"
-	},
-	"headersPref": {
-		"message": "追加のヘッダを含める"
-	},
-	"notifDetectPref": {
-		"message": "検出通知を無効にする"
-	},
-	"notifPref": {
-		"message": "全通知を無効にする"
-	},
-	"disablePref": {
-		"message": "検出停止"
+	"buttonClick": {
+		"message": "ブラウザのアクションボタン機能"
 	},
 	"clearList": {
 		"message": "このURLリストを消去"
@@ -110,17 +20,143 @@
 	"copyAll": {
 		"message": "表示URLを全てコピー"
 	},
-	"proxyPref": {
-		"message": "HTTPプロキシサーバを使う"
+	"copyMethod": {
+		"message": "ストリームURLのコピー形式"
+	},
+	"customCommandPref": {
+		"message": "CLIパラメータを追加する"
+	},
+	"customCtPref": {
+		"message": "追加のContent-Typeヘッダを検出"
+	},
+	"customCtTip": {
+		"message": "1行に1項目です。大文字・小文字を区別しません。"
+	},
+	"customExtPref": {
+		"message": "追加のファイル拡張子を検出"
+	},
+	"customExtTip": {
+		"message": "1行に1項目です。"
+	},
+	"deleteTooltip": {
+		"message": "クリックしてこのURLを削除"
+	},
+	"disablePref": {
+		"message": "検出停止"
+	},
+	"downloadDirectPref": {
+		"message": "URLをコピーする代わりに、non-manifestファイルをダウンロードする"
 	},
 	"downloaderPref": {
 		"message": "外部ダウンローダを使う"
 	},
-	"buttonClick": {
-		"message": "ブラウザのアクションボタン機能"
+	"exportButton": {
+		"message": "エクスポート"
 	},
-	"popupType": {
-		"message": "タイプ"
+	"exportSettings": {
+		"message": "JSONファイルへ/から設定をエクスポート/インポートする"
+	},
+	"extText": {
+		"message": "HLS/DASH/HDS/MSSストリームで使用されるプレイリストと字幕、およびカスタムファイル拡張子やContent-Typeヘッダを検出します。既製のyt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-REのコマンドを組み立てます。"
+	},
+	"ffmpeg": {
+		"message": "FFmpeg コマンド"
+	},
+	"file": {
+		"message": "ファイルに保存"
+	},
+	"fileExtension": {
+		"message": "ファイル拡張子"
+	},
+	"filePref": {
+		"message": "メディアファイルの直接リンクを無視する"
+	},
+	"fileSizePref": {
+		"message": "これよりも小さいサイズのメディアファイルを無視する"
+	},
+	"filenamePref": {
+		"message": "ファイル名にタブのタイトルを使用"
+	},
+	"filterInput": {
+		"message": "フィルター"
+	},
+	"headersPref": {
+		"message": "追加のヘッダを含める"
+	},
+	"hlsdl": {
+		"message": "hlsdl コマンド"
+	},
+	"importButton": {
+		"message": "インポート"
+	},
+	"importButtonFailure": {
+		"message": "設定をインポートできません。"
+	},
+	"kodiUrl": {
+		"message": "Kodi URL"
+	},
+	"manifestPref": {
+		"message": "ストリームを無視する"
+	},
+	"manifestTip": {
+		"message": "これはこのアドオンの主目的です。例えば、カスタムのファイル拡張子/Content-Typeのみを使用したい場合は、無効にしてください。"
+	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-RE コマンド"
+	},
+	"noRestorePref": {
+		"message": "起動時に以前のセッションを無視する"
+	},
+	"notifCopiedText": {
+		"message": "次のURLのコピーに成功しました:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "URLをコピーしました!"
+	},
+	"notifDetectPref": {
+		"message": "検出通知を無効にする"
+	},
+	"notifDownErrorText": {
+		"message": "URLをダウンロードできません:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "ダウンロードエラー!"
+	},
+	"notifErrorText": {
+		"message": "URLをコピーできません:\n"
+	},
+	"notifErrorTitle": {
+		"message": "コピーエラー!"
+	},
+	"notifIncompCopiedText": {
+		"message": "選択したツールとの互換性がないため、ストリームのURLは通常どおりコピーします:\n"
+	},
+	"notifManyText": {
+		"message": "新たに複数のストリームを検出しました:\n"
+	},
+	"notifManyTitle": {
+		"message": "複数のストリームを検出しました!"
+	},
+	"notifPref": {
+		"message": "全通知を無効にする"
+	},
+	"notifText": {
+		"message": "新たに $1 ストリームを検出しました:\n"
+	},
+	"notifTitle": {
+		"message": "ストリームを検出しました!"
+	},
+	"openOptions": {
+		"message": "設定"
+	},
+	"openPopup": {
+		"message": "アドオンのパネルを開く"
+	},
+	"placeholderCell": {
+		"message": "検出したURLがありません"
+	},
+	"player": {
+		"message": "デフォルトプレーヤで再生"
 	},
 	"popupFilename": {
 		"message": "ファイル名"
@@ -134,92 +170,23 @@
 	"popupTimestamp": {
 		"message": "タイムスタンプ"
 	},
-	"deleteTooltip": {
-		"message": "クリックしてこのURLを削除"
+	"popupType": {
+		"message": "タイプ"
 	},
-	"tabThis": {
-		"message": "このタブ"
-	},
-	"tabAll": {
-		"message": "全てのタブ"
-	},
-	"tabPrevious": {
-		"message": "以前のセッション"
-	},
-	"filterInput": {
-		"message": "フィルター"
-	},
-	"openOptions": {
-		"message": "設定"
-	},
-	"titlePref": {
-		"message": "検出ソースにタブのタイトルを表示"
-	},
-	"filenamePref": {
-		"message": "ファイル名にタブのタイトルを使用"
-	},
-	"timestampPref": {
-		"message": "ファイル名にタイムスタンプを追加"
-	},
-	"fileExtension": {
-		"message": "ファイル拡張子"
-	},
-	"subtitlePref": {
-		"message": "字幕を無視する"
-	},
-	"filePref": {
-		"message": "メディアファイルの直接リンクを無視する"
-	},
-	"fileSizePref": {
-		"message": "これよりも小さいサイズのメディアファイルを無視する"
-	},
-	"downloadDirectPref": {
-		"message": "URLをコピーする代わりに、non-manifestファイルをダウンロードする"
-	},
-	"autoDownloadPref": {
-		"message": "自動でnon-manifestファイルをダウンロードする"
-	},
-	"autoDownloadTip": {
-		"message": "標準のダウンロードフォルダにファイルを保存します。視聴中にストリーミングをダウンロードする場合などに便利です。URLリストへの追加や通知は行いませんので、スパムの心配はありません。不要なダウンロードを防ぐために、URLブラックリストを使用します。"
-	},
-	"manifestPref": {
-		"message": "ストリームを無視する"
-	},
-	"manifestTip": {
-		"message": "これはこのアドオンの主目的です。例えば、カスタムのファイル拡張子/Content-Typeのみを使用したい場合は、無効にしてください。"
-	},
-	"openPopup": {
-		"message": "アドオンのパネルを開く"
-	},
-	"placeholderCell": {
-		"message": "検出したURLがありません"
-	},
-	"blacklistPref": {
-		"message": "URLブラックリストを使う"
-	},
-	"blacklistTip": {
-		"message": "1行に1項目です。送信元と送信先のURLの両方が対象です。つまり、アドオンは効果的にこれらのフレーズを含むWebサイトを無効にするだけでなく、ストリームURLも無視します。"
-	},
-	"customExtPref": {
-		"message": "追加のファイル拡張子を検出"
-	},
-	"customExtTip": {
-		"message": "1行に1項目です。"
-	},
-	"customCtPref": {
-		"message": "追加のContent-Typeヘッダを検出"
-	},
-	"customCtTip": {
-		"message": "1行に1項目です。大文字・小文字を区別しません。"
-	},
-	"noRestorePref": {
-		"message": "起動時に以前のセッションを無視する"
+	"proxyPref": {
+		"message": "HTTPプロキシサーバを使う"
 	},
 	"recentPref": {
 		"message": "限定する最新エントリーの表示数"
 	},
-	"resetButtonLabel": {
-		"message": "全アドオンデータをリセット(緊急用)"
+	"regexCommandPref": {
+		"message": "ユーザ定義コマンドで正規表現を使う"
+	},
+	"regexCommandTip": {
+		"message": "完全な正規表現とオプションのフラグを使用します (例: /ab+c/i)。最終的なユーザーコマンドで置換を行います。置換フィールドが空だと、マッチパターンが削除されます。"
+	},
+	"regexWarning": {
+		"message": "正規表現が正しくありません。"
 	},
 	"resetButton": {
 		"message": "全設定のリセット"
@@ -227,16 +194,49 @@
 	"resetButtonConfirm": {
 		"message": "本当にすべての設定をリセットしますか?"
 	},
-	"exportSettings": {
-		"message": "JSONファイルへ/から設定をエクスポート/インポートする"
+	"resetButtonLabel": {
+		"message": "全アドオンデータをリセット(緊急用)"
 	},
-	"exportButton": {
-		"message": "エクスポート"
+	"streamlink": {
+		"message": "Streamlink コマンド"
 	},
-	"importButton": {
-		"message": "インポート"
+	"streamlinkOutput": {
+		"message": "Streamlinkの出力先"
 	},
-	"importButtonFailure": {
-		"message": "設定をインポートできません。"
+	"subtitlePref": {
+		"message": "字幕を無視する"
+	},
+	"tabAll": {
+		"message": "全てのタブ"
+	},
+	"tabPrevious": {
+		"message": "以前のセッション"
+	},
+	"tabThis": {
+		"message": "このタブ"
+	},
+	"tableForm": {
+		"message": "テーブルエントリ"
+	},
+	"timestampPref": {
+		"message": "ファイル名にタイムスタンプを追加"
+	},
+	"titlePref": {
+		"message": "検出ソースにタブのタイトルを表示"
+	},
+	"url": {
+		"message": "通常のURL"
+	},
+	"user": {
+		"message": "ユーザ定義コマンド"
+	},
+	"userCommand": {
+		"message": "ユーザ定義コマンド"
+	},
+	"userCommandTip": {
+		"message": "利用可能な変数:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "yt-dlp コマンド"
 	}
 }

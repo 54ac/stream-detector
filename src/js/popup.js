@@ -517,6 +517,9 @@ const createList = async () => {
 	const urlStorageRestore = await getStorage("urlStorageRestore");
 
 	if (urlStorage.length || urlStorageRestore.length) {
+		if (recentPref && urlList.length > recentAmount)
+			urlList.length = recentAmount;
+
 		const urlStorageFilter = document
 			.getElementById("filterInput")
 			.value.toLowerCase();
@@ -549,9 +552,6 @@ const createList = async () => {
 							url.type.toLowerCase().includes(urlStorageFilter) ||
 							url.hostname.toLowerCase().includes(urlStorageFilter)
 					);
-
-			if (recentPref && urlList.length > recentAmount)
-				urlList.length = recentAmount;
 
 			// clear list first just in case - quick and dirty
 			table.innerHTML = "";

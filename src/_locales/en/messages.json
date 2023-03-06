@@ -1,114 +1,18 @@
 {
-	"notifTitle": {
-		"message": "Stream detected!"
+	"autoDownloadPref": {
+		"message": "Automatically download non-manifest files"
 	},
-	"notifText": {
-		"message": "New $1 stream detected:\n"
+	"autoDownloadTip": {
+		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Works only when 'Ignore direct links to media files' is unchecked. Does not show notifications so as to not spam the user. Use URL blacklist to prevent unwanted downloads."
 	},
-	"notifManyTitle": {
-		"message": "Multiple streams detected!"
+	"blacklistPref": {
+		"message": "Use content blacklist"
 	},
-	"notifManyText": {
-		"message": "New streams detected:\n"
+	"blacklistTip": {
+		"message": "One entry per line, case insensitive. Concerns stream/file types, Content-Type headers, and URLs, i.e. the addon will be effectively ignore any URLs involving these phrases."
 	},
-	"notifCopiedTitle": {
-		"message": "URL(s) copied!"
-	},
-	"notifCopiedText": {
-		"message": "Successfully copied the following URL(s):\n"
-	},
-	"notifIncompCopiedText": {
-		"message": "Stream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
-	},
-	"notifErrorTitle": {
-		"message": "Copy error!"
-	},
-	"notifErrorText": {
-		"message": "Unable to copy URL(s):\n"
-	},
-	"notifDownErrorTitle": {
-		"message": "Download error!"
-	},
-	"notifDownErrorText": {
-		"message": "Unable to download URL:\n"
-	},
-	"extText": {
-		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE commands."
-	},
-	"copyMethod": {
-		"message": "Copy stream URL as"
-	},
-	"url": {
-		"message": "Regular URL"
-	},
-	"kodiUrl": {
-		"message": "Kodi URL"
-	},
-	"tableForm": {
-		"message": "Table entry"
-	},
-	"ytdlp": {
-		"message": "yt-dlp command"
-	},
-	"ffmpeg": {
-		"message": "FFmpeg command"
-	},
-	"streamlink": {
-		"message": "Streamlink command"
-	},
-	"hlsdl": {
-		"message": "hlsdl command"
-	},
-	"nm3u8dl": {
-		"message": "N_m3u8DL-RE command"
-	},
-	"user1": {
-		"message": "User-defined command 1"
-	},
-	"user2": {
-		"message": "User-defined command 2"
-	},
-	"user3": {
-		"message": "User-defined command 3"
-	},
-	"streamlinkOutput": {
-		"message": "Output Streamlink to"
-	},
-	"file": {
-		"message": "File"
-	},
-	"player": {
-		"message": "Default player"
-	},
-	"customCommandPref": {
-		"message": "Additional command line parameters"
-	},
-	"userCommand": {
-		"message": "User-defined commands"
-	},
-	"userCommandTip": {
-		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"regexCommandPref": {
-		"message": "Use regex in user-defined command"
-	},
-	"regexCommandTip": {
-		"message": "Enter as string, e.g. ab+c. Performs replacement in final user command. Empty replacement field will remove the match."
-	},
-	"regexWarning": {
-		"message": "Incorrect regular expression."
-	},
-	"headersPref": {
-		"message": "Include additional headers"
-	},
-	"notifDetectPref": {
-		"message": "Disable detection notifications"
-	},
-	"notifPref": {
-		"message": "Disable all notifications"
-	},
-	"disablePref": {
-		"message": "Disable detection"
+	"buttonClick": {
+		"message": "Browser action button functionality"
 	},
 	"clearList": {
 		"message": "Clear this URL list"
@@ -116,20 +20,149 @@
 	"copyAll": {
 		"message": "Copy all visible URLs"
 	},
-	"proxyPref": {
-		"message": "Use HTTP proxy server"
+	"copyMethod": {
+		"message": "Copy stream URL as"
+	},
+	"customCommandPref": {
+		"message": "Additional command line parameters"
+	},
+	"customCtPref": {
+		"message": "Detect additional Content-Type headers"
+	},
+	"customCtTip": {
+		"message": "One entry per line. Case insensitive."
+	},
+	"customExtPref": {
+		"message": "Detect additional file extensions"
+	},
+	"customExtTip": {
+		"message": "One entry per line."
+	},
+	"deleteTooltip": {
+		"message": "Click to delete URL."
+	},
+	"disablePref": {
+		"message": "Disable detection"
+	},
+	"downloadDirectPref": {
+		"message": "Download non-manifest files instead of copying their URLs"
 	},
 	"downloaderPref": {
 		"message": "Use external downloader for yt-dlp"
 	},
+	"exportButton": {
+		"message": "Export"
+	},
+	"exportSettings": {
+		"message": "Export/import settings to/from JSON file"
+	},
+	"extText": {
+		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE commands."
+	},
+	"ffmpeg": {
+		"message": "FFmpeg command"
+	},
+	"file": {
+		"message": "File"
+	},
+	"fileExtension": {
+		"message": "File extension"
+	},
+	"filePref": {
+		"message": "Ignore direct links to media files"
+	},
+	"fileSizePref": {
+		"message": "Ignore media files smaller than"
+	},
+	"filenamePref": {
+		"message": "Use tab title as filename"
+	},
+	"filterInput": {
+		"message": "Filter"
+	},
+	"headersPref": {
+		"message": "Include additional headers"
+	},
+	"hlsdl": {
+		"message": "hlsdl command"
+	},
+	"importButton": {
+		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Could not import settings."
+	},
+	"kodiUrl": {
+		"message": "Kodi URL"
+	},
+	"manifestPref": {
+		"message": "Ignore streams"
+	},
+	"manifestTip": {
+		"message": "This is the main purpose of the addon. Disable if you want to e.g. only capture files directly or use custom file extensions/content types."
+	},
 	"multithreadPref": {
 		"message": "Download multiple concurrent fragments in yt-dlp"
 	},
-	"buttonClick": {
-		"message": "Browser action button functionality"
+	"nm3u8dl": {
+		"message": "N_m3u8DL-RE command"
 	},
-	"popupType": {
-		"message": "Type"
+	"noRestorePref": {
+		"message": "Disable previous session functionality (clear entries on launch)"
+	},
+	"notifCopiedText": {
+		"message": "Successfully copied the following URL(s):\n"
+	},
+	"notifCopiedTitle": {
+		"message": "URL(s) copied!"
+	},
+	"notifDetectPref": {
+		"message": "Disable detection notifications"
+	},
+	"notifDownErrorText": {
+		"message": "Unable to download URL:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Download error!"
+	},
+	"notifErrorText": {
+		"message": "Unable to copy URL(s):\n"
+	},
+	"notifErrorTitle": {
+		"message": "Copy error!"
+	},
+	"notifIncompCopiedText": {
+		"message": "Stream URL(s) copied in plain form due to lack of compatibility with the chosen tool:\n"
+	},
+	"notifManyText": {
+		"message": "New streams detected:\n"
+	},
+	"notifManyTitle": {
+		"message": "Multiple streams detected!"
+	},
+	"notifPref": {
+		"message": "Disable all notifications"
+	},
+	"notifText": {
+		"message": "New $1 stream detected:\n"
+	},
+	"notifTitle": {
+		"message": "Stream detected!"
+	},
+	"openOptions": {
+		"message": "Options"
+	},
+	"openPopup": {
+		"message": "Open addon popup"
+	},
+	"openSidebar": {
+		"message": "Open addon sidebar"
+	},
+	"placeholderCell": {
+		"message": "No URLs available."
+	},
+	"player": {
+		"message": "Default player"
 	},
 	"popupFilename": {
 		"message": "Filename"
@@ -143,95 +176,23 @@
 	"popupTimestamp": {
 		"message": "Timestamp"
 	},
-	"deleteTooltip": {
-		"message": "Click to delete URL."
+	"popupType": {
+		"message": "Type"
 	},
-	"tabThis": {
-		"message": "Current tab"
-	},
-	"tabAll": {
-		"message": "Current session"
-	},
-	"tabPrevious": {
-		"message": "Previous sessions"
-	},
-	"filterInput": {
-		"message": "Filter"
-	},
-	"openOptions": {
-		"message": "Options"
-	},
-	"titlePref": {
-		"message": "Show tab title as source"
-	},
-	"filenamePref": {
-		"message": "Use tab title as filename"
-	},
-	"timestampPref": {
-		"message": "Append timestamp to filename"
-	},
-	"fileExtension": {
-		"message": "File extension"
-	},
-	"subtitlePref": {
-		"message": "Ignore subtitles"
-	},
-	"filePref": {
-		"message": "Ignore direct links to media files"
-	},
-	"fileSizePref": {
-		"message": "Ignore media files smaller than"
-	},
-	"downloadDirectPref": {
-		"message": "Download non-manifest files instead of copying their URLs"
-	},
-	"autoDownloadPref": {
-		"message": "Automatically download non-manifest files"
-	},
-	"autoDownloadTip": {
-		"message": "Saves files to the default download folder. Useful for e.g. downloading a stream while watching. Works only when 'Ignore direct links to media files' is unchecked. Does not show notifications so as to not spam the user. Use URL blacklist to prevent unwanted downloads."
-	},
-	"manifestPref": {
-		"message": "Ignore streams"
-	},
-	"manifestTip": {
-		"message": "This is the main purpose of the addon. Disable if you want to e.g. only capture files directly or use custom file extensions/content types."
-	},
-	"openPopup": {
-		"message": "Open addon popup"
-	},
-	"openSidebar": {
-		"message": "Open addon sidebar"
-	},
-	"placeholderCell": {
-		"message": "No URLs available."
-	},
-	"blacklistPref": {
-		"message": "Use content blacklist"
-	},
-	"blacklistTip": {
-		"message": "One entry per line, case insensitive. Concerns stream/file types, Content-Type headers, and URLs, i.e. the addon will be effectively ignore any URLs involving these phrases."
-	},
-	"customExtPref": {
-		"message": "Detect additional file extensions"
-	},
-	"customExtTip": {
-		"message": "One entry per line."
-	},
-	"customCtPref": {
-		"message": "Detect additional Content-Type headers"
-	},
-	"customCtTip": {
-		"message": "One entry per line. Case insensitive."
-	},
-	"noRestorePref": {
-		"message": "Disable previous session functionality (clear entries on launch)"
+	"proxyPref": {
+		"message": "Use HTTP proxy server"
 	},
 	"recentPref": {
 		"message": "Only show certain number of latest entries"
 	},
-	"resetButtonLabel": {
-		"message": "Reset all addon data (in case of emergency)"
+	"regexCommandPref": {
+		"message": "Use regex in user-defined command"
+	},
+	"regexCommandTip": {
+		"message": "Enter as string, e.g. ab+c. Performs replacement in final user command. Empty replacement field will remove the match."
+	},
+	"regexWarning": {
+		"message": "Incorrect regular expression."
 	},
 	"resetButton": {
 		"message": "Reset settings"
@@ -239,19 +200,58 @@
 	"resetButtonConfirm": {
 		"message": "Are you sure you wish to reset all settings?"
 	},
-	"exportSettings": {
-		"message": "Export/import settings to/from JSON file"
+	"resetButtonLabel": {
+		"message": "Reset all addon data (in case of emergency)"
 	},
-	"exportButton": {
-		"message": "Export"
+	"streamlink": {
+		"message": "Streamlink command"
 	},
-	"importButton": {
-		"message": "Import"
+	"streamlinkOutput": {
+		"message": "Output Streamlink to"
 	},
-	"importButtonFailure": {
-		"message": "Could not import settings."
+	"subtitlePref": {
+		"message": "Ignore subtitles"
+	},
+	"tabAll": {
+		"message": "Current session"
+	},
+	"tabPrevious": {
+		"message": "Previous sessions"
+	},
+	"tabThis": {
+		"message": "Current tab"
+	},
+	"tableForm": {
+		"message": "Table entry"
+	},
+	"timestampPref": {
+		"message": "Append timestamp to filename"
 	},
 	"tipHint": {
 		"message": "Hover over question marks to learn more about particular options."
+	},
+	"titlePref": {
+		"message": "Show tab title as source"
+	},
+	"url": {
+		"message": "Regular URL"
+	},
+	"user1": {
+		"message": "User-defined command 1"
+	},
+	"user2": {
+		"message": "User-defined command 2"
+	},
+	"user3": {
+		"message": "User-defined command 3"
+	},
+	"userCommand": {
+		"message": "User-defined commands"
+	},
+	"userCommandTip": {
+		"message": "Available fields:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "yt-dlp command"
 	}
 }

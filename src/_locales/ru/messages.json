@@ -1,114 +1,18 @@
 {
-	"notifTitle": {
-		"message": "Найден поток!"
+	"autoDownloadPref": {
+		"message": "Автоматически загружать медиафайлы"
 	},
-	"notifText": {
-		"message": "Найден новый $1-поток:\n"
+	"autoDownloadTip": {
+		"message": "Сохранять файлы в папку загрузок по умолчанию. Полезно, например, для загрузки потока во время просмотра. Работает только при отключённой функции «Игнорировать прямые ссылки на медиафайлы». Уведомления не отображаются, чтобы не утомлять пользователя. Используйте фильтр для предотвращения нежелательных загрузок."
 	},
-	"notifManyTitle": {
-		"message": "Найдено несколько потоков!"
+	"blacklistPref": {
+		"message": "Использовать фильтр содержимого"
 	},
-	"notifManyText": {
-		"message": "Найдены новые потоки:\n"
+	"blacklistTip": {
+		"message": "По одной записи в строке, регистр не учитывается. Касается типов потоков/файлов, заголовков типа содержимого и ссылок, т.е. расширение будет эффективно игнорировать любые ссылки, содержащие эти фразы."
 	},
-	"notifCopiedTitle": {
-		"message": "Скопировано!"
-	},
-	"notifCopiedText": {
-		"message": "Скопированы следующее ссылки:\n"
-	},
-	"notifIncompCopiedText": {
-		"message": "Ссылки на потоки скопированы как обычные из-за несовместимости с выбранной программой:\n"
-	},
-	"notifErrorTitle": {
-		"message": "Ошибка копирования!"
-	},
-	"notifErrorText": {
-		"message": "Невозможно скопировать ссылки:\n"
-	},
-	"notifDownErrorTitle": {
-		"message": "Ошибка загрузки!"
-	},
-	"notifDownErrorText": {
-		"message": "Невозможно загрузить по ссылке:\n"
-	},
-	"extText": {
-		"message": "Находит списки воспроизведения и субтитры, используемые потоками HLS/DASH/HDS/MSS, а также пользовательские расширения файлов и заголовки типов содержимого. Формирует готовые командные строки для yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
-	},
-	"copyMethod": {
-		"message": "Копировать ссылку на поток как"
-	},
-	"url": {
-		"message": "Обычная ссылка"
-	},
-	"kodiUrl": {
-		"message": "Ссылка для Kodi"
-	},
-	"tableForm": {
-		"message": "Запись таблицы"
-	},
-	"ytdlp": {
-		"message": "Команда для yt-dlp"
-	},
-	"ffmpeg": {
-		"message": "Команда для FFmpeg"
-	},
-	"streamlink": {
-		"message": "Команда для Streamlink"
-	},
-	"hlsdl": {
-		"message": "Команда для hlsdl"
-	},
-	"nm3u8dl": {
-		"message": "Команда для N_m3u8DL-RE"
-	},
-	"user1": {
-		"message": "Пользовательская команда 1"
-	},
-	"user2": {
-		"message": "Пользовательская команда 2"
-	},
-	"user3": {
-		"message": "Пользовательская команда 3"
-	},
-	"streamlinkOutput": {
-		"message": "Вывод Streamlink в"
-	},
-	"file": {
-		"message": "Файл"
-	},
-	"player": {
-		"message": "Проигрыватель по умолчанию"
-	},
-	"customCommandPref": {
-		"message": "Дополнительные параметры командной строки"
-	},
-	"userCommand": {
-		"message": "Пользовательские команды"
-	},
-	"userCommandTip": {
-		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"regexCommandPref": {
-		"message": "Регулярное выражение в пользовательской команде"
-	},
-	"regexCommandTip": {
-		"message": "Введите как строку, например: ab+c. Выполняется поиск и замена в конечной пользовательской команде. Пустое поле замены удаляет найденное совпадение."
-	},
-	"regexWarning": {
-		"message": "Неправильное регулярное выражение."
-	},
-	"headersPref": {
-		"message": "Включать дополнительные заголовки"
-	},
-	"notifDetectPref": {
-		"message": "Отключить уведомления обнаружения"
-	},
-	"notifPref": {
-		"message": "Отключить все уведомления"
-	},
-	"disablePref": {
-		"message": "Отключить поиск"
+	"buttonClick": {
+		"message": "Функция кнопки действия браузера"
 	},
 	"clearList": {
 		"message": "Очистить список"
@@ -116,20 +20,149 @@
 	"copyAll": {
 		"message": "Скопировать все ссылки"
 	},
-	"proxyPref": {
-		"message": "Использовать HTTP-прокси"
+	"copyMethod": {
+		"message": "Копировать ссылку на поток как"
+	},
+	"customCommandPref": {
+		"message": "Дополнительные параметры командной строки"
+	},
+	"customCtPref": {
+		"message": "Поиск дополнительных заголовков типа содержимого"
+	},
+	"customCtTip": {
+		"message": "По одной записи в строке. Регистр не учитывается."
+	},
+	"customExtPref": {
+		"message": "Поиск дополнительных расширений файлов"
+	},
+	"customExtTip": {
+		"message": "По одной записи в строке."
+	},
+	"deleteTooltip": {
+		"message": "Нажмите, чтобы удалить ссылку"
+	},
+	"disablePref": {
+		"message": "Отключить поиск"
+	},
+	"downloadDirectPref": {
+		"message": "Загружать медиафайлы вместо копирования их ссылок"
 	},
 	"downloaderPref": {
 		"message": "Использовать внешний загрузчик"
 	},
+	"exportButton": {
+		"message": "Экспорт"
+	},
+	"exportSettings": {
+		"message": "Экспорт/импорт настроек через JSON-файл"
+	},
+	"extText": {
+		"message": "Находит списки воспроизведения и субтитры, используемые потоками HLS/DASH/HDS/MSS, а также пользовательские расширения файлов и заголовки типов содержимого. Формирует готовые командные строки для yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
+	},
+	"ffmpeg": {
+		"message": "Команда для FFmpeg"
+	},
+	"file": {
+		"message": "Файл"
+	},
+	"fileExtension": {
+		"message": "Расширение файла"
+	},
+	"filePref": {
+		"message": "Игнорировать прямые ссылки на медиафайлы"
+	},
+	"fileSizePref": {
+		"message": "Игнорировать медиафайлы менее"
+	},
+	"filenamePref": {
+		"message": "Использовать заголовок вкладки как имя файла"
+	},
+	"filterInput": {
+		"message": "Фильтр"
+	},
+	"headersPref": {
+		"message": "Включать дополнительные заголовки"
+	},
+	"hlsdl": {
+		"message": "Команда для hlsdl"
+	},
+	"importButton": {
+		"message": "Импорт"
+	},
+	"importButtonFailure": {
+		"message": "Невозможно импортировать настройки."
+	},
+	"kodiUrl": {
+		"message": "Ссылка для Kodi"
+	},
+	"manifestPref": {
+		"message": "Игнорировать потоки"
+	},
+	"manifestTip": {
+		"message": "Это основная цель расширения. Отключайте, если хотите, например, использовать только пользовательские расширения файлов/типы содержимого."
+	},
 	"multithreadPref": {
 		"message": "Загружать несколько фрагментов параллельно в yt-dlp"
 	},
-	"buttonClick": {
-		"message": "Функция кнопки действия браузера"
+	"nm3u8dl": {
+		"message": "Команда для N_m3u8DL-RE"
 	},
-	"popupType": {
-		"message": "Тип"
+	"noRestorePref": {
+		"message": "Отключить функцию предыдущей сессии (очищать записи при запуске)"
+	},
+	"notifCopiedText": {
+		"message": "Скопированы следующее ссылки:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "Скопировано!"
+	},
+	"notifDetectPref": {
+		"message": "Отключить уведомления обнаружения"
+	},
+	"notifDownErrorText": {
+		"message": "Невозможно загрузить по ссылке:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Ошибка загрузки!"
+	},
+	"notifErrorText": {
+		"message": "Невозможно скопировать ссылки:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Ошибка копирования!"
+	},
+	"notifIncompCopiedText": {
+		"message": "Ссылки на потоки скопированы как обычные из-за несовместимости с выбранной программой:\n"
+	},
+	"notifManyText": {
+		"message": "Найдены новые потоки:\n"
+	},
+	"notifManyTitle": {
+		"message": "Найдено несколько потоков!"
+	},
+	"notifPref": {
+		"message": "Отключить все уведомления"
+	},
+	"notifText": {
+		"message": "Найден новый $1-поток:\n"
+	},
+	"notifTitle": {
+		"message": "Найден поток!"
+	},
+	"openOptions": {
+		"message": "Настройки"
+	},
+	"openPopup": {
+		"message": "Открыть панель расширения"
+	},
+	"openSidebar": {
+		"message": "Открыть боковую панель"
+	},
+	"placeholderCell": {
+		"message": "Ссылки не найдены."
+	},
+	"player": {
+		"message": "Проигрыватель по умолчанию"
 	},
 	"popupFilename": {
 		"message": "Имя файла"
@@ -143,95 +176,23 @@
 	"popupTimestamp": {
 		"message": "Дата/время"
 	},
-	"deleteTooltip": {
-		"message": "Нажмите, чтобы удалить ссылку"
+	"popupType": {
+		"message": "Тип"
 	},
-	"tabThis": {
-		"message": "Текущая вкладка"
-	},
-	"tabAll": {
-		"message": "Текущая сессия"
-	},
-	"tabPrevious": {
-		"message": "Предыдущие сессии"
-	},
-	"filterInput": {
-		"message": "Фильтр"
-	},
-	"openOptions": {
-		"message": "Настройки"
-	},
-	"titlePref": {
-		"message": "Показывать заголовок вкладки как источник"
-	},
-	"filenamePref": {
-		"message": "Использовать заголовок вкладки как имя файла"
-	},
-	"timestampPref": {
-		"message": "Добавлять дату/время к имени файла"
-	},
-	"fileExtension": {
-		"message": "Расширение файла"
-	},
-	"subtitlePref": {
-		"message": "Игнорировать субтитры"
-	},
-	"filePref": {
-		"message": "Игнорировать прямые ссылки на медиафайлы"
-	},
-	"fileSizePref": {
-		"message": "Игнорировать медиафайлы менее"
-	},
-	"downloadDirectPref": {
-		"message": "Загружать медиафайлы вместо копирования их ссылок"
-	},
-	"autoDownloadPref": {
-		"message": "Автоматически загружать медиафайлы"
-	},
-	"autoDownloadTip": {
-		"message": "Сохранять файлы в папку загрузок по умолчанию. Полезно, например, для загрузки потока во время просмотра. Работает только при отключённой функции «Игнорировать прямые ссылки на медиафайлы». Уведомления не отображаются, чтобы не утомлять пользователя. Используйте фильтр для предотвращения нежелательных загрузок."
-	},
-	"manifestPref": {
-		"message": "Игнорировать потоки"
-	},
-	"manifestTip": {
-		"message": "Это основная цель расширения. Отключайте, если хотите, например, использовать только пользовательские расширения файлов/типы содержимого."
-	},
-	"openPopup": {
-		"message": "Открыть панель расширения"
-	},
-	"openSidebar": {
-		"message": "Открыть боковую панель"
-	},
-	"placeholderCell": {
-		"message": "Ссылки не найдены."
-	},
-	"blacklistPref": {
-		"message": "Использовать фильтр содержимого"
-	},
-	"blacklistTip": {
-		"message": "По одной записи в строке, регистр не учитывается. Касается типов потоков/файлов, заголовков типа содержимого и ссылок, т.е. расширение будет эффективно игнорировать любые ссылки, содержащие эти фразы."
-	},
-	"customExtPref": {
-		"message": "Поиск дополнительных расширений файлов"
-	},
-	"customExtTip": {
-		"message": "По одной записи в строке."
-	},
-	"customCtPref": {
-		"message": "Поиск дополнительных заголовков типа содержимого"
-	},
-	"customCtTip": {
-		"message": "По одной записи в строке. Регистр не учитывается."
-	},
-	"noRestorePref": {
-		"message": "Отключить функцию предыдущей сессии (очищать записи при запуске)"
+	"proxyPref": {
+		"message": "Использовать HTTP-прокси"
 	},
 	"recentPref": {
 		"message": "Показывать определённое количество последних записей"
 	},
-	"resetButtonLabel": {
-		"message": "Сброс всех данных расширения (в экстренном случае)"
+	"regexCommandPref": {
+		"message": "Регулярное выражение в пользовательской команде"
+	},
+	"regexCommandTip": {
+		"message": "Введите как строку, например: ab+c. Выполняется поиск и замена в конечной пользовательской команде. Пустое поле замены удаляет найденное совпадение."
+	},
+	"regexWarning": {
+		"message": "Неправильное регулярное выражение."
 	},
 	"resetButton": {
 		"message": "Сброс настроек"
@@ -239,19 +200,58 @@
 	"resetButtonConfirm": {
 		"message": "Сбросить все настройки на значения по умолчанию?"
 	},
-	"exportSettings": {
-		"message": "Экспорт/импорт настроек через JSON-файл"
+	"resetButtonLabel": {
+		"message": "Сброс всех данных расширения (в экстренном случае)"
 	},
-	"exportButton": {
-		"message": "Экспорт"
+	"streamlink": {
+		"message": "Команда для Streamlink"
 	},
-	"importButton": {
-		"message": "Импорт"
+	"streamlinkOutput": {
+		"message": "Вывод Streamlink в"
 	},
-	"importButtonFailure": {
-		"message": "Невозможно импортировать настройки."
+	"subtitlePref": {
+		"message": "Игнорировать субтитры"
+	},
+	"tabAll": {
+		"message": "Текущая сессия"
+	},
+	"tabPrevious": {
+		"message": "Предыдущие сессии"
+	},
+	"tabThis": {
+		"message": "Текущая вкладка"
+	},
+	"tableForm": {
+		"message": "Запись таблицы"
+	},
+	"timestampPref": {
+		"message": "Добавлять дату/время к имени файла"
 	},
 	"tipHint": {
 		"message": "Наведите курсор мыши на вопросительные знаки, чтобы узнать больше о конкретных параметрах."
+	},
+	"titlePref": {
+		"message": "Показывать заголовок вкладки как источник"
+	},
+	"url": {
+		"message": "Обычная ссылка"
+	},
+	"user1": {
+		"message": "Пользовательская команда 1"
+	},
+	"user2": {
+		"message": "Пользовательская команда 2"
+	},
+	"user3": {
+		"message": "Пользовательская команда 3"
+	},
+	"userCommand": {
+		"message": "Пользовательские команды"
+	},
+	"userCommandTip": {
+		"message": "Доступные переменные:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "Команда для yt-dlp"
 	}
 }

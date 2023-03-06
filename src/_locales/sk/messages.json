@@ -1,114 +1,18 @@
 {
-	"notifTitle": {
-		"message": "Našiel sa stream"
+	"autoDownloadPref": {
+		"message": "Automaticky sťahovať súbory mimo manifestu"
 	},
-	"notifText": {
-		"message": "Našiel sa nový stream $1:\n"
+	"autoDownloadTip": {
+		"message": "Uloží súboru do predvoleného priečinka pre sťahovania. Užitočné napríklad pri sťahovaní streamu počas sledovania. Nepridáva položky do zoznamu adries a nezobrazuje upozornenia, aby používateľ nebol rušený. Na zabránenie nežiadúcich sťahovaní použite zoznam zakázaných adries URL."
 	},
-	"notifManyTitle": {
-		"message": "Našlo sa viacero streamov!"
+	"blacklistPref": {
+		"message": "Použiť zoznam zakázaných adries URL"
 	},
-	"notifManyText": {
-		"message": "Nájdené nové streamy:\n"
+	"blacklistTip": {
+		"message": "Jedna položka na riadok, na veľkosti písmen nezáleží. Aplikuje sa na typy súborov a adresy streamov, t. j. doplnok bude prakticky vypnutý pre všetky stránky a streamy/typy súborov, ktoré obsahujú nasledujúci text."
 	},
-	"notifCopiedTitle": {
-		"message": "Adresa(y) URL skopírovaná(é)!"
-	},
-	"notifCopiedText": {
-		"message": "Adresa(y) URL bola(i) úspešne skopírovaná(é):\n"
-	},
-	"notifIncompCopiedText": {
-		"message": "Adresa URL skopírovaná(é) bez formátovacích znakov kvôli kompatibilite s vybraným nástrojom:\n"
-	},
-	"notifErrorTitle": {
-		"message": "Chyba pri kopírovaní!"
-	},
-	"notifErrorText": {
-		"message": "Nebolo možné skopírovať adresu(y) URL:\n"
-	},
-	"notifDownErrorTitle": {
-		"message": "Chyba pri sťahovaní!"
-	},
-	"notifDownErrorText": {
-		"message": "Nepodarilo sa stiahnuť adresu URL:\n"
-	},
-	"extText": {
-		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS rovnako ako aj vlastné prípony súborov a hlavičky Content-Type. Zostaví hotové príkazy pre yt-dlp/FFmpeg/Streamlink/N_m3u8DL-RE."
-	},
-	"copyMethod": {
-		"message": "Kopírovať adresu streamu ako"
-	},
-	"url": {
-		"message": "adresu URL"
-	},
-	"kodiUrl": {
-		"message": "adresu URL pre Kodi"
-	},
-	"tableForm": {
-		"message": "položku tabuľky"
-	},
-	"ytdlp": {
-		"message": "príkaz yt-dlp"
-	},
-	"ffmpeg": {
-		"message": "príkaz FFmpeg"
-	},
-	"streamlink": {
-		"message": "príkaz Streamlink"
-	},
-	"hlsdl": {
-		"message": "príkaz hlsdl"
-	},
-	"nm3u8dl": {
-		"message": "príkaz N_m3u8DL-RE"
-	},
-	"user1": {
-		"message": "používateľom definovaný príkaz 1"
-	},
-	"user2": {
-		"message": "používateľom definovaný príkaz 2"
-	},
-	"user3": {
-		"message": "používateľom definovaný príkaz 3"
-	},
-	"streamlinkOutput": {
-		"message": "poslať Streamlink do"
-	},
-	"file": {
-		"message": "Súboru"
-	},
-	"player": {
-		"message": "Predvoleného prehrávača"
-	},
-	"customCommandPref": {
-		"message": "Dodatočné parametre príkazu"
-	},
-	"userCommand": {
-		"message": "Používateľom definovaný príkaz"
-	},
-	"userCommandTip": {
-		"message": "Dostupné polia:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"regexCommandPref": {
-		"message": "Použiť reg. výraz v používateľom definovanom príkaze"
-	},
-	"regexCommandTip": {
-		"message": "Zadajte ako reťazec, napr. ab+c. Vykoná nahradenie vo výslednom príkaze. Prázdne pole nahradzovania odstráni zodpovedajúci text."
-	},
-	"regexWarning": {
-		"message": "Neplatný regulárny výraz."
-	},
-	"headersPref": {
-		"message": "Pridať dodatočné hlavičky"
-	},
-	"notifDetectPref": {
-		"message": "Vypnúť upozornenia o detekcii"
-	},
-	"notifPref": {
-		"message": "Vypnúť všetky notifikácie"
-	},
-	"disablePref": {
-		"message": "Vypnúť detekciu"
+	"buttonClick": {
+		"message": "Funkcia akčného tlačidla prehliadača"
 	},
 	"clearList": {
 		"message": "Vyčistiť zoznam adries"
@@ -116,20 +20,149 @@
 	"copyAll": {
 		"message": "Kopírovať viditeľné adresy"
 	},
-	"proxyPref": {
-		"message": "Použiť HTTP server proxy"
+	"copyMethod": {
+		"message": "Kopírovať adresu streamu ako"
+	},
+	"customCommandPref": {
+		"message": "Dodatočné parametre príkazu"
+	},
+	"customCtPref": {
+		"message": "Detegovať ďalšie hlavičky Content-Type"
+	},
+	"customCtTip": {
+		"message": "Jedna položka na riadok. Na veľkosti písmen nezáleží."
+	},
+	"customExtPref": {
+		"message": "Detegovať ďalšie prípony súborov"
+	},
+	"customExtTip": {
+		"message": "Jedna položka na riadok."
+	},
+	"deleteTooltip": {
+		"message": "Kliknutím odstránite adresu URL"
+	},
+	"disablePref": {
+		"message": "Vypnúť detekciu"
+	},
+	"downloadDirectPref": {
+		"message": "Sťahovať súbory mimo manifestu miesto kopírovania ich adries URL"
 	},
 	"downloaderPref": {
 		"message": "Použiť externý sťahovač pre yt-dlp"
 	},
+	"exportButton": {
+		"message": "Export"
+	},
+	"exportSettings": {
+		"message": "Exportovať/importovať nastavenia do/zo súboru JSON"
+	},
+	"extText": {
+		"message": "Deteguje playlisty a titulky vo formáte HLS/DASH/HDS/MSS rovnako ako aj vlastné prípony súborov a hlavičky Content-Type. Zostaví hotové príkazy pre yt-dlp/FFmpeg/Streamlink/N_m3u8DL-RE."
+	},
+	"ffmpeg": {
+		"message": "príkaz FFmpeg"
+	},
+	"file": {
+		"message": "Súboru"
+	},
+	"fileExtension": {
+		"message": "Prípona súboru"
+	},
+	"filePref": {
+		"message": "Ignorovať priame odkazy na multimediálne súbory"
+	},
+	"fileSizePref": {
+		"message": "Ignorovať multimediálne súbory menšie ako"
+	},
+	"filenamePref": {
+		"message": "Súbor pomenovať podľa názvu karty"
+	},
+	"filterInput": {
+		"message": "Filter"
+	},
+	"headersPref": {
+		"message": "Pridať dodatočné hlavičky"
+	},
+	"hlsdl": {
+		"message": "príkaz hlsdl"
+	},
+	"importButton": {
+		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Nepodarilo sa importovať nastavenia."
+	},
+	"kodiUrl": {
+		"message": "adresu URL pre Kodi"
+	},
+	"manifestPref": {
+		"message": "Ignorovať streamy"
+	},
+	"manifestTip": {
+		"message": "Toto je hlavné poslanie tohto doplnku. Použite, ak chcete napríklad stiahnuť súbory iba priamo alebo použiť vlastné prípony/typy obsahu súborov."
+	},
 	"multithreadPref": {
 		"message": "Sťahovať súčasne viaceré fragmenty pomocou yt-dlp"
 	},
-	"buttonClick": {
-		"message": "Funkcia akčného tlačidla prehliadača"
+	"nm3u8dl": {
+		"message": "príkaz N_m3u8DL-RE"
 	},
-	"popupType": {
-		"message": "Typ"
+	"noRestorePref": {
+		"message": "Vypne funkciu zapamätania predchádzajúcich sedení (vyčistí položky pri spustení)"
+	},
+	"notifCopiedText": {
+		"message": "Adresa(y) URL bola(i) úspešne skopírovaná(é):\n"
+	},
+	"notifCopiedTitle": {
+		"message": "Adresa(y) URL skopírovaná(é)!"
+	},
+	"notifDetectPref": {
+		"message": "Vypnúť upozornenia o detekcii"
+	},
+	"notifDownErrorText": {
+		"message": "Nepodarilo sa stiahnuť adresu URL:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Chyba pri sťahovaní!"
+	},
+	"notifErrorText": {
+		"message": "Nebolo možné skopírovať adresu(y) URL:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Chyba pri kopírovaní!"
+	},
+	"notifIncompCopiedText": {
+		"message": "Adresa URL skopírovaná(é) bez formátovacích znakov kvôli kompatibilite s vybraným nástrojom:\n"
+	},
+	"notifManyText": {
+		"message": "Nájdené nové streamy:\n"
+	},
+	"notifManyTitle": {
+		"message": "Našlo sa viacero streamov!"
+	},
+	"notifPref": {
+		"message": "Vypnúť všetky notifikácie"
+	},
+	"notifText": {
+		"message": "Našiel sa nový stream $1:\n"
+	},
+	"notifTitle": {
+		"message": "Našiel sa stream"
+	},
+	"openOptions": {
+		"message": "Možnosti"
+	},
+	"openPopup": {
+		"message": "Otvoriť okno doplnku"
+	},
+	"openSidebar": {
+		"message": "Otvoriť postrannú lištu doplnku"
+	},
+	"placeholderCell": {
+		"message": "Nie sú dostupné žiadne adresy URL."
+	},
+	"player": {
+		"message": "Predvoleného prehrávača"
 	},
 	"popupFilename": {
 		"message": "Názov súboru"
@@ -143,95 +176,23 @@
 	"popupTimestamp": {
 		"message": "Časová značka"
 	},
-	"deleteTooltip": {
-		"message": "Kliknutím odstránite adresu URL"
+	"popupType": {
+		"message": "Typ"
 	},
-	"tabThis": {
-		"message": "tejto karty"
-	},
-	"tabAll": {
-		"message": "všetkých kariet"
-	},
-	"tabPrevious": {
-		"message": "minulých sedení"
-	},
-	"filterInput": {
-		"message": "Filter"
-	},
-	"openOptions": {
-		"message": "Možnosti"
-	},
-	"titlePref": {
-		"message": "Zobrazovať v mene karty zdroj"
-	},
-	"filenamePref": {
-		"message": "Súbor pomenovať podľa názvu karty"
-	},
-	"timestampPref": {
-		"message": "Pridať časovú značku k názvu súboru"
-	},
-	"fileExtension": {
-		"message": "Prípona súboru"
-	},
-	"subtitlePref": {
-		"message": "Ignorovať titulky"
-	},
-	"filePref": {
-		"message": "Ignorovať priame odkazy na multimediálne súbory"
-	},
-	"fileSizePref": {
-		"message": "Ignorovať multimediálne súbory menšie ako"
-	},
-	"downloadDirectPref": {
-		"message": "Sťahovať súbory mimo manifestu miesto kopírovania ich adries URL"
-	},
-	"autoDownloadPref": {
-		"message": "Automaticky sťahovať súbory mimo manifestu"
-	},
-	"autoDownloadTip": {
-		"message": "Uloží súboru do predvoleného priečinka pre sťahovania. Užitočné napríklad pri sťahovaní streamu počas sledovania. Nepridáva položky do zoznamu adries a nezobrazuje upozornenia, aby používateľ nebol rušený. Na zabránenie nežiadúcich sťahovaní použite zoznam zakázaných adries URL."
-	},
-	"manifestPref": {
-		"message": "Ignorovať streamy"
-	},
-	"manifestTip": {
-		"message": "Toto je hlavné poslanie tohto doplnku. Použite, ak chcete napríklad stiahnuť súbory iba priamo alebo použiť vlastné prípony/typy obsahu súborov."
-	},
-	"openPopup": {
-		"message": "Otvoriť okno doplnku"
-	},
-	"openSidebar": {
-		"message": "Otvoriť postrannú lištu doplnku"
-	},
-	"placeholderCell": {
-		"message": "Nie sú dostupné žiadne adresy URL."
-	},
-	"blacklistPref": {
-		"message": "Použiť zoznam zakázaných adries URL"
-	},
-	"blacklistTip": {
-		"message": "Jedna položka na riadok, na veľkosti písmen nezáleží. Aplikuje sa na typy súborov a adresy streamov, t. j. doplnok bude prakticky vypnutý pre všetky stránky a streamy/typy súborov, ktoré obsahujú nasledujúci text."
-	},
-	"customExtPref": {
-		"message": "Detegovať ďalšie prípony súborov"
-	},
-	"customExtTip": {
-		"message": "Jedna položka na riadok."
-	},
-	"customCtPref": {
-		"message": "Detegovať ďalšie hlavičky Content-Type"
-	},
-	"customCtTip": {
-		"message": "Jedna položka na riadok. Na veľkosti písmen nezáleží."
-	},
-	"noRestorePref": {
-		"message": "Vypne funkciu zapamätania predchádzajúcich sedení (vyčistí položky pri spustení)"
+	"proxyPref": {
+		"message": "Použiť HTTP server proxy"
 	},
 	"recentPref": {
 		"message": "Zobraziť iba určitý počet posledných položiek"
 	},
-	"resetButtonLabel": {
-		"message": "Obnoviť všetky nastavenia (v prípade nutnosti)"
+	"regexCommandPref": {
+		"message": "Použiť reg. výraz v používateľom definovanom príkaze"
+	},
+	"regexCommandTip": {
+		"message": "Zadajte ako reťazec, napr. ab+c. Vykoná nahradenie vo výslednom príkaze. Prázdne pole nahradzovania odstráni zodpovedajúci text."
+	},
+	"regexWarning": {
+		"message": "Neplatný regulárny výraz."
 	},
 	"resetButton": {
 		"message": "Obnoviť nastavenia"
@@ -239,19 +200,58 @@
 	"resetButtonConfirm": {
 		"message": "Naozaj chcete nastaviť všetky nastavenia na predvolené hodnoty?"
 	},
-	"exportSettings": {
-		"message": "Exportovať/importovať nastavenia do/zo súboru JSON"
+	"resetButtonLabel": {
+		"message": "Obnoviť všetky nastavenia (v prípade nutnosti)"
 	},
-	"exportButton": {
-		"message": "Export"
+	"streamlink": {
+		"message": "príkaz Streamlink"
 	},
-	"importButton": {
-		"message": "Import"
+	"streamlinkOutput": {
+		"message": "poslať Streamlink do"
 	},
-	"importButtonFailure": {
-		"message": "Nepodarilo sa importovať nastavenia."
+	"subtitlePref": {
+		"message": "Ignorovať titulky"
+	},
+	"tabAll": {
+		"message": "všetkých kariet"
+	},
+	"tabPrevious": {
+		"message": "minulých sedení"
+	},
+	"tabThis": {
+		"message": "tejto karty"
+	},
+	"tableForm": {
+		"message": "položku tabuľky"
+	},
+	"timestampPref": {
+		"message": "Pridať časovú značku k názvu súboru"
 	},
 	"tipHint": {
 		"message": "Podržte kurzor myši nad otáznikom a o konkrétnej funkcii tak zistíte viac."
+	},
+	"titlePref": {
+		"message": "Zobrazovať v mene karty zdroj"
+	},
+	"url": {
+		"message": "adresu URL"
+	},
+	"user1": {
+		"message": "používateľom definovaný príkaz 1"
+	},
+	"user2": {
+		"message": "používateľom definovaný príkaz 2"
+	},
+	"user3": {
+		"message": "používateľom definovaný príkaz 3"
+	},
+	"userCommand": {
+		"message": "Používateľom definovaný príkaz"
+	},
+	"userCommandTip": {
+		"message": "Dostupné polia:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "príkaz yt-dlp"
 	}
 }

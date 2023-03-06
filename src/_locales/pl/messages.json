@@ -1,114 +1,18 @@
 {
-	"notifTitle": {
-		"message": "Wykryto stream!"
+	"autoDownloadPref": {
+		"message": "Automatycznie ściągaj multimedia"
 	},
-	"notifText": {
-		"message": "Wykryto nowy stream $1:\n"
+	"autoDownloadTip": {
+		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Działa jedynie, gdy opcja 'Nie wykrywaj bezpośrednich linków do multimediów' jest wyłączona. Nie pokazuje powiadomień, aby nie spamować użytkownika.Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."
 	},
-	"notifManyTitle": {
-		"message": "Wykryto streamy!"
+	"blacklistPref": {
+		"message": "Filtr danych"
 	},
-	"notifManyText": {
-		"message": "Wykryto nowe streamy:\n"
+	"blacklistTip": {
+		"message": "Każdy wpis w nowej linii, ignoruje wielkość liter. Dotyczy typów streamów/plików, nagłówków Content-Type oraz linków - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki związane z danymi frazami."
 	},
-	"notifCopiedTitle": {
-		"message": "Skopiowano link(i)!"
-	},
-	"notifCopiedText": {
-		"message": "Pomyślnie skopiowano następujące link(i) do schowka:\n"
-	},
-	"notifIncompCopiedText": {
-		"message": "Dane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
-	},
-	"notifErrorTitle": {
-		"message": "Błąd kopiowania!"
-	},
-	"notifErrorText": {
-		"message": "Nie udało się skopiować linków:\n"
-	},
-	"notifDownErrorTitle": {
-		"message": "Błąd ściągania!"
-	},
-	"notifDownErrorText": {
-		"message": "Nie udało się ściągnąć pliku:\n"
-	},
-	"extText": {
-		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
-	},
-	"copyMethod": {
-		"message": "Skopiuj link do streamu jako"
-	},
-	"url": {
-		"message": "Zwykły link"
-	},
-	"kodiUrl": {
-		"message": "Link Kodi"
-	},
-	"tableForm": {
-		"message": "Wpis tabeli"
-	},
-	"ytdlp": {
-		"message": "Komendę yt-dlp"
-	},
-	"ffmpeg": {
-		"message": "Komendę FFmpeg"
-	},
-	"streamlink": {
-		"message": "Komendę Streamlink"
-	},
-	"hlsdl": {
-		"message": "Komendę hlsdl"
-	},
-	"nm3u8dl": {
-		"message": "Komendę N_m3u8DL-RE"
-	},
-	"user1": {
-		"message": "Komendę własną 1"
-	},
-	"user2": {
-		"message": "Komendę własną 2"
-	},
-	"user3": {
-		"message": "Komendę własną 3"
-	},
-	"streamlinkOutput": {
-		"message": "Przesyłaj strumień wyjściowy Streamlink do"
-	},
-	"file": {
-		"message": "Pliku"
-	},
-	"player": {
-		"message": "Domyślnego odtwarzacza"
-	},
-	"customCommandPref": {
-		"message": "Dodatkowe argumenty linii poleceń"
-	},
-	"userCommand": {
-		"message": "Komendy własne"
-	},
-	"userCommandTip": {
-		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"regexCommandPref": {
-		"message": "Użyj regex w komendzie własnej"
-	},
-	"regexCommandTip": {
-		"message": "Wpisz jako ciąg znaków, np. ab+c. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
-	},
-	"regexWarning": {
-		"message": "Nieprawidłowe wyrażenie regularne."
-	},
-	"headersPref": {
-		"message": "Dołącz dodatkowe nagłówki"
-	},
-	"notifDetectPref": {
-		"message": "Wyłącz powiadomienia o wykryciu linków"
-	},
-	"notifPref": {
-		"message": "Wyłącz wszystkie powiadomienia"
-	},
-	"disablePref": {
-		"message": "Wyłącz wykrywanie"
+	"buttonClick": {
+		"message": "Działanie przycisku na pasku narzędzi"
 	},
 	"clearList": {
 		"message": "Wyczyść tę listę"
@@ -116,20 +20,149 @@
 	"copyAll": {
 		"message": "Skopiuj widoczne linki"
 	},
-	"proxyPref": {
-		"message": "Użyj serwera HTTP proxy"
+	"copyMethod": {
+		"message": "Skopiuj link do streamu jako"
+	},
+	"customCommandPref": {
+		"message": "Dodatkowe argumenty linii poleceń"
+	},
+	"customCtPref": {
+		"message": "Wykrywaj dodatkowe nagłówki Content-Type"
+	},
+	"customCtTip": {
+		"message": "Każdy wpis w nowej linii. Wielkość liter nieistotna."
+	},
+	"customExtPref": {
+		"message": "Wykrywaj dodatkowe rozszerzenia plików"
+	},
+	"customExtTip": {
+		"message": "Każdy wpis w nowej linii."
+	},
+	"deleteTooltip": {
+		"message": "Kliknij, aby usunąć link."
+	},
+	"disablePref": {
+		"message": "Wyłącz wykrywanie"
+	},
+	"downloadDirectPref": {
+		"message": "Ściągaj pliki bezpośrednio zamiast kopiować ich linki (oprócz manifestów)"
 	},
 	"downloaderPref": {
 		"message": "Użyj zewnętrznego narzędzia pobierania z yt-dlp"
 	},
+	"exportButton": {
+		"message": "Eksport"
+	},
+	"exportSettings": {
+		"message": "Eksport/import ustawień do/z pliku JSON"
+	},
+	"extText": {
+		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
+	},
+	"ffmpeg": {
+		"message": "Komendę FFmpeg"
+	},
+	"file": {
+		"message": "Pliku"
+	},
+	"fileExtension": {
+		"message": "Rozszerzenie pliku"
+	},
+	"filePref": {
+		"message": "Nie wykrywaj bezpośrednich linków do multimediów"
+	},
+	"fileSizePref": {
+		"message": "Ignoruj pliki multimedialne o wielkości poniżej"
+	},
+	"filenamePref": {
+		"message": "Tytuł karty jako nazwa pliku"
+	},
+	"filterInput": {
+		"message": "Filtr"
+	},
+	"headersPref": {
+		"message": "Dołącz dodatkowe nagłówki"
+	},
+	"hlsdl": {
+		"message": "Komendę hlsdl"
+	},
+	"importButton": {
+		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Nie udało się zaimportować ustawień."
+	},
+	"kodiUrl": {
+		"message": "Link Kodi"
+	},
+	"manifestPref": {
+		"message": "Nie wykrywaj streamów"
+	},
+	"manifestTip": {
+		"message": "Główny cel tego dodatku. Wyłącz, jeśli chcesz np. wykrywać pliki bezpośrednio lub wyłącznie używać własnych rozszerzeń/nagłówków content type."
+	},
 	"multithreadPref": {
 		"message": "Pobieraj wiele fragmentów równocześnie w yt-dlp"
 	},
-	"buttonClick": {
-		"message": "Działanie przycisku na pasku narzędzi"
+	"nm3u8dl": {
+		"message": "Komendę N_m3u8DL-RE"
 	},
-	"popupType": {
-		"message": "Rodzaj"
+	"noRestorePref": {
+		"message": "Wyłącz obsługę poprzednich sesji (usuń wpisy przy starcie)"
+	},
+	"notifCopiedText": {
+		"message": "Pomyślnie skopiowano następujące link(i) do schowka:\n"
+	},
+	"notifCopiedTitle": {
+		"message": "Skopiowano link(i)!"
+	},
+	"notifDetectPref": {
+		"message": "Wyłącz powiadomienia o wykryciu linków"
+	},
+	"notifDownErrorText": {
+		"message": "Nie udało się ściągnąć pliku:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Błąd ściągania!"
+	},
+	"notifErrorText": {
+		"message": "Nie udało się skopiować linków:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Błąd kopiowania!"
+	},
+	"notifIncompCopiedText": {
+		"message": "Dane skopiowane w zwykłej formie z powodu użycia narzędzia niekompatybilnego z rodzajem streamu:\n"
+	},
+	"notifManyText": {
+		"message": "Wykryto nowe streamy:\n"
+	},
+	"notifManyTitle": {
+		"message": "Wykryto streamy!"
+	},
+	"notifPref": {
+		"message": "Wyłącz wszystkie powiadomienia"
+	},
+	"notifText": {
+		"message": "Wykryto nowy stream $1:\n"
+	},
+	"notifTitle": {
+		"message": "Wykryto stream!"
+	},
+	"openOptions": {
+		"message": "Ustawienia"
+	},
+	"openPopup": {
+		"message": "Otwórz główne okno"
+	},
+	"openSidebar": {
+		"message": "Otwórz panel boczny"
+	},
+	"placeholderCell": {
+		"message": "Brak dostępnych linków."
+	},
+	"player": {
+		"message": "Domyślnego odtwarzacza"
 	},
 	"popupFilename": {
 		"message": "Nazwa pliku"
@@ -143,95 +176,23 @@
 	"popupTimestamp": {
 		"message": "Data"
 	},
-	"deleteTooltip": {
-		"message": "Kliknij, aby usunąć link."
+	"popupType": {
+		"message": "Rodzaj"
 	},
-	"tabThis": {
-		"message": "Obecna karta"
-	},
-	"tabAll": {
-		"message": "Obecna sesja"
-	},
-	"tabPrevious": {
-		"message": "Poprzednie sesje"
-	},
-	"filterInput": {
-		"message": "Filtr"
-	},
-	"openOptions": {
-		"message": "Ustawienia"
-	},
-	"titlePref": {
-		"message": "Pokaż tytuł karty jako źródło"
-	},
-	"filenamePref": {
-		"message": "Tytuł karty jako nazwa pliku"
-	},
-	"timestampPref": {
-		"message": "Dodaj datę i czas do nazwy pliku"
-	},
-	"fileExtension": {
-		"message": "Rozszerzenie pliku"
-	},
-	"subtitlePref": {
-		"message": "Nie wykrywaj napisów"
-	},
-	"filePref": {
-		"message": "Nie wykrywaj bezpośrednich linków do multimediów"
-	},
-	"fileSizePref": {
-		"message": "Ignoruj pliki multimedialne o wielkości poniżej"
-	},
-	"downloadDirectPref": {
-		"message": "Ściągaj pliki bezpośrednio zamiast kopiować ich linki (oprócz manifestów)"
-	},
-	"autoDownloadPref": {
-		"message": "Automatycznie ściągaj multimedia"
-	},
-	"autoDownloadTip": {
-		"message": "Zapisuje pliki do domyślnego folderu. Przydatne np. do pobierania streamu podczas oglądania. Działa jedynie, gdy opcja 'Nie wykrywaj bezpośrednich linków do multimediów' jest wyłączona. Nie pokazuje powiadomień, aby nie spamować użytkownika.Użyj filtra linków, by zapobiec pobieraniu niepotrzebnych plików."
-	},
-	"manifestPref": {
-		"message": "Nie wykrywaj streamów"
-	},
-	"manifestTip": {
-		"message": "Główny cel tego dodatku. Wyłącz, jeśli chcesz np. wykrywać pliki bezpośrednio lub wyłącznie używać własnych rozszerzeń/nagłówków content type."
-	},
-	"openPopup": {
-		"message": "Otwórz główne okno"
-	},
-	"openSidebar": {
-		"message": "Otwórz panel boczny"
-	},
-	"placeholderCell": {
-		"message": "Brak dostępnych linków."
-	},
-	"blacklistPref": {
-		"message": "Filtr danych"
-	},
-	"blacklistTip": {
-		"message": "Każdy wpis w nowej linii, ignoruje wielkość liter. Dotyczy typów streamów/plików, nagłówków Content-Type oraz linków - dodatek nie będzie wykrywał linków na pasujących stronach oraz zignoruje linki związane z danymi frazami."
-	},
-	"customExtPref": {
-		"message": "Wykrywaj dodatkowe rozszerzenia plików"
-	},
-	"customExtTip": {
-		"message": "Każdy wpis w nowej linii."
-	},
-	"customCtPref": {
-		"message": "Wykrywaj dodatkowe nagłówki Content-Type"
-	},
-	"customCtTip": {
-		"message": "Każdy wpis w nowej linii. Wielkość liter nieistotna."
-	},
-	"noRestorePref": {
-		"message": "Wyłącz obsługę poprzednich sesji (usuń wpisy przy starcie)"
+	"proxyPref": {
+		"message": "Użyj serwera HTTP proxy"
 	},
 	"recentPref": {
 		"message": "Wyświetl jedynie określoną liczbę ostatnich wpisów"
 	},
-	"resetButtonLabel": {
-		"message": "Reset wszystkich danych dodatku (w przypadku awarii)"
+	"regexCommandPref": {
+		"message": "Użyj regex w komendzie własnej"
+	},
+	"regexCommandTip": {
+		"message": "Wpisz jako ciąg znaków, np. ab+c. Wykonuje zamianę w ostatecznej formie komendy własnej. Puste pole zamiany oznacza usunięcie."
+	},
+	"regexWarning": {
+		"message": "Nieprawidłowe wyrażenie regularne."
 	},
 	"resetButton": {
 		"message": "Reset ustawień"
@@ -239,19 +200,58 @@
 	"resetButtonConfirm": {
 		"message": "Czy na pewno chcesz zresetować ustawienia?"
 	},
-	"exportSettings": {
-		"message": "Eksport/import ustawień do/z pliku JSON"
+	"resetButtonLabel": {
+		"message": "Reset wszystkich danych dodatku (w przypadku awarii)"
 	},
-	"exportButton": {
-		"message": "Eksport"
+	"streamlink": {
+		"message": "Komendę Streamlink"
 	},
-	"importButton": {
-		"message": "Import"
+	"streamlinkOutput": {
+		"message": "Przesyłaj strumień wyjściowy Streamlink do"
 	},
-	"importButtonFailure": {
-		"message": "Nie udało się zaimportować ustawień."
+	"subtitlePref": {
+		"message": "Nie wykrywaj napisów"
+	},
+	"tabAll": {
+		"message": "Obecna sesja"
+	},
+	"tabPrevious": {
+		"message": "Poprzednie sesje"
+	},
+	"tabThis": {
+		"message": "Obecna karta"
+	},
+	"tableForm": {
+		"message": "Wpis tabeli"
+	},
+	"timestampPref": {
+		"message": "Dodaj datę i czas do nazwy pliku"
 	},
 	"tipHint": {
 		"message": "Najedź myszką na znaki zapytania, aby dowiedzieć się więcej o poszczególnych opcjach."
+	},
+	"titlePref": {
+		"message": "Pokaż tytuł karty jako źródło"
+	},
+	"url": {
+		"message": "Zwykły link"
+	},
+	"user1": {
+		"message": "Komendę własną 1"
+	},
+	"user2": {
+		"message": "Komendę własną 2"
+	},
+	"user3": {
+		"message": "Komendę własną 3"
+	},
+	"userCommand": {
+		"message": "Komendy własne"
+	},
+	"userCommandTip": {
+		"message": "Dostępne pola:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "Komendę yt-dlp"
 	}
 }
