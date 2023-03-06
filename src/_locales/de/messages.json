@@ -1,75 +1,18 @@
 {
-	"notifTitle": {
-		"message": "Neuer Stream erkannt!"
+	"autoDownloadPref": {
+		"message": "Automatisches Herunterladen von Nicht-Manifest-Dateien"
 	},
-	"notifText": {
-		"message": "$1 Stream:\n"
+	"autoDownloadTip": {
+		"message": "Speichert Dateien in einem Standardordner. Nützlich, um z.B. einen Stream beim Ansehen zu speichern. Funktioniert nur, wenn 'Ignoriere Links auf Mediendateien' inaktiv ist. Zeigt keine Meldungen, um den Nutzer nicht zu nerven.Nutze URL Blacklists, um automatische Downloads zu verhindern."
 	},
-	"notifCopiedTitle": {
-		"message": "URL(s) kopiert!"
+	"blacklistPref": {
+		"message": "Nutze Blacklists für Inhalte"
 	},
-	"notifCopiedText": {
-		"message": "Erfolgreich kopierte URL(s):\n"
+	"blacklistTip": {
+		"message": "Ein Eintrag pro Zeile, Groß-/Kleinschreibung wird ignoriert, betrifft Stream- und Mediendateien, Content-Type Header, und URLs. Das AddOn wird alle URLs ignorieren, die diese Phrasen enthalten.."
 	},
-	"notifIncompCopiedText": {
-		"message": "Stream URL(s) wurde im Klartext kopiert, da das ausgewählte Tool nicht kompatibel ist:\n"
-	},
-	"notifErrorTitle": {
-		"message": "Kopierfehler!"
-	},
-	"notifErrorText": {
-		"message": "Kann URL(s) nicht kopieren:\n"
-	},
-	"extText": {
-		"message": "Erkennen von Playlists und Untertiteln in HLS, DASH, HDS und MSS Streams. Generiert yt-dlp, FFmpeg, Streamlink, hlsdl und weitere (benutzerdefinierte) Kommandos."
-	},
-	"copyMethod": {
-		"message": "Kopiere Stream URL als"
-	},
-	"url": {
-		"message": "nur die URL"
-	},
-	"ytdlp": {
-		"message": "yt-dlp Kommando"
-	},
-	"ffmpeg": {
-		"message": "FFmpeg Kommando"
-	},
-	"streamlink": {
-		"message": "Streamlink Kommando"
-	},
-	"hlsdl": {
-		"message": "hlsdl Kommando"
-	},
-	"user": {
-		"message": "benutzerdef. Kommando"
-	},
-	"streamlinkOutput": {
-		"message": "Speichere Streamlink zu"
-	},
-	"file": {
-		"message": "Datei"
-	},
-	"player": {
-		"message": "Standard Player"
-	},
-	"customCommandPref": {
-		"message": "Zusätzliche Kommandozeilenparameter"
-	},
-	"userCommand": {
-		"message": "benutzerdefiniertes Kommando"
-	},
-	"userCommandTip": {
-		"message": "Verfügbare Felder:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
-	},
-	"headersPref": {
-		"message": "Füge Header hinzu"
-	},
-	"notifPref": {
-		"message": "Deaktiviere Benachrichtigungen"
-	},
-	"disablePref": {
-		"message": "Deaktiviere Erkennung"
+	"buttonClick": {
+		"message": "Funktion des Browser Action Buttons"
 	},
 	"clearList": {
 		"message": "Diese URL Liste leeren"
@@ -77,20 +20,155 @@
 	"copyAll": {
 		"message": "Kopiere alle sichtbaren URLs"
 	},
-	"proxyPref": {
-		"message": "Nutze HTTP Proxyserver"
+	"copyMethod": {
+		"message": "Kopiere Stream URL als"
+	},
+	"customCommandPref": {
+		"message": "Zusätzliche Kommandozeilenparameter"
+	},
+	"customCtPref": {
+		"message": "Erkenne zusätzliche Content-Type Header"
+	},
+	"customCtTip": {
+		"message": "Ein Eintrag pro Zeile. Groß-/Kleinschreibung irrelevant."
+	},
+	"customExtPref": {
+		"message": "Erkenne zusätzliche Dateierweiterungen"
+	},
+	"customExtTip": {
+		"message": "Ein Eintrag pro Zeile."
+	},
+	"deleteTooltip": {
+		"message": "Lösche diese URL."
+	},
+	"disablePref": {
+		"message": "Deaktiviere Erkennung"
+	},
+	"downloadDirectPref": {
+		"message": "Downloade Nicht-Manifest Dateien anstatt die URL zu kopieren"
 	},
 	"downloaderPref": {
 		"message": "Nutze externen Downloader"
 	},
-	"buttonClick": {
-		"message": "Funktion des Browser Action Buttons"
+	"exportButton": {
+		"message": "Export"
 	},
-	"popupType": {
-		"message": "Typ"
+	"exportSettings": {
+		"message": "Export/Import der Einstellungen (JSON Datei)"
+	},
+	"extText": {
+		"message": "Erkennen von Playlists und Untertiteln in HLS, DASH, HDS und MSS Streams. Generiert yt-dlp, FFmpeg, Streamlink, hlsdl und weitere (benutzerdefinierte) Kommandos."
+	},
+	"ffmpeg": {
+		"message": "FFmpeg Kommando"
+	},
+	"file": {
+		"message": "Datei"
+	},
+	"fileExtension": {
+		"message": "Dateierweiterung"
+	},
+	"filePref": {
+		"message": "Ignoriere Links auf Mediendateien"
+	},
+	"fileSizePref": {
+		"message": "Ignoriere Mediendateien, wenn kleiner als"
+	},
+	"filenamePref": {
+		"message": "Nutze den Tab Titel als Dateinamen"
+	},
+	"filterInput": {
+		"message": "Filter"
+	},
+	"headersPref": {
+		"message": "Füge zusätzliche Header hinzu"
+	},
+	"hlsdl": {
+		"message": "hlsdl Kommando"
+	},
+	"importButton": {
+		"message": "Import"
+	},
+	"importButtonFailure": {
+		"message": "Einstellungen konnten nicht importiert werden."
+	},
+	"kodiUrl": {
+		"message": "Kodi URL"
+	},
+	"manifestPref": {
+		"message": "Ignoriere Streams"
+	},
+	"manifestTip": {
+		"message": "Eigentlich der Haupt-Anwendungszweck dieses AddONs. Deaktivieren ist sinnvoll, wenn man z.B. ausschließlich Deteien mit einem spezifischen Header oder Extension erfassen möchte."
+	},
+	"multithreadPref": {
+		"message": "Paralleles Downloaden der fragmente mittels yt-dlp"
+	},
+	"nm3u8dl": {
+		"message": "N_m3u8DL-RE Kommando"
+	},
+	"noRestorePref": {
+		"message": "Deaktiviere Wiederaufnahme der vorherigen Session (leere Einträge beim Start)"
+	},
+	"notifCopiedText": {
+		"message": "Erfolgreich kopierte URL(s):\n"
+	},
+	"notifCopiedTitle": {
+		"message": "URL(s) kopiert!"
+	},
+	"notifDetectPref": {
+		"message": "Deaktiviere Meldung beim Erkennen"
+	},
+	"notifDownErrorText": {
+		"message": "Diese URL verursachte den Fehler:\n"
+	},
+	"notifDownErrorTitle": {
+		"message": "Downloadfehler!"
+	},
+	"notifErrorText": {
+		"message": "Kann URL(s) nicht kopieren:\n"
+	},
+	"notifErrorTitle": {
+		"message": "Kopierfehler!"
+	},
+	"notifIncompCopiedText": {
+		"message": "Stream URL(s) wurde im Klartext kopiert, da das ausgewählte Tool nicht kompatibel ist:\n"
+	},
+	"notifManyText": {
+		"message": "Neue Streams erkannt:\n"
+	},
+	"notifManyTitle": {
+		"message": "Mehrere Streams erkannt!"
+	},
+	"notifPref": {
+		"message": "Deaktiviere Benachrichtigungen"
+	},
+	"notifText": {
+		"message": "$1 Stream:\n"
+	},
+	"notifTitle": {
+		"message": "Neuer Stream erkannt!"
+	},
+	"openOptions": {
+		"message": "Einstellungen"
+	},
+	"openPopup": {
+		"message": "Öffne das AddOn Popup"
+	},
+	"openSidebar": {
+		"message": "Öffne die AddOn Sidebar"
+	},
+	"placeholderCell": {
+		"message": "Keine URLs verfügbar."
+	},
+	"player": {
+		"message": "Standard Player"
 	},
 	"popupFilename": {
 		"message": "Dateiname"
+	},
+	"popupSize": {
+		"message": "Größe"
 	},
 	"popupSource": {
 		"message": "Quelle"
@@ -98,28 +176,82 @@
 	"popupTimestamp": {
 		"message": "Zeitstempel"
 	},
-	"deleteTooltip": {
-		"message": "Lösche diese URL."
+	"popupType": {
+		"message": "Typ"
+	},
+	"proxyPref": {
+		"message": "Nutze HTTP Proxyserver"
+	},
+	"recentPref": {
+		"message": "Zeige nur eine bestimmte Menge der letzten Einträge"
+	},
+	"regexCommandPref": {
+		"message": "Nutze regex in benutzerdefinierten Kommandos"
+	},
+	"regexCommandTip": {
+		"message": "Eingabe als String, z.B. ab+c. Führt Ersetungen im letztendlichen Benutzerkommando durch. Empty replacement field will remove the match."
+	},
+	"regexWarning": {
+		"message": "Fehlerhafter regulärer Ausdruck."
+	},
+	"resetButton": {
+		"message": "Einstellungen zurücksetzen"
+	},
+	"resetButtonConfirm": {
+		"message": "Sicher? Alles auf Standard einstellen?"
+	},
+	"resetButtonLabel": {
+		"message": "Alle AddOn Daten zurücksetzen (im Notfall)"
+	},
+	"streamlink": {
+		"message": "Streamlink Kommando"
+	},
+	"streamlinkOutput": {
+		"message": "Speichere Streamlink zu"
+	},
+	"subtitlePref": {
+		"message": "Ignoriere Untertitel"
+	},
+	"tabAll": {
+		"message": "Aktuelle Sitzung"
+	},
+	"tabPrevious": {
+		"message": "Vorherige Sitzung"
 	},
 	"tabThis": {
 		"message": "von aktuellem Tab"
 	},
-	"tabAll": {
-		"message": "von allen Tabs"
+	"tableForm": {
+		"message": "Tabelleneintrag"
 	},
-	"tabPrevious": {
-		"message": "von vorherigen Sitzungen"
+	"timestampPref": {
+		"message": "Füge Zeitstempel ans Ende der Datei hinzu"
 	},
-	"filterInput": {
-		"message": "Filter"
-	},
-	"openOptions": {
-		"message": "Einstellungen"
+	"tipHint": {
+		"message": "Lass die Maus über einer Option schweben, um mehr über diese zu erfahren."
 	},
 	"titlePref": {
 		"message": "Zeige den Tab Titel als Quelle"
 	},
-	"filenamePref": {
-		"message": "Nutze den Tab Titel als Dateinamen"
+	"url": {
+		"message": "nur die URL"
+	},
+	"user1": {
+		"message": "Benutzerdefiniertes Kommando 1"
+	},
+	"user2": {
+		"message": "Benutzerdefiniertes Kommando 2"
+	},
+	"user3": {
+		"message": "Benutzerdefiniertes Kommando 3"
+	},
+	"userCommand": {
+		"message": "benutzerdefiniertes Kommando"
+	},
+	"userCommandTip": {
+		"message": "Verfügbare Felder:\n%url%\n%filename%\n%useragent%\n%referer%\n%cookie%\n%proxy%\n%origin%\n%tabtitle%\n%timestamp%"
+	},
+	"ytdlp": {
+		"message": "yt-dlp Kommando"
 	}
 }
