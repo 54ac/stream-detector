@@ -25,7 +25,7 @@
 		"stylelint-config-standard": "^33.0.0"
 	},
 	"scripts": {
-		"build": "rimraf dist && parcel build src/manifest.json --config @parcel/config-webextension --no-source-maps && chrome-pack",
+		"build": "rimraf dist && parcel build src/manifest.json --config @parcel/config-webextension --no-source-maps",
 		"start": "rimraf dist && parcel watch src/manifest.json --host localhost --config @parcel/config-webextension"
 	},
 	"browserslist": "firefox 89"
