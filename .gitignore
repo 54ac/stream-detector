@@ -1,7 +1,7 @@
 /dist
 /node_modules
 /.parcel-cache
-build.crx
+dist.crx
 chrome-pack.bat
 dist.pem
 .firefox.exe.lnk

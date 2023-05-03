@@ -19,13 +19,13 @@
 		"eslint-plugin-prettier": "^4.2.1",
 		"parcel": "^2.8.3",
 		"prettier": "^2.8.1",
-		"rimraf": "^4.1.2",
+		"rimraf": "^5.0.0",
 		"stylelint": "^15.0.0",
-		"stylelint-config-recommended": "^10.0.1",
-		"stylelint-config-standard": "^30.0.1"
+		"stylelint-config-recommended": "^12.0.0",
+		"stylelint-config-standard": "^33.0.0"
 	},
 	"scripts": {
-		"build": "rimraf dist && parcel build src/manifest.json --config @parcel/config-webextension --no-source-maps",
+		"build": "rimraf dist && parcel build src/manifest.json --config @parcel/config-webextension --no-source-maps && chrome-pack",
 		"start": "rimraf dist && parcel watch src/manifest.json --host localhost --config @parcel/config-webextension"
 	},
 	"browserslist": "firefox 89"
