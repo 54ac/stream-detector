@@ -1,11 +1,11 @@
 {
 	"name": "stream-detector",
 	"author": {
-		"name": "rowrawer",
-		"email": "rowrawer@gmail.com",
-		"url": "https://github.com/rowrawer"
+		"name": "54ac",
+		"email": "me@54ac.bio",
+		"url": "https://github.com/54ac"
 	},
-	"repository": "github:rowrawer/stream-detector",
+	"repository": "github:54ac/stream-detector",
 	"version": "1.0.0",
 	"type": "module",
 	"private": true,
