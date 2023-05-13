@@ -35,7 +35,7 @@ Upon being notified that a stream has been detected (as in the screenshot above)
 ### Where can I download this?
 
 - [The Firefox Addons (AMO) listing.](https://addons.mozilla.org/en-US/firefox/addon/hls-stream-detector/)
-- [The GitHub releases page.](https://github.com/rowrawer/stream-detector/releases)
+- [The GitHub releases page.](https://github.com/54ac/stream-detector/releases)
 
 ---
 
