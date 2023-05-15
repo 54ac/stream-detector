@@ -101,6 +101,9 @@
 	"manifestTip": {
 		"message": "これはこのアドオンの主目的です。例えば、カスタムのファイル拡張子/Content-Typeのみを使用したい場合は、無効にしてください。"
 	},
+	"multithreadPref": {
+		"message": "yt-dlpでフラグメントファイルを多重同時ダウンロードする"
+	},
 	"nm3u8dl": {
 		"message": "N_m3u8DL-RE コマンド"
 	},
@@ -151,6 +154,9 @@
 	},
 	"openPopup": {
 		"message": "アドオンのパネルを開く"
+	},
+	"openSidebar": {
+		"message": "アドオンのサイドバーを開く"
 	},
 	"placeholderCell": {
 		"message": "検出したURLがありません"
@@ -221,14 +227,23 @@
 	"timestampPref": {
 		"message": "ファイル名にタイムスタンプを追加"
 	},
+	"tipHint": {
+		"message": "疑問符にカーソルを合わせると、特定のオプションの詳細を表示します。"
+	},
 	"titlePref": {
 		"message": "検出ソースにタブのタイトルを表示"
 	},
 	"url": {
 		"message": "通常のURL"
 	},
-	"user": {
-		"message": "ユーザ定義コマンド"
+	"user1": {
+		"message": "ユーザ定義コマンド 1"
+	},
+	"user2": {
+		"message": "ユーザ定義コマンド 2"
+	},
+	"user3": {
+		"message": "ユーザ定義コマンド 3"
 	},
 	"userCommand": {
 		"message": "ユーザ定義コマンド"
