@@ -26,7 +26,7 @@ Being able to easily find direct URLs to streams on the Internet. I wrote this i
 
 ### Is anyone even using this?
 
-As of updating this document, the addon has over 10,000 average daily users and 2,500 downloads in the last 30 days.
+As of updating this document, the addon is at approx. 12,000 average daily users and 2,500 downloads in the last 30 days.
 
 ### How do I use this?
 
