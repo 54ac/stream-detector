@@ -2,9 +2,10 @@
 	"name": "The Stream Detector",
 	"version": "2.11.6",
 	"description": "__MSG_extText__",
-	"manifest_version": 3,
+	"manifest_version": 2,
 	"default_locale": "en",
 	"permissions": [
+		"<all_urls>",
 		"clipboardWrite",
 		"downloads",
 		"notifications",
@@ -12,10 +13,9 @@
 		"tabs",
 		"webRequest"
 	],
-	"host_permissions": ["<all_urls>"],
 	"background": {
-		"service_worker": "js/background.js",
-		"type": "module"
+		"scripts": ["js/background.js"],
+		"persistent": false
 	},
 	"icons": {
 		"16": "img/icon-dark-16.png",
@@ -33,7 +33,7 @@
 	"options_ui": {
 		"page": "options.html"
 	},
-	"action": {
+	"browser_action": {
 		"default_title": "The Stream Detector",
 		"default_popup": "popup.html",
 		"default_icon": {
@@ -57,5 +57,14 @@
 				"size": 16
 			}
 		]
+	},
+	"sidebar_action": {
+		"default_title": "The Stream Detector",
+		"default_panel": "sidebar.html",
+		"default_icon": {
+			"16": "img/icon-dark-16.png",
+			"48": "img/icon-dark-48.png"
+		},
+		"open_at_install": false
 	}
 }

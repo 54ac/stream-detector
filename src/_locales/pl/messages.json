@@ -57,7 +57,7 @@
 		"message": "Eksport/import ustawień do/z pliku JSON"
 	},
 	"extText": {
-		"message": "Wykrywa playlisty oraz napisy używane przez streamy HLS/DASH/HDS/MSS, a także rozszerzenia plików i nagłówki Content-Type dodane przez użytkownika. Tworzy gotowe komendy dla programów yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE."
+		"message": "Wykrywa playlisty i napisy używane przez streamy oraz własne rozszerzenia plików i nagłówki. Tworzy gotowe komendy dla programów."
 	},
 	"ffmpeg": {
 		"message": "Komendę FFmpeg"

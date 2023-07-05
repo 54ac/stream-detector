@@ -1,5 +1,3 @@
-"use strict";
-
 import {
 	saveOptionStorage,
 	getStorage,
@@ -7,6 +5,9 @@ import {
 } from "./components/storage.js";
 
 import notifIcon from "../img/icon-dark-96.png";
+
+// firefox/chrome
+chrome.browserAction = chrome.browserAction || chrome.action;
 
 const _ = chrome.i18n.getMessage; // i18n
 
@@ -245,7 +246,7 @@ const copyURL = async (info) => {
 		if (filenamePref && e.tabData?.title) outFilename = e.tabData.title;
 		else {
 			outFilename = filename;
-			if (outFilename.indexOf(".")) {
+			if (outFilename.indexOf(".") !== -1) {
 				// filename without extension
 				outFilename = outFilename.split(".");
 				outFilename.pop();

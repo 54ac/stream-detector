@@ -57,7 +57,7 @@
 		"message": "Export/import settings to/from JSON file"
 	},
 	"extText": {
-		"message": "Detects playlists and subtitles used by HLS/DASH/HDS/MSS streams as well as custom file extensions and Content-Type headers. Assembles readymade yt-dlp/FFmpeg/Streamlink/hlsdl/N_m3u8DL-RE commands."
+		"message": "Detects playlists and subtitles used by streams, incl. custom file extensions and headers. Assembles readymade commands for tools."
 	},
 	"ffmpeg": {
 		"message": "FFmpeg command"

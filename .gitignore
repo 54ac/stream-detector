@@ -1,8 +1,7 @@
 /dist
+/dist-chrome
 /node_modules
 /.parcel-cache
-dist.crx
-chrome-pack.bat
-dist.pem
+/src/manifest.json
 .firefox.exe.lnk
 icon.svg
