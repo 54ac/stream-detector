@@ -8,6 +8,7 @@ import notifIcon from "../img/icon-dark-96.png";
 
 // firefox/chrome
 chrome.browserAction = chrome.browserAction || chrome.action;
+const isChrome = chrome.runtime.getURL("").startsWith("chrome-extension://");
 
 const _ = chrome.i18n.getMessage; // i18n
 
@@ -199,6 +200,9 @@ const copyURL = async (info) => {
 					code += ` --header "Cookie: ${headerCookie}"`;
 				else if (fileMethod.startsWith("user"))
 					code = code.replace(new RegExp("%cookie%", "g"), headerCookie);
+			} else if (fileMethod === "ytdlp") {
+				if (!isChrome) code += ` --cookies-from-browser firefox`;
+				else code += ` --cookies-from-browser chrome`;
 			} else if (fileMethod.startsWith("user"))
 				code = code.replace(new RegExp("%cookie%", "g"), "");
 

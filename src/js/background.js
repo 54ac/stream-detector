@@ -137,7 +137,7 @@ const getTabData = async (tab) =>
 	new Promise((resolve) => chrome.tabs.get(tab, (data) => resolve(data)));
 
 const urlValidator = (e, requestDetails, headerSize, headerCt) => {
-	if (!e.length) return false;
+	if (!e) return false;
 
 	if (requestDetails.tabId === -1) return false;
 
@@ -149,19 +149,19 @@ const urlValidator = (e, requestDetails, headerSize, headerCt) => {
 	)
 		return false;
 
-	if (subtitlePref && e.some((el) => el.category === "subtitles")) return false;
+	if (subtitlePref && e.category === "subtitles") return false;
 
-	if (filePref && e.some((el) => el.category === "files")) return false;
+	if (filePref && e.category === "files") return false;
 
 	if (
 		fileSizePref &&
-		e.some((el) => el.category === ("files" || "custom")) &&
+		(e.category === "files" || e.category === "custom") &&
 		headerSize &&
 		Math.floor(headerSize.value / 1024 / 1024) < Number(fileSizeAmount)
 	)
 		return false;
 
-	if (manifestPref && e.some((el) => el.category === "stream")) return false;
+	if (manifestPref && e.category === "stream") return false;
 
 	if (
 		blacklistPref &&
@@ -176,7 +176,7 @@ const urlValidator = (e, requestDetails, headerSize, headerCt) => {
 					?.toLowerCase()
 					.includes(entry.toLowerCase()) ||
 				headerCt?.value?.toLowerCase().includes(entry.toLowerCase()) ||
-				e.some((el) => el.type.toLowerCase().includes(entry.toLowerCase()))
+				e.type.toLowerCase().includes(entry.toLowerCase())
 		)
 	)
 		return false;
@@ -185,21 +185,19 @@ const urlValidator = (e, requestDetails, headerSize, headerCt) => {
 };
 
 const urlFilter = (requestDetails) => {
-	let ext = [];
-	let head = [];
+	let ext;
+	let head;
 
 	const url = new URL(requestDetails.url).pathname.toLowerCase();
-
 	// check file extension and see if the url matches
-	if (customExtPref && customSupported.ext?.length) {
-		for (const e of customSupported.ext)
-			if (url.toLowerCase().includes("." + e.toLowerCase()))
-				ext.push(customSupported);
-	}
-	for (const s of supported.filter((f) => f.ext?.length))
-		for (const e of s.ext)
-			if (url.toLowerCase().includes("." + e.toLowerCase()))
-				ext.push(supported.find((ss) => ss.ext.includes(e)));
+	ext =
+		customExtPref &&
+		customSupported.ext?.some((fe) => url.toLowerCase().includes("." + fe)) &&
+		customSupported;
+	if (!ext)
+		ext = supported.find((f) =>
+			f.ext?.some((fe) => url.toLowerCase().includes("." + fe))
+		);
 
 	// depends which listener caught it
 	requestDetails.headers =
@@ -210,15 +208,16 @@ const urlFilter = (requestDetails) => {
 	);
 	if (headerCt?.value) {
 		// check content type header and see if it matches
-		if (customCtPref && customSupported.ct?.length) {
-			for (const h of customSupported.ct)
-				if (headerCt.value.toLowerCase().includes(h.toLowerCase()))
-					head.push(customSupported);
-		}
-		for (const s of supported.filter((f) => f.ct?.length))
-			for (const h of s.ct)
-				if (headerCt.value.toLowerCase().includes(h.toLowerCase()))
-					head.push(supported.find((ss) => ss.ct.includes(h)));
+		head =
+			customCtPref &&
+			customSupported?.ct?.some((fe) =>
+				headerCt.value.toLowerCase().includes(fe.toLowerCase())
+			) &&
+			customSupported;
+		if (!head)
+			head = supported.find((f) =>
+				f.ct?.some((fe) => headerCt.value.toLowerCase() === fe.toLowerCase())
+			);
 	}
 
 	const headerSize = requestDetails.headers?.find(
@@ -229,8 +228,8 @@ const urlFilter = (requestDetails) => {
 
 	if (!urlValidator(e, requestDetails, headerSize, headerCt)) return;
 	queue.push(requestDetails.requestId);
-	requestDetails.type = e[0].type;
-	requestDetails.category = e[0].category;
+	requestDetails.type = e.type;
+	requestDetails.category = e.category;
 	addURL(requestDetails);
 };
 
